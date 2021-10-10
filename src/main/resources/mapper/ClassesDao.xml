@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.ClassesDao">
+
+    <resultMap type="com.example.entity.Classes" id="ClassesMap">
+        <result property="classesId" column="classes_id" jdbcType="INTEGER"/>
+        <result property="classesNum" column="classes_num" jdbcType="VARCHAR"/>
+        <result property="classesName" column="classes_name" jdbcType="VARCHAR"/>
+        <result property="classesAllNumber" column="classes_all_number" jdbcType="INTEGER"/>
+        <association property="grade" javaType="grade">
+            <result property="gradeId" column="grade_id" jdbcType="INTEGER"/>
+            <result property="gradeNum" column="grade_num" jdbcType="VARCHAR"/>
+            <result property="gradeName" column="grade_name" jdbcType="VARCHAR"/>
+            <association property="professional" javaType="professional">
+                <result property="professionalId" column="professional_id" jdbcType="INTEGER"/>
+                <result property="professionalNum" column="professional_num" jdbcType="VARCHAR"/>
+                <result property="professionalName" column="professional_name" jdbcType="VARCHAR"/>
+                <association property="college" javaType="college">
+                    <result property="collegeId" column="college_id" jdbcType="INTEGER"/>
+                    <result property="collegeNum" column="college_num" jdbcType="VARCHAR"/>
+                    <result property="collegeName" column="college_name" jdbcType="VARCHAR"/>
+                </association>
+            </association>
+        </association>
+        <association property="teacher" javaType="teacher">
+            <result property="teacherId" column="teacher_id" jdbcType="INTEGER"/>
+            <result property="teacherNum" column="teacher_num" jdbcType="VARCHAR"/>
+            <result property="teacherName" column="teacher_name" jdbcType="VARCHAR"/>
+            <result property="teacherAge" column="teacher_age" jdbcType="VARCHAR"/>
+            <result property="teacherCard" column="teacher_card" jdbcType="VARCHAR"/>
+            <result property="teacherNational" column="teacher_national" jdbcType="VARCHAR"/>
+            <result property="teacherSex" column="teacher_sex" jdbcType="VARCHAR"/>
+            <result property="teacherEmail" column="teacher_email" jdbcType="VARCHAR"/>
+            <result property="teacherImg" column="teacher_img" jdbcType="VARCHAR"/>
+            <result property="teacherPhone" column="teacher_phone" jdbcType="INTEGER"/>
+            <result property="teacherPassword" column="teacher_password" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="findById" resultMap="ClassesMap">
+        SELECT *
+        FROM classes AS c LEFT OUTER JOIN grade AS g
+        ON c.grade_id = g.grade_id
+        LEFT OUTER JOIN professional AS p
+        ON g.professional_id = p.professional_id
+        LEFT OUTER JOIN college AS co
+        ON p.college_id = co.college_id
+        LEFT OUTER JOIN teacher as t
+        ON c.teacher_id = t.teacher_id
+        where c.classes_id = #{classesId}
+    </select>
+
+    <!--添加时唯一性检查-->
+    <select id="findByGradeIdAndClassesName" resultMap="ClassesMap">
+        SELECT *
+        FROM classes
+        where grade_id = #{gradeId} and classes_name = #{classesName}
+    </select>
+
+    <!--修改时唯一性检查-->
+    <select id="findByIdGradeIdAndClassesName" resultMap="ClassesMap">
+        SELECT *
+        FROM classes
+        where classes_id != #{classesId} and grade_id = #{gradeId} and classes_name = #{classesName}
+    </select>
+
+    <!--查询所有数据-->
+    <select id="findAll" resultMap="ClassesMap">
+        SELECT *
+        FROM classes AS c LEFT OUTER JOIN grade AS g
+        ON c.grade_id = g.grade_id
+        LEFT OUTER JOIN professional AS p
+        ON g.professional_id = p.professional_id
+        LEFT OUTER JOIN college AS co
+        ON p.college_id = co.college_id
+        LEFT OUTER JOIN teacher as t
+        ON c.teacher_id = t.teacher_id
+    </select>
+
+    <!--分页查询-->
+    <select id="findList" resultMap="ClassesMap">
+        SELECT *
+        FROM classes AS c LEFT OUTER JOIN grade AS g
+        ON c.grade_id = g.grade_id
+        LEFT OUTER JOIN professional AS p
+        ON g.professional_id = p.professional_id
+        LEFT OUTER JOIN college AS co
+        ON p.college_id = co.college_id
+        LEFT OUTER JOIN teacher as t
+        ON c.teacher_id = t.teacher_id
+        where 1=1
+        <if test="classesNum != ''">
+            and classes_num like concat('%',#{classesNum},'%')
+        </if>
+        <if test="classesName != ''">
+            or classes_name like concat('%',#{classesName},'%')
+        </if>
+        order by classes_id desc
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="classesId" useGeneratedKeys="true">
+        insert into classes(classes_num, classes_name, classes_all_number, classes_state, grade_id, teacher_id)
+        values (#{classesNum}, #{classesName}, #{classesAllNumber}, #{classesState}, #{grade.gradeId}, #{teacher.teacherId})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update classes
+        <set>
+            <if test="classesNum != null and classesNum != ''">
+                classes_num = #{classesNum},
+            </if>
+            <if test="classesName != null and classesName != ''">
+                classes_name = #{classesName},
+            </if>
+            <if test="classesAllNumber != null">
+                classes_all_number = #{classesAllNumber},
+            </if>
+            <if test="classesState != null">
+                classes_state = #{classesState},
+            </if>
+            <if test="grade.gradeId != null">
+                grade_id = #{grade.gradeId},
+            </if>
+            <if test="teacher.teacherId != null">
+                teacher_id = #{teacher.teacherId},
+            </if>
+        </set>
+        where classes_id = #{classesId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from classes where classes_id = #{classesId}
+    </delete>
+
+    <!--批量删除-->
+    <delete id="deleteBatch" >
+        delete from classes where classes_id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
+

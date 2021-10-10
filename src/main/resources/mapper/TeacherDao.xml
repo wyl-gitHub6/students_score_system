@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.TeacherDao">
+
+    <resultMap type="com.example.entity.Teacher" id="TeacherMap">
+        <result property="teacherId" column="teacher_id" jdbcType="INTEGER"/>
+        <result property="teacherNum" column="teacher_num" jdbcType="VARCHAR"/>
+        <result property="teacherName" column="teacher_name" jdbcType="VARCHAR"/>
+        <result property="teacherAge" column="teacher_age" jdbcType="VARCHAR"/>
+        <result property="teacherCard" column="teacher_card" jdbcType="VARCHAR"/>
+        <result property="teacherNational" column="teacher_national" jdbcType="VARCHAR"/>
+        <result property="teacherSex" column="teacher_sex" jdbcType="VARCHAR"/>
+        <result property="teacherEmail" column="teacher_email" jdbcType="VARCHAR"/>
+        <result property="teacherImg" column="teacher_img" jdbcType="VARCHAR"/>
+        <result property="teacherPhone" column="teacher_phone" jdbcType="INTEGER"/>
+        <result property="teacherPassword" column="teacher_password" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findList" resultMap="TeacherMap">
+        select *
+        from teacher
+        where 1=1
+        <if test="teacherNum != ''">
+            and teacher_num like concat('%',#{teacherNum},'%')
+        </if>
+        <if test="teacherName != ''">
+            or teacher_name like concat('%',#{teacherName},'%')
+        </if>
+        order by teacher_id desc
+    </select>
+
+    <!--查询单个-->
+    <select id="findById" resultMap="TeacherMap">
+        select
+          teacher_id, teacher_num, teacher_name, teacher_age, teacher_national, teacher_sex, teacher_email, teacher_img, teacher_phone, teacher_password, teacher_card
+        from teacher
+        where teacher_id = #{teacherId}
+    </select>
+
+    <!--查询所有数据-->
+    <select id="findAll" resultMap="TeacherMap">
+        select
+          teacher_id, teacher_num, teacher_name, teacher_age, teacher_national, teacher_sex, teacher_email, teacher_img, teacher_phone, teacher_password, teacher_card
+        from teacher
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="teacherId" useGeneratedKeys="true">
+        insert into teacher(teacher_num, teacher_name, teacher_age, teacher_national, teacher_sex, teacher_email, teacher_img, teacher_phone, teacher_password, teacher_card)
+        values (#{teacherNum}, #{teacherName}, #{teacherAge}, #{teacherNational}, #{teacherSex}, #{teacherEmail}, #{teacherImg}, #{teacherPhone}, #{teacherPassword}, #{teacherCard})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update teacher
+        <set>
+            <if test="teacherNum != null and teacherNum != ''">
+                teacher_num = #{teacherNum},
+            </if>
+            <if test="teacherName != null and teacherName != ''">
+                teacher_name = #{teacherName},
+            </if>
+            <if test="teacherAge != null and teacherAge != ''">
+                teacher_age = #{teacherAge},
+            </if>
+            <if test="teacherNational != null and teacherNational != ''">
+                teacher_national = #{teacherNational},
+            </if>
+            <if test="teacherSex != null and teacherSex != ''">
+                teacher_sex = #{teacherSex},
+            </if>
+            <if test="teacherEmail != null and teacherEmail != ''">
+                teacher_email = #{teacherEmail},
+            </if>
+            <if test="teacherImg != null and teacherImg != ''">
+                teacher_img = #{teacherImg},
+            </if>
+            <if test="teacherPhone != null">
+                teacher_phone = #{teacherPhone},
+            </if>
+            <if test="teacherPassword != null and teacherPassword != ''">
+                teacher_password = #{teacherPassword},
+            </if>
+            <if test="teacherCard != null and teacherPassword != ''">
+                teacher_card = #{teacherCard},
+            </if>
+        </set>
+        where teacher_id = #{teacherId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from teacher where teacher_id = #{teacherId}
+    </delete>
+
+    <!--批量删除-->
+    <delete id="deleteBatch" >
+        delete from teacher where teacher_id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
+

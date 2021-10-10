@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.CollegeDao">
+
+    <resultMap type="com.example.entity.College" id="CollegeMap">
+        <result property="collegeId" column="college_id" jdbcType="INTEGER"/>
+        <result property="collegeNum" column="college_num" jdbcType="VARCHAR"/>
+        <result property="collegeName" column="college_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="findById" resultMap="CollegeMap">
+        select
+          college_id, college_num, college_name
+        from college
+        where college_id = #{collegeId}
+    </select>
+
+    <!--分页查询-->
+    <select id="findList" resultMap="CollegeMap">
+        select
+          college_id, college_num, college_name
+        from college
+        where 1=1
+        <if test="collegeNum != ''">
+            and college_num like concat('%',#{collegeNum},'%')
+        </if>
+        <if test="collegeName != ''">
+            or college_name like concat('%',#{collegeName},'%')
+        </if>
+        order by college_id desc
+    </select>
+
+    <!--查询所有数据-->
+    <select id="findAll" resultMap="CollegeMap">
+        select
+          college_id, college_num, college_name
+        from college
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="collegeId" useGeneratedKeys="true">
+        insert into college(college_num, college_name)
+        values (#{collegeNum}, #{collegeName})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update college
+        <set>
+            <if test="collegeNum != null and collegeNum != ''">
+                college_num = #{collegeNum},
+            </if>
+            <if test="collegeName != null and collegeName != ''">
+                college_name = #{collegeName},
+            </if>
+        </set>
+        where college_id = #{collegeId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from college where college_id = #{collegeId}
+    </delete>
+
+    <!--批量删除-->
+    <delete id="deleteBatch" >
+        delete from college where college_id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
+

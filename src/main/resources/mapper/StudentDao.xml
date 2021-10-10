@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.StudentDao">
+
+    <resultMap type="com.example.entity.Student" id="StudentMap">
+        <result property="studentId" column="student_id" jdbcType="INTEGER"/>
+        <result property="studentNum" column="student_num" jdbcType="VARCHAR"/>
+        <result property="studentName" column="student_name" jdbcType="VARCHAR"/>
+        <result property="studentSex" column="student_sex" jdbcType="INTEGER"/>
+        <result property="studentAge" column="student_age" jdbcType="VARCHAR"/>
+        <result property="studentNational" column="student_national" jdbcType="VARCHAR"/>
+        <result property="studentEmail" column="student_email" jdbcType="VARCHAR"/>
+        <result property="studentCard" column="student_card" jdbcType="VARCHAR"/>
+        <result property="studentPhone" column="student_phone" jdbcType="VARCHAR"/>
+        <result property="studentImg" column="student_img" jdbcType="VARCHAR"/>
+        <result property="studentPassword" column="student_password" jdbcType="VARCHAR"/>
+        <association property="classes" javaType="classes">
+            <result property="classesId" column="classes_id" jdbcType="INTEGER"/>
+            <result property="classesNum" column="classes_num" jdbcType="VARCHAR"/>
+            <result property="classesName" column="classes_name" jdbcType="VARCHAR"/>
+            <result property="classesAllNumber" column="classes_all_number" jdbcType="INTEGER"/>
+            <association property="grade" javaType="grade">
+                <result property="gradeId" column="grade_id" jdbcType="INTEGER"/>
+                <result property="gradeNum" column="grade_num" jdbcType="VARCHAR"/>
+                <result property="gradeName" column="grade_name" jdbcType="VARCHAR"/>
+                <association property="professional" javaType="professional">
+                    <result property="professionalId" column="professional_id" jdbcType="INTEGER"/>
+                    <result property="professionalNum" column="professional_num" jdbcType="VARCHAR"/>
+                    <result property="professionalName" column="professional_name" jdbcType="VARCHAR"/>
+                    <association property="college" javaType="college">
+                        <result property="collegeId" column="college_id" jdbcType="INTEGER"/>
+                        <result property="collegeNum" column="college_num" jdbcType="VARCHAR"/>
+                        <result property="collegeName" column="college_name" jdbcType="VARCHAR"/>
+                    </association>
+                </association>
+            </association>
+        </association>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="findById" resultMap="StudentMap">
+        SELECT *
+        FROM student AS s LEFT OUTER JOIN classes AS c
+        ON s.classes_id = c.classes_id
+        LEFT OUTER JOIN grade AS g
+        ON c.grade_id = g.grade_id
+        LEFT OUTER JOIN professional AS p
+        ON g.professional_id = p.professional_id
+        LEFT OUTER JOIN college AS co
+        ON p.college_id = co.college_id
+        where s.student_id = #{studentId}
+    </select>
+
+    <!--根据学号查询-->
+    <select id="findByStudentNum" resultMap="StudentMap">
+        SELECT *
+        FROM student
+        where student_num = #{studentNum}
+    </select>
+
+    <!--修改时唯一性检查-->
+    <select id="findByStudentNumAndId" resultMap="StudentMap">
+        SELECT *
+        FROM student
+        where student_num = #{studentNum} and student_id != #{studentId}
+    </select>
+
+    <!--分页查询-->
+    <select id="findList" resultMap="StudentMap">
+        SELECT *
+        FROM student AS s LEFT OUTER JOIN classes AS c
+        ON s.classes_id = c.classes_id
+        LEFT OUTER JOIN grade AS g
+        ON c.grade_id = g.grade_id
+        LEFT OUTER JOIN professional AS p
+        ON g.professional_id = p.professional_id
+        LEFT OUTER JOIN college AS co
+        ON p.college_id = co.college_id
+        where 1=1
+        <if test="studentNum != ''">
+            and student_num like concat('%',#{studentNum},'%')
+        </if>
+        <if test="studentName != ''">
+            or student_name like concat('%',#{studentName},'%')
+        </if>
+        order by student_id desc
+    </select>
+
+    <!--查询所有数据-->
+    <select id="findAll" resultMap="StudentMap">
+        SELECT *
+        FROM student AS s LEFT OUTER JOIN classes AS c
+        ON s.classes_id = c.classes_id
+        LEFT OUTER JOIN grade AS g
+        ON c.grade_id = g.grade_id
+        LEFT OUTER JOIN professional AS p
+        ON g.professional_id = p.professional_id
+        LEFT OUTER JOIN college AS co
+        ON p.college_id = co.college_id
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="studentId" useGeneratedKeys="true">
+        insert into student(student_num, student_name, student_sex, student_age, student_national, student_email, student_card, student_phone, student_img, classes_id, student_password)
+        values (#{studentNum}, #{studentName}, #{studentSex}, #{studentAge}, #{studentNational}, #{studentEmail}, #{studentCard}, #{studentPhone}, #{studentImg}, #{classes.classesId}, #{studentPassword})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update student
+        <set>
+            <if test="studentNum != null and studentNum != ''">
+                student_num = #{studentNum},
+            </if>
+            <if test="studentName != null and studentName != ''">
+                student_name = #{studentName},
+            </if>
+            <if test="studentSex != null">
+                student_sex = #{studentSex},
+            </if>
+            <if test="studentAge != null and studentAge != ''">
+                student_age = #{studentAge},
+            </if>
+            <if test="studentNational != null and studentNational != ''">
+                student_national = #{studentNational},
+            </if>
+            <if test="studentEmail != null and studentEmail != ''">
+                student_email = #{studentEmail},
+            </if>
+            <if test="studentCard != null and studentCard != ''">
+                student_card = #{studentCard},
+            </if>
+            <if test="studentPhone != null and studentPhone != ''">
+                student_phone = #{studentPhone},
+            </if>
+            <if test="studentImg != null and studentImg != ''">
+                student_img = #{studentImg},
+            </if>
+            <if test="classes.classesId != null">
+                classes_id = #{classes.classesId},
+            </if>
+            <if test="studentPassword != null and studentPassword != ''">
+                student_password = #{studentPassword},
+            </if>
+        </set>
+        where student_id = #{studentId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from student where student_id = #{studentId}
+    </delete>
+
+    <!--批量删除-->
+    <delete id="deleteBatch" >
+        delete from student where student_id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
+
