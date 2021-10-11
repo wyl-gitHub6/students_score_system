@@ -99,10 +99,30 @@
         order by classes_id desc
     </select>
 
+    <select id="findByGradeId" resultMap="ClassesMap">
+        SELECT *
+        FROM classes AS c LEFT OUTER JOIN grade AS g
+        ON c.grade_id = g.grade_id
+        LEFT OUTER JOIN professional AS p
+        ON g.professional_id = p.professional_id
+        LEFT OUTER JOIN college AS co
+        ON p.college_id = co.college_id
+        LEFT OUTER JOIN teacher as t
+        ON c.teacher_id = t.teacher_id
+        where c.grade_id = #{gradeId}
+        <if test="classesNum != ''">
+            and classes_num like concat('%',#{classesNum},'%')
+        </if>
+        <if test="classesName != ''">
+            or classes_name like concat('%',#{classesName},'%')
+        </if>
+        order by classes_id desc
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="classesId" useGeneratedKeys="true">
-        insert into classes(classes_num, classes_name, classes_all_number, classes_state, grade_id, teacher_id)
-        values (#{classesNum}, #{classesName}, #{classesAllNumber}, #{classesState}, #{grade.gradeId}, #{teacher.teacherId})
+        insert into classes(classes_num, classes_name, classes_all_number, grade_id, teacher_id)
+        values (#{classesNum}, #{classesName}, #{classesAllNumber}, #{grade.gradeId}, #{teacher.teacherId})
     </insert>
 
     <!--通过主键修改数据-->
@@ -117,9 +137,6 @@
             </if>
             <if test="classesAllNumber != null">
                 classes_all_number = #{classesAllNumber},
-            </if>
-            <if test="classesState != null">
-                classes_state = #{classesState},
             </if>
             <if test="grade.gradeId != null">
                 grade_id = #{grade.gradeId},

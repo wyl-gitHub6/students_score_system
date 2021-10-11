@@ -2,6 +2,8 @@ package com.example.dao;
 
 import com.example.entity.Student;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -80,6 +82,25 @@ public interface StudentDao {
      * @param studentId
      * @return
      */
-    Student findByStudentNumAndId(Integer studentNum, Integer studentId);
+    Student findByStudentNumAndId(@Param("studentNum") Integer studentNum,
+                                  @Param("studentId") Integer studentId);
+
+    /**
+     * 查询班级人数
+     * @param classesId
+     * @return
+     */
+    int findCount(Integer classesId);
+
+    /**
+     * 根据班级ID查询
+     * @param classesId
+     * @param studentNum
+     * @param studentName
+     * @return
+     */
+    List<Student> findByClassesId(@Param("classesId") Integer classesId,
+                                  @Param("studentNum") String studentNum,
+                                  @Param("studentName") String studentName);
 }
 

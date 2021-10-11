@@ -51,6 +51,35 @@
         where s.student_id = #{studentId}
     </select>
 
+    <!--查询班级人数-->
+    <select id="findCount" resultType="int">
+        SELECT count(*)
+        FROM student
+        WHERE classes_id = #{classes_id}
+    </select>
+
+    <!--根据班级ID查询-->
+    <select id="findByClassesId"  resultMap="StudentMap">
+        SELECT *
+        FROM student AS s LEFT OUTER JOIN classes AS c
+        ON s.classes_id = c.classes_id
+        LEFT OUTER JOIN grade AS g
+        ON c.grade_id = g.grade_id
+        LEFT OUTER JOIN professional AS p
+        ON g.professional_id = p.professional_id
+        LEFT OUTER JOIN college AS co
+        ON p.college_id = co.college_id
+        where 1=1
+        <if test="studentNum != ''">
+            and student_num like concat('%',#{studentNum},'%')
+        </if>
+        <if test="studentName != ''">
+            or student_name like concat('%',#{studentName},'%')
+        </if>
+        and s.classes_id = #{classesId}
+        order by student_id desc
+    </select>
+
     <!--根据学号查询-->
     <select id="findByStudentNum" resultMap="StudentMap">
         SELECT *

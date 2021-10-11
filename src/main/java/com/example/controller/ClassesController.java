@@ -23,10 +23,10 @@ public class ClassesController {
     private ClassesService classesService;
 
     @GetMapping("/findList")
-    public Result findList(@RequestParam("currentPage") int currentPage,
-                           @RequestParam("pageSize") int pageSize,
-                           @RequestParam("classesNum") String classesNum,
-                           @RequestParam("classesName") String classesName){
+    public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+                           @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                           @RequestParam(value = "classesNum",defaultValue = "") String classesNum,
+                           @RequestParam(value = "classesName",defaultValue = "") String classesName){
         List<Classes> list = classesService.findList(currentPage, pageSize, classesNum, classesName);
         PageInfo pageInfo = new PageInfo(list);
         return Result.success(pageInfo,"查询成功!");
@@ -119,6 +119,33 @@ public class ClassesController {
             return Result.success("删除成功!");
         }
         return Result.error("删除失败!");
+    }
+
+    /**
+     * 根据所在年级查询
+     * @param currentPage
+     * @param pageSize
+     * @param gradeId
+     * @param classesNum
+     * @param classesName
+     * @return
+     */
+    @GetMapping("/findByGradeId")
+    public Result findByGradeId(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+                           @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                           @RequestParam(value = "gradeId") int gradeId,
+                           @RequestParam(value = "classesNum",defaultValue = "") String classesNum,
+                           @RequestParam(value = "classesName",defaultValue = "") String classesName){
+        List<Classes> list = classesService.findByGradeId(currentPage, pageSize,gradeId, classesNum, classesName);
+        PageInfo pageInfo = new PageInfo(list);
+        return Result.success(pageInfo,"查询成功!");
+    }
+
+    @GetMapping("/driver")
+    public Result driver(@RequestParam("ids") int[] ids,
+                         @RequestParam("classesId") int classesId){
+        int i = classesService.driver(ids, classesId);
+        return Result.success("本次共为"+i+"位同学分班");
     }
 }
 

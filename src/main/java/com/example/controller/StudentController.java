@@ -129,6 +129,12 @@ public class StudentController {
         return Result.error("删除失败!");
     }
 
+    /**
+     * 导入
+     * @param file
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/uploadXls")
     public Result uploadXls(MultipartFile file) throws IOException {
         HSSFSheet sheet = UploadXls.uploadXls(file);
@@ -172,6 +178,22 @@ public class StudentController {
             }
         }
         return Result.success("共导入"+j+"条数据!");
+    }
+
+    /**
+     * 根据班级查询
+     * @param classesId
+     * @return
+     */
+    @GetMapping("/findByClassesId")
+    public Result findByClassesId(@RequestParam("classesId") int classesId,
+                                  @RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+                                  @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                                  @RequestParam(value = "studentNum",defaultValue = "") String  studentNum,
+                                  @RequestParam(value = "studentName",defaultValue = "") String studentName){
+        List<Student> list = studentService.findByClassesId(currentPage,pageSize,classesId,studentNum,studentName);
+        PageInfo pageInfo = new PageInfo(list);
+        return Result.success(pageInfo,"查询成功!");
     }
 }
 

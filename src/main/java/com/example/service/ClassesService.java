@@ -83,4 +83,23 @@ public interface ClassesService {
      * @return
      */
     Classes findByIdGradeIdAndClassesName(Integer classesId, Integer gradeId, String classesName);
+
+    /**
+     * 根据所在年级查询
+     * @param currentPage
+     * @param pageSize
+     * @param gradeId
+     * @param classesNum
+     * @param classesName
+     * @return
+     */
+    List<Classes> findByGradeId(int currentPage, int pageSize, int gradeId, String classesNum, String classesName);
+
+    /**
+     * 分班
+     * @param ids
+     * @param classesId
+     * @return
+     */
+    int driver(int[] ids, int classesId);
 }

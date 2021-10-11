@@ -76,7 +76,7 @@ public interface ClassesDao {
      * @param classesName
      * @return
      */
-    Classes findByGradeIdAndClassesName(@Param("gradeId")Integer gradeId,
+    Classes findByGradeIdAndClassesName(@Param("gradeId") Integer gradeId,
                                         @Param("classesName")String classesName);
 
     /**
@@ -86,8 +86,19 @@ public interface ClassesDao {
      * @param classesName
      * @return
      */
-    Classes findByIdGradeIdAndClassesName(@Param("classesId")Integer classesId,
-                                          @Param("gradeId")Integer gradeId,
-                                          @Param("classesName")String classesName);
+    Classes findByIdGradeIdAndClassesName(@Param("classesId") Integer classesId,
+                                          @Param("gradeId") Integer gradeId,
+                                          @Param("classesName") String classesName);
+
+    /**
+     * 根据年级查询
+     * @param gradeId
+     * @param classesNum
+     * @param classesName
+     * @return
+     */
+    List<Classes> findByGradeId(@Param("gradeId") int gradeId,
+                                @Param("classesNum") String classesNum,
+                                @Param("classesName") String classesName);
 }
 

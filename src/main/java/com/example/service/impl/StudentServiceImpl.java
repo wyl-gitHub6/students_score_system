@@ -105,4 +105,10 @@ public class StudentServiceImpl implements StudentService {
     public Student findByStudentNumAndId(Integer studentNum, Integer studentId) {
         return studentDao.findByStudentNumAndId(studentNum,studentId);
     }
+
+    @Override
+    public List<Student> findByClassesId(int currentPage, int pageSize, int classesId,String studentNum, String studentName) {
+        PageHelper.startPage(currentPage,pageSize);
+        return studentDao.findByClassesId(classesId,studentNum,studentName);
+    }
 }

@@ -81,4 +81,15 @@ public interface StudentService {
      * @return
      */
     Student findByStudentNumAndId(Integer studentNum, Integer studentId);
+
+    /**
+     * 根据班级查询
+     * @param currentPage
+     * @param pageSize
+     * @param classesId
+     * @param studentNum
+     * @param studentName
+     * @return
+     */
+    List<Student> findByClassesId(int currentPage, int pageSize, int classesId, String studentNum, String studentName);
 }
