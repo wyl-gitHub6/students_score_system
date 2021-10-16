@@ -89,8 +89,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> findList(int currentPage, int pageSize, String courseNum, String courseName) {
+    public List<Course> findList(int currentPage, int pageSize, String courseNum, String courseName, int courseState) {
         PageHelper.startPage(currentPage,pageSize);
-        return courseDao.findList(courseNum,courseName);
+        return courseDao.findList(courseNum,courseName,courseState);
+    }
+
+    @Override
+    public List<Course> findByCourseState(int courseState) {
+        return courseDao.findByCourseState(courseState);
     }
 }

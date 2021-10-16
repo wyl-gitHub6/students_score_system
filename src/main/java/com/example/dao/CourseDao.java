@@ -65,9 +65,18 @@ public interface CourseDao {
      * 分页
      * @param courseNum
      * @param courseName
+     * @param courseState
      * @return
      */
     List<Course> findList(@Param("courseNum") String courseNum,
-                          @Param("courseName") String courseName);
+                          @Param("courseName") String courseName,
+                          @Param("courseState") int courseState);
+
+    /**
+     * 根据课程类别查询
+     * @param courseState
+     * @return
+     */
+    List<Course> findByCourseState(int courseState);
 }
 

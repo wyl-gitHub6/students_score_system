@@ -63,7 +63,15 @@ public interface CourseService {
      * @param pageSize
      * @param courseNum
      * @param courseName
+     * @param courseState
      * @return
      */
-    List<Course> findList(int currentPage, int pageSize, String courseNum, String courseName);
+    List<Course> findList(int currentPage, int pageSize, String courseNum, String courseName, int courseState);
+
+    /**
+     * 根据课程类被查询
+     * @param courseState
+     * @return
+     */
+    List<Course> findByCourseState(int courseState);
 }

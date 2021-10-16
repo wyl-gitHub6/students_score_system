@@ -54,7 +54,16 @@
         <if test="courseName != ''">
             or c.course_name like concat('%',#{courseName},'%')
         </if>
+        <if test="courseState != '-1'">
+            and c.course_state like concat('%',#{courseState},'%')
+        </if>
         order by c.course_id desc
+    </select>
+    <select id="findByCourseState" resultMap="CourseMap">
+        SELECT *
+        FROM course AS c LEFT OUTER JOIN teacher AS t
+        ON c.teacher_id = t.teacher_id
+        where c.course_state = #{courseState}
     </select>
 
     <!--新增所有列-->

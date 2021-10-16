@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.ArrangDao">
+
+    <resultMap type="com.example.entity.Classes" id="ArrangMap">
+            <result property="classesId" column="classes_id" jdbcType="INTEGER"/>
+            <result property="classesNum" column="classes_num" jdbcType="VARCHAR"/>
+            <result property="classesName" column="classes_name" jdbcType="VARCHAR"/>
+            <result property="classesAllNumber" column="classes_all_number" jdbcType="INTEGER"/>
+        <collection property="courseList" ofType="course">
+            <id property="courseId" column="course_id" />
+            <result property="courseName" column="course_name"/>
+            <result property="courseNum" column="course_num"/>
+            <result property="courseDesc" column="course_desc"/>
+            <result property="courseState" column="course_state"/>
+            <result property="courseImg" column="course_img"/>
+            <result property="courseCredit" column="course_credit"/>
+            <result property="startTime" column="start_time"/>
+            <result property="endTime" column="end_time"/>
+        </collection>
+    </resultMap>
+
+    <delete id="delete">
+        delete from arrang where classes_id = #{classesId} and course_id = #{courseId}
+    </delete>
+
+    <!--根据班级ID查询-->
+    <select id="findByClassesId" resultMap="ArrangMap">
+        select *
+        from arrang AS a LEFT OUTER JOIN course AS c
+        on a.course_id = c.course_id
+        LEFT OUTER JOIN classes AS cl
+        ON a.classes_id = cl.classes_id
+        where cl.classes_id = #{classesId}
+    </select>
+
+    <!--查询所有数据-->
+    <select id="findClasses" resultMap="ArrangfindMap">
+        select DISTINCT cl.classes_name,cl.classes_id
+        from arrang AS a LEFT OUTER JOIN classes AS cl
+        ON a.classes_id = cl.classes_id
+        where 1=1
+        <if test="classes != ''">
+           and cl.classes_name like concat('%',#{classesName},'%')
+        </if>
+    </select>
+
+    <resultMap type="com.example.entity.Classes" id="ArrangfindMap">
+        <result property="classesId" column="classes_id" jdbcType="INTEGER"/>
+        <result property="classesNum" column="classes_num" jdbcType="VARCHAR"/>
+        <result property="classesName" column="classes_name" jdbcType="VARCHAR"/>
+        <result property="classesAllNumber" column="classes_all_number" jdbcType="INTEGER"/>
+        <association property="course" javaType="course">
+            <result property="courseId" column="course_id" jdbcType="INTEGER"/>
+            <result property="courseName" column="course_name" jdbcType="VARCHAR"/>
+            <result property="courseNum" column="course_num" jdbcType="VARCHAR"/>
+            <result property="courseDesc" column="course_desc" jdbcType="VARCHAR"/>
+            <result property="courseState" column="course_state" jdbcType="INTEGER"/>
+            <result property="courseImg" column="course_img" jdbcType="VARCHAR"/>
+            <result property="courseCredit" column="course_credit" jdbcType="INTEGER"/>
+            <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+            <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+        </association>
+    </resultMap>
+
+    <select id="findByCourseIdAndClassesId" resultMap="findMap">
+        select *
+        from arrang AS a LEFT OUTER JOIN course AS c
+        on a.course_id = c.course_id
+        LEFT OUTER JOIN classes AS cl
+        ON a.classes_id = cl.classes_id
+        where a.course_id = #{courseId} and a.classes_id = #{classesId}
+    </select>
+
+    <resultMap type="com.example.entity.Arrang" id="findMap">
+        <association property="classes" column="classes">
+            <result property="classesId" column="classes_id" jdbcType="INTEGER"/>
+            <result property="classesNum" column="classes_num" jdbcType="VARCHAR"/>
+            <result property="classesName" column="classes_name" jdbcType="VARCHAR"/>
+            <result property="classesAllNumber" column="classes_all_number" jdbcType="INTEGER"/>
+        </association>
+        <association property="course" javaType="course">
+            <result property="courseId" column="course_id" jdbcType="INTEGER"/>
+            <result property="courseName" column="course_name" jdbcType="VARCHAR"/>
+            <result property="courseNum" column="course_num" jdbcType="VARCHAR"/>
+            <result property="courseDesc" column="course_desc" jdbcType="VARCHAR"/>
+            <result property="courseState" column="course_state" jdbcType="INTEGER"/>
+            <result property="courseImg" column="course_img" jdbcType="VARCHAR"/>
+            <result property="courseCredit" column="course_credit" jdbcType="INTEGER"/>
+            <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+            <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+        </association>
+    </resultMap>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="arrangId" useGeneratedKeys="true">
+        insert into arrang(classes_id, course_id)
+        values (#{classes.classesId}, #{course.courseId})
+    </insert>
+
+
+
+</mapper>
+

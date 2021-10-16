@@ -1,6 +1,8 @@
 package com.example.entity;
 
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.*;
 
 /**
@@ -40,7 +42,9 @@ public class Classes implements Serializable {
 
     private Teacher teacher;
 
+    private List<Course> courseList;
 
+    private Course course;
 
 }
 

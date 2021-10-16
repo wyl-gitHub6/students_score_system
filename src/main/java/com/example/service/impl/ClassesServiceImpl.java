@@ -134,14 +134,20 @@ public class ClassesServiceImpl implements ClassesService {
     @Override
     public int driver(int[] ids, int classesId) {
         int i = 0;
+        Classes classes = classesDao.findById(classesId);
         for (int studentId:ids) {
-            Student student = new Student();
-            Classes classes = new Classes();
-            classes.setClassesId(classesId);
-            student.setStudentId(studentId);
-            student.setClasses(classes);
-            studentDao.update(student);
-            i++;
+            int count = studentDao.findCount(classesId);
+            /*如果班级未满 则添加学生*/
+            if (count < classes.getClassesAllNumber()){
+                Student student = new Student();
+                classes.setClassesId(classesId);
+                student.setStudentId(studentId);
+                student.setClasses(classes);
+                studentDao.update(student);
+                i++;
+            }else{
+                return i;
+            }
         }
         return i;
     }

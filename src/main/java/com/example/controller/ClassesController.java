@@ -141,6 +141,12 @@ public class ClassesController {
         return Result.success(pageInfo,"查询成功!");
     }
 
+    /**
+     * 分班
+     * @param ids
+     * @param classesId
+     * @return
+     */
     @GetMapping("/driver")
     public Result driver(@RequestParam("ids") int[] ids,
                          @RequestParam("classesId") int classesId){
