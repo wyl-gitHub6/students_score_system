@@ -90,4 +90,10 @@ public interface GradeService {
      * @return
      */
     Grade findByIdAndProfessionalIdAndGradeName(Integer gradeId, Integer professionalId, String gradeName);
+
+    /**
+     * 查询年级数量
+     * @return
+     */
+    int findCount();
 }

@@ -1,7 +1,6 @@
 package com.example.entity;
 
 import java.io.Serializable;
-import java.util.List;
 
 import lombok.*;
 
@@ -20,7 +19,6 @@ public class Arrang implements Serializable {
     private Classes classes;
 
     private Course course;
-
 
 }
 

@@ -108,4 +108,9 @@ public class GradeServiceImpl implements GradeService {
     public Grade findByIdAndProfessionalIdAndGradeName(Integer gradeId, Integer professionalId, String gradeName) {
         return gradeDao.findByIdAndProfessionalIdAndGradeName(gradeId,professionalId,gradeName);
     }
+
+    @Override
+    public int findCount() {
+        return gradeDao.findCount();
+    }
 }

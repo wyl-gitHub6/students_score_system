@@ -102,5 +102,29 @@ public interface StudentDao {
     List<Student> findByClassesId(@Param("classesId") Integer classesId,
                                   @Param("studentNum") String studentNum,
                                   @Param("studentName") String studentName);
+
+    /**
+     * 登录
+     * @param studentNum
+     * @param password
+     * @return
+     */
+    Student findByStudentNumAndPassword(@Param("studentNum") String studentNum,
+                                        @Param("password") String password);
+
+    /**
+     * 必修课录入成绩时查询该课程没成绩的学生
+     * @param classesId
+     * @param courseId
+     * @return
+     */
+    List<Student> findByClasses(@Param("classesId") int classesId,
+                                @Param("courseId") int courseId);
+
+    /**
+     * 查询学生数量
+     * @return
+     */
+    int getCount();
 }
 

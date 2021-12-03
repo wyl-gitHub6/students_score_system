@@ -66,4 +66,25 @@ public interface TeacherService {
      * @return
      */
     boolean deleteBatch(int[] ids);
+
+    /**
+     * 登录
+     * @param teacherNum
+     * @param password
+     * @return
+     */
+    Teacher login(String teacherNum, String password);
+
+    /**
+     * 查询教师数量
+     * @return
+     */
+    int findCount();
+
+    /**
+     * 根据职工编号查询
+     * @param teacherNum
+     * @return
+     */
+    Teacher findByNum(String teacherNum);
 }

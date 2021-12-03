@@ -92,4 +92,26 @@ public interface StudentService {
      * @return
      */
     List<Student> findByClassesId(int currentPage, int pageSize, int classesId, String studentNum, String studentName);
+
+    /**
+     * 登录
+     * @param studentNum
+     * @param password
+     * @return
+     */
+    Student login(String studentNum, String password);
+
+    /**
+     * 必修课录入成绩时查询该课程没成绩的学生
+     * @param classesId
+     * @param courseId
+     * @return
+     */
+    List<Student> findByClasses(int classesId,int courseId);
+
+    /**
+     * 查询学生数量
+     * @return
+     */
+    int findCount();
 }

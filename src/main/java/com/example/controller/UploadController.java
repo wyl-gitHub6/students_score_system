@@ -9,6 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * @author wyl
+ */
 @RestController
 @RequestMapping("/uploadController")
 public class UploadController {

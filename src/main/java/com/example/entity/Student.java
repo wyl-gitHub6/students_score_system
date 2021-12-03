@@ -43,6 +43,7 @@ public class Student implements Serializable {
 
     private String studentPassword;
 
+    private String code;
 
 
 }

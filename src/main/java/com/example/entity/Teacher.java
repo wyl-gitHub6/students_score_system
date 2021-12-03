@@ -41,7 +41,7 @@ public class Teacher implements Serializable {
 
     private String teacherPassword;
 
-
+    private String code;
 
 }
 

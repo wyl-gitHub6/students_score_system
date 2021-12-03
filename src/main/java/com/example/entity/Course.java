@@ -2,6 +2,7 @@ package com.example.entity;
 
 import java.util.Date;
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
@@ -48,9 +49,21 @@ public class Course implements Serializable {
     @JsonFormat(pattern = "yyyy-MM",timezone = "GMT+8")
     private Date endTime;
 
+    /**
+     * 选修课人数限制
+     */
+    private Integer number;
+
     private Teacher teacher;
 
+    private List<Student> studentList;
 
+    private List<Classes> classesList;
 
+    /**
+     * 统计
+     */
+    private int value;
+    private String name;
 }
 

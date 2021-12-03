@@ -151,4 +151,18 @@ public class ClassesServiceImpl implements ClassesService {
         }
         return i;
     }
+
+    @Override
+    public int findCount() {
+        return classesDao.findCount();
+    }
+
+    @Override
+    public List<Classes> findByTeacherId(int teacherId) {
+        List<Classes> list = classesDao.findByTeacherId(teacherId);
+        for (Classes c:list) {
+            c.setClassesNumber(studentDao.findCount(c.getClassesId()));
+        }
+        return list;
+    }
 }

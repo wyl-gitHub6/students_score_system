@@ -153,5 +153,26 @@ public class ClassesController {
         int i = classesService.driver(ids, classesId);
         return Result.success("本次共为"+i+"位同学分班");
     }
+
+    /**
+     * 查询班级数量
+     * @return
+     */
+    @GetMapping("findCount")
+    public Result findCount(){
+        int count = classesService.findCount();
+        return Result.success(count,"查询成功!");
+    }
+
+    /**
+     * 查询教师所带班级
+     * @param teacherId
+     * @return
+     */
+    @GetMapping("/findByTeacherId")
+    public Result findByTeacherId(@RequestParam("teacherId") int teacherId){
+        List<Classes> classes = classesService.findByTeacherId(teacherId);
+        return Result.success(classes,"查询成功!");
+    }
 }
 

@@ -119,5 +119,15 @@ public class CollegeController {
         }
         return Result.error("删除失败!");
     }
+
+    /**
+     * 查询院系数量
+     * @return
+     */
+    @GetMapping("findCount")
+    public Result findCount(){
+        int count = collegeService.findCount();
+        return Result.success(count,"查询成功!");
+    }
 }
 

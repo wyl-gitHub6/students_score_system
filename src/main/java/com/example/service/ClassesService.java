@@ -102,4 +102,17 @@ public interface ClassesService {
      * @return
      */
     int driver(int[] ids, int classesId);
+
+    /**
+     * 查询班级数量
+     * @return
+     */
+    int findCount();
+
+    /**
+     * 查询教师所带班级
+     * @param teacherId
+     * @return
+     */
+    List<Classes> findByTeacherId(int teacherId);
 }

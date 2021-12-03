@@ -66,4 +66,10 @@ public interface CollegeService {
      * @return
      */
     List<College> findList(int currentPage, int pageSize, String collegeNum, String collegeName);
+
+    /**
+     * 查询院系数量
+     * @return
+     */
+    int findCount();
 }

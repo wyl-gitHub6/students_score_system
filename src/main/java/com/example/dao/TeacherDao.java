@@ -69,5 +69,28 @@ public interface TeacherDao {
      * @return
      */
     boolean deleteBatch(int[] ids);
+
+    /**
+     * 登录
+     * @param teacherNum
+     * @param password
+     * @return
+     */
+    Teacher findByTeacherNumAndPassword(@Param("teacherNum") String teacherNum,
+                                        @Param("password") String password);
+
+    /**
+     * 查询教师数量
+     * @return
+     */
+    int findCount();
+
+    /**
+     * 根据职工编号查询
+     * @param teacherNum
+     * @return
+     */
+    Teacher findByTeacherNum(String teacherNum);
+
 }
 

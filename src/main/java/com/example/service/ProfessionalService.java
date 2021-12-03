@@ -90,4 +90,10 @@ public interface ProfessionalService {
      * @return
      */
     Professional findByIdAndCollegeIdAndProfessionalName(Integer professionalId, Integer collegeId, String professionalName);
+
+    /**
+     * 查询专业数量
+     * @return
+     */
+    int findCount();
 }

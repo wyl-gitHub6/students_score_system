@@ -108,4 +108,9 @@ public class ProfessionalServiceImpl implements ProfessionalService {
     public Professional findByIdAndCollegeIdAndProfessionalName(Integer professionalId, Integer collegeId, String professionalName) {
         return professionalDao.findByIdAndCollegeIdAndProfessionalName(professionalId,collegeId,professionalName);
     }
+
+    @Override
+    public int findCount() {
+        return professionalDao.findCount();
+    }
 }

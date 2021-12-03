@@ -136,5 +136,15 @@ public class ProfessionalController {
         }
         return Result.error("删除失败!");
     }
+
+    /**
+     * 查询专业数量
+     * @return
+     */
+    @GetMapping("findCount")
+    public Result findCount(){
+        int count = professionalService.findCount();
+        return Result.success(count,"查询成功!");
+    }
 }
 

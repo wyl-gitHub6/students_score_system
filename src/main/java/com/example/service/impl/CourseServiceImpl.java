@@ -7,6 +7,9 @@ import com.example.service.CourseService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
+
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -53,6 +56,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public int insert(Course course) {
         course.setCourseNum(RandomUtil.randomString(9));
+        course.setNumber(ObjectUtils.isEmpty(course.getNumber())?0:course.getNumber());
         return this.courseDao.insert(course);
     }
 
@@ -64,6 +68,7 @@ public class CourseServiceImpl implements CourseService {
      */
     @Override
     public int update(Course course) {
+        course.setNumber(ObjectUtils.isEmpty(course.getNumber())?0:course.getNumber());
         return this.courseDao.update(course);
     }
 
@@ -98,4 +103,10 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> findByCourseState(int courseState) {
         return courseDao.findByCourseState(courseState);
     }
+
+    @Override
+    public List<Course> findByTeacherId(int teacherId) {
+        return courseDao.findByTeacherId(teacherId);
+    }
+
 }

@@ -100,5 +100,18 @@ public interface ClassesDao {
     List<Classes> findByGradeId(@Param("gradeId") int gradeId,
                                 @Param("classesNum") String classesNum,
                                 @Param("classesName") String classesName);
+
+    /**
+     * 查询班级数量
+     * @return
+     */
+    int findCount();
+
+    /**
+     * 查询教师所带班级
+     * @param teacherId
+     * @return
+     */
+    List<Classes> findByTeacherId(int teacherId);
 }
 

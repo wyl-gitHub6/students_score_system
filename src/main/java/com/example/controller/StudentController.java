@@ -1,10 +1,14 @@
 package com.example.controller;
 
+import cn.hutool.crypto.SecureUtil;
+import com.example.config.SendEmailConfig;
 import com.example.entity.Classes;
 import com.example.entity.Student;
+import com.example.entity.Teacher;
 import com.example.service.StudentService;
 import com.example.utils.Result;
 import com.example.utils.UploadXls;
+import com.example.utils.VerCode;
 import com.github.pagehelper.PageInfo;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -28,6 +32,14 @@ public class StudentController {
     @Resource
     private StudentService studentService;
 
+    /**
+     * 分页
+     * @param currentPage
+     * @param pageSize
+     * @param studentNum
+     * @param studentName
+     * @return
+     */
     @GetMapping("/findList")
     public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                            @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
@@ -193,7 +205,89 @@ public class StudentController {
                                   @RequestParam(value = "studentName",defaultValue = "") String studentName){
         List<Student> list = studentService.findByClassesId(currentPage,pageSize,classesId,studentNum,studentName);
         PageInfo pageInfo = new PageInfo(list);
+        if (pageInfo == null){
+            return Result.error("暂无数据！");
+        }
         return Result.success(pageInfo,"查询成功!");
+    }
+
+    /**
+     * 登录
+     * @param studentNum
+     * @param password
+     * @return
+     */
+    @GetMapping("/login")
+    public Result login(@RequestParam("studentNum") String studentNum,
+                        @RequestParam("password") String password){
+        Student student = studentService.login(studentNum, SecureUtil.md5(password));
+        if(null != student){
+            return Result.success(student,"登录成功!");
+        }
+        return Result.error("学号或密码错误!");
+    }
+
+    /**
+     * 必修课录入成绩时查询该课程没成绩的学生
+     * @param classesId
+     * @return
+     */
+    @GetMapping("/findByClasses")
+    public Result findByClasses(@RequestParam("classesId") int classesId,
+                                @RequestParam("courseId") int courseId){
+        List<Student> list = studentService.findByClasses(classesId,courseId);
+        if (list.isEmpty()){
+            return Result.error("暂无数据！");
+        }
+        return Result.success(list,"查询成功!");
+    }
+
+    /**
+     * 查询学生数量
+     * @return
+     */
+    @GetMapping("findCount")
+    public Result findCount(){
+        int count = studentService.findCount();
+        return Result.success(count,"查询成功!");
+    }
+
+    /**
+     * 修改密码判断与旧密码加密后是否相同
+     * @param studentId
+     * @param password
+     * @return
+     */
+    @GetMapping("/updatePassword")
+    public Result updatePassword(@RequestParam("studentId") int studentId,
+                                 @RequestParam("password") String password){
+        Student student = studentService.findById(studentId);
+        if (student.getStudentPassword().equals(SecureUtil.md5(password))){
+            return Result.success("与旧密码相同");
+        }
+        return Result.error("密码不同");
+    }
+
+    /**
+     * 发送邮箱验证码
+     * @param studentNum
+     * @param emailAddress
+     * @return
+     */
+    @GetMapping("/sendEmail")
+    public Result sendEmail(@RequestParam("studentNum") int studentNum,
+                            @RequestParam("emailAddress") String emailAddress){
+        Student student = studentService.findByStudentNum(studentNum);
+        if (null == student){
+            return Result.error("请输入正确的学号！");
+        }
+        if (!student.getStudentEmail().equals(emailAddress)){
+            return Result.error("请输入绑定的邮箱！");
+        }
+        String code = VerCode.getVerCode();
+        SendEmailConfig.sendEmail(emailAddress,code);
+        student.setCode(code);
+        return Result.success(student,"发送成功,注意查收！");
     }
 }
 

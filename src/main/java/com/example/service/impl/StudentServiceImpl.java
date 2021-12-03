@@ -1,8 +1,6 @@
 package com.example.service.impl;
 
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
-import com.example.entity.Classes;
 import com.example.entity.Student;
 import com.example.dao.StudentDao;
 import com.example.service.StudentService;
@@ -66,6 +64,10 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public int update(Student student) {
+        Student s = studentDao.findById(student.getStudentId());
+        if (!s.getStudentPassword().equals(student.getStudentPassword())){
+            student.setStudentPassword(SecureUtil.md5(student.getStudentPassword()));
+        }
         return this.studentDao.update(student);
     }
 
@@ -110,5 +112,20 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> findByClassesId(int currentPage, int pageSize, int classesId,String studentNum, String studentName) {
         PageHelper.startPage(currentPage,pageSize);
         return studentDao.findByClassesId(classesId,studentNum,studentName);
+    }
+
+    @Override
+    public Student login(String studentNum, String password) {
+        return studentDao.findByStudentNumAndPassword(studentNum,password);
+    }
+
+    @Override
+    public List<Student> findByClasses(int classesId,int courseId) {
+        return studentDao.findByClasses(classesId,courseId);
+    }
+
+    @Override
+    public int findCount() {
+        return studentDao.getCount();
     }
 }

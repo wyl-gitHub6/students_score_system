@@ -78,5 +78,12 @@ public interface CourseDao {
      * @return
      */
     List<Course> findByCourseState(int courseState);
+
+    /**
+     * 查询教师所教授课程
+     * @param teacherId
+     * @return
+     */
+    List<Course> findByTeacherId(int teacherId);
 }
 

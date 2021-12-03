@@ -22,7 +22,15 @@ public class CourseController {
     @Resource
     private CourseService courseService;
 
-
+    /**
+     * 分页查询
+     * @param currentPage
+     * @param pageSize
+     * @param courseNum
+     * @param courseName
+     * @param courseState
+     * @return
+     */
     @GetMapping("/findList")
     public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                            @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
@@ -114,9 +122,28 @@ public class CourseController {
         return Result.error("删除失败!");
     }
 
+    /**
+     * 根据课程类型查询
+     * @param courseState
+     * @return
+     */
     @GetMapping("/findByCourseState")
     public Result findByCourseState(@RequestParam("courseState") int courseState){
         List<Course> list = courseService.findByCourseState(courseState);
+        return Result.success(list,"查询成功!");
+    }
+
+    /**
+     * 查询教师所教授课程
+     * @param teacherId
+     * @return
+     */
+    @GetMapping("/findByTeacherId")
+    public Result findByTeacherId(@RequestParam("teacherId") int teacherId){
+        List<Course> list = courseService.findByTeacherId(teacherId);
+        if (list.isEmpty()){
+            return Result.error("暂无所教授课程");
+        }
         return Result.success(list,"查询成功!");
     }
 }

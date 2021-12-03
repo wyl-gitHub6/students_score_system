@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import cn.hutool.db.Page;
 import com.example.entity.Arrang;
 import com.example.entity.Classes;
 import com.example.service.ArrangService;
@@ -66,12 +65,23 @@ public class ArrangController {
         return Result.success(msg);
     }
 
+    /**
+     * 根据班级ID查询
+     * @param classesId
+     * @return
+     */
     @GetMapping("/findByClassesId")
     public Result findByClassesId(@RequestParam("classesId") int classesId){
-        List<Classes> arrang = arrangService.findByClassesId(classesId);
-        return Result.success(arrang,"查询成功!");
+        List<Classes> list = arrangService.findByClassesId(classesId);
+        return Result.success(list,"查询成功!");
     }
 
+    /**
+     * 根据课程ID和班级ID删除
+     * @param courseId
+     * @param classesId
+     * @return
+     */
     @DeleteMapping("/delete")
     public Result delete(@RequestParam("courseId") int courseId,
                          @RequestParam("classesId") int classesId){
@@ -81,5 +91,17 @@ public class ArrangController {
         }
         return Result.error("删除失败!");
     }
+
+    /**
+     * 根据课程ID查询
+     * @param courseId
+     * @return
+     */
+    @GetMapping("/findByCourseId")
+    public Result findByCourseId(@RequestParam("courseId") int courseId){
+        List<Classes> list = arrangService.findByCourseId(courseId);
+        return Result.success(list,"查询成功!");
+    }
+
 }
 

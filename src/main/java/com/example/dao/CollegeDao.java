@@ -66,5 +66,11 @@ public interface CollegeDao {
      * @return
      */
     List<College> findList(String collegeNum, String collegeName);
+
+    /**
+     * 查询院系数量
+     * @return
+     */
+    int findCount();
 }
 

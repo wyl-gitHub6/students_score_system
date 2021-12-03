@@ -140,5 +140,15 @@ public class GradeController {
         }
         return Result.error("删除失败!");
     }
+
+    /**
+     * 查询年级数量
+     * @return
+     */
+    @GetMapping("findCount")
+    public Result findCount(){
+        int count = gradeService.findCount();
+        return Result.success(count,"查询成功!");
+    }
 }
 

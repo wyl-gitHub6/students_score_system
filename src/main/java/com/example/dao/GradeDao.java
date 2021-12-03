@@ -95,5 +95,11 @@ public interface GradeDao {
     Grade findByIdAndProfessionalIdAndGradeName(@Param("gradeId") Integer gradeId,
                                                 @Param("professionalId") Integer professionalId,
                                                 @Param("gradeName") String gradeName);
+
+    /**
+     * 查询年级数量
+     * @return
+     */
+    int findCount();
 }
 

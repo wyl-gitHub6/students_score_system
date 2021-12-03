@@ -86,4 +86,9 @@ public class ArrangServiceImpl implements ArrangService {
     public boolean delete(int courseId, int classesId) {
         return arrangDao.delete(courseId,classesId);
     }
+
+    @Override
+    public List<Classes> findByCourseId(int courseId) {
+        return arrangDao.findByCourseId(courseId);
+    }
 }

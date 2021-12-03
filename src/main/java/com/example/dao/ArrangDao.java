@@ -55,5 +55,12 @@ public interface ArrangDao {
      */
     boolean delete(@Param("courseId") int courseId,
                    @Param("classesId") int classesId);
+
+    /**
+     * 根据课程ID查询
+     * @param courseId
+     * @return
+     */
+    List<Classes> findByCourseId(int courseId);
 }
 

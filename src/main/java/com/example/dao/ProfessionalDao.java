@@ -95,5 +95,11 @@ public interface ProfessionalDao {
     Professional findByIdAndCollegeIdAndProfessionalName(@Param("professionalId") Integer professionalId,
                                                          @Param("collegeId") Integer collegeId,
                                                          @Param("professionalName") String professionalName);
+
+    /**
+     * 查询专业数量
+     * @return
+     */
+    int findCount();
 }
 

@@ -93,4 +93,9 @@ public class CollegeServiceImpl implements CollegeService {
         PageHelper.startPage(currentPage,pageSize);
         return collegeDao.findList(collegeNum,collegeName);
     }
+
+    @Override
+    public int findCount() {
+        return collegeDao.findCount();
+    }
 }

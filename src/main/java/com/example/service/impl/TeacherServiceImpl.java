@@ -48,6 +48,21 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherDao.deleteBatch(ids);
     }
 
+    @Override
+    public Teacher login(String teacherNum, String password) {
+        return teacherDao.findByTeacherNumAndPassword(teacherNum,password);
+    }
+
+    @Override
+    public int findCount() {
+        return teacherDao.findCount();
+    }
+
+    @Override
+    public Teacher findByNum(String teacherNum) {
+        return teacherDao.findByTeacherNum(teacherNum);
+    }
+
     /**
      * 通过ID查询单条数据
      *
@@ -90,6 +105,10 @@ public class TeacherServiceImpl implements TeacherService {
      */
     @Override
     public int update(Teacher teacher) {
+        Teacher t = teacherDao.findById(teacher.getTeacherId());
+        if (!t.getTeacherPassword().equals(teacher.getTeacherPassword())){
+            teacher.setTeacherPassword(SecureUtil.md5(teacher.getTeacherPassword()));
+        }
         return this.teacherDao.update(teacher);
     }
 

@@ -1,11 +1,12 @@
 package com.example.controller;
 
-import com.example.entity.Classes;
-import com.example.entity.Student;
+import cn.hutool.crypto.SecureUtil;
+import com.example.config.SendEmailConfig;
 import com.example.entity.Teacher;
 import com.example.service.TeacherService;
 import com.example.utils.Result;
 import com.example.utils.UploadXls;
+import com.example.utils.VerCode;
 import com.github.pagehelper.PageInfo;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -136,9 +137,8 @@ public class TeacherController {
         for (int i = 1; i <= lastRowNum; i++) {
             //通过下标获取行
             HSSFRow row = sheet.getRow(i);
-            //从行中获取数据
-
             /**
+             * 从行中获取数据
              * getNumericCellValue() 获取数字
              * getStringCellValue 获取String
              */
@@ -159,9 +159,74 @@ public class TeacherController {
                 t.setTeacherNational(national);
                 t.setTeacherCard(card);
                 teacherService.insert(t);
-
         }
         return Result.success("共导入"+j+"条数据!");
     }
+
+    /**
+     * 登录
+     * @param teacherNum
+     * @param password
+     * @return
+     */
+    @GetMapping("/login")
+    public Result login(@RequestParam("teacherNum") String teacherNum,
+                        @RequestParam("password") String password){
+        Teacher teacher = teacherService.login(teacherNum, SecureUtil.md5(password));
+        if(null != teacher){
+            return Result.success(teacher,"登录成功!");
+        }
+        return Result.error("职工编号或密码错误!");
+    }
+
+    /**
+     * 查询教师数量
+     * @return
+     */
+    @GetMapping("findCount")
+    public Result findCount(){
+        int count = teacherService.findCount();
+        return Result.success(count,"查询成功!");
+    }
+
+    /**
+     * 修改密码判断与旧密码加密后是否相同
+     * @param teacherId
+     * @param password
+     * @return
+     */
+    @GetMapping("/updatePassword")
+    public Result updatePassword(@RequestParam("teacherId") int teacherId,
+                                 @RequestParam("password") String password){
+        Teacher teacher = teacherService.findById(teacherId);
+        if (teacher.getTeacherPassword().equals(SecureUtil.md5(password))){
+            return Result.success("与旧密码相同");
+        }
+        return Result.error("密码不同");
+    }
+
+    /**
+     * 发送邮箱验证码
+     * @param teacherNum
+     * @param emailAddress
+     * @return
+     */
+    @GetMapping("/sendEmail")
+    public Result sendEmail(@RequestParam("teacherNum") String teacherNum,
+                            @RequestParam("emailAddress") String emailAddress){
+        Teacher teacher = teacherService.findByNum(teacherNum);
+        if (null == teacher){
+            return Result.error("请输入正确的职工编号！");
+        }
+        if (!teacher.getTeacherEmail().equals(emailAddress)){
+            return Result.error("请输入绑定的邮箱！");
+        }
+        String code = VerCode.getVerCode();
+        SendEmailConfig.sendEmail(emailAddress,code);
+        teacher.setCode(code);
+        return Result.success(teacher,"发送成功,注意查收！");
+    }
+
+
 }
 

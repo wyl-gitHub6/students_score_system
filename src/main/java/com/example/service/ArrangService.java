@@ -50,4 +50,12 @@ public interface ArrangService {
      * @return
      */
     boolean delete(int courseId, int classesId);
+
+    /**
+     * 根据课程ID查询
+     * @param courseId
+     * @return
+     */
+    List<Classes> findByCourseId(int courseId);
+
 }
