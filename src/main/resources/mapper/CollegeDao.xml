@@ -38,6 +38,10 @@
         from college
     </select>
 
+    <select id="findCount" resultType="java.lang.Integer">
+        select count(*) from college
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="collegeId" useGeneratedKeys="true">
         insert into college(college_num, college_name)

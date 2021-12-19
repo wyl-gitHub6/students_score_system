@@ -12,6 +12,7 @@
         <result property="courseCredit" column="course_credit" jdbcType="INTEGER"/>
         <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
         <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+        <result property="number" column="number" jdbcType="TIMESTAMP"/>
         <association property="teacher" javaType="teacher">
             <result property="teacherId" column="teacher_id" jdbcType="INTEGER"/>
             <result property="teacherNum" column="teacher_num" jdbcType="VARCHAR"/>
@@ -59,6 +60,8 @@
         </if>
         order by c.course_id desc
     </select>
+
+    <!--根据课程类型查询-->
     <select id="findByCourseState" resultMap="CourseMap">
         SELECT *
         FROM course AS c LEFT OUTER JOIN teacher AS t
@@ -66,10 +69,18 @@
         where c.course_state = #{courseState}
     </select>
 
+    <!--根据教师ID查询-->
+    <select id="findByTeacherId" resultMap="CourseMap">
+        SELECT *
+        FROM course AS c LEFT OUTER JOIN teacher AS t
+        ON c.teacher_id = t.teacher_id
+        where c.teacher_id = #{teacherId}
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="courseId" useGeneratedKeys="true">
-        insert into course(course_name, course_num, course_desc, course_state, course_img, course_credit, start_time, end_time, teacher_id)
-        values (#{courseName}, #{courseNum}, #{courseDesc}, #{courseState}, #{courseImg}, #{courseCredit}, #{startTime}, #{endTime}, #{teacher.teacherId})
+        insert into course(course_name, course_num, course_desc, course_state, course_img, course_credit, start_time, end_time, teacher_id,`number`)
+        values (#{courseName}, #{courseNum}, #{courseDesc}, #{courseState}, #{courseImg}, #{courseCredit}, #{startTime}, #{endTime}, #{teacher.teacherId},#{number})
     </insert>
 
     <!--通过主键修改数据-->
@@ -100,8 +111,11 @@
             <if test="endTime != null">
                 end_time = #{endTime},
             </if>
+            <if test="number != null">
+                `number` = #{number},
+            </if>
             <if test="teacher.teacherId != null">
-                teacher_id = #{teacher.teacherId},
+                teacher_id = #{teacher.teacherId}
             </if>
         </set>
         where course_id = #{courseId}

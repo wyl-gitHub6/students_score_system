@@ -78,6 +78,10 @@
         order by grade_id desc
     </select>
 
+    <select id="findCount" resultType="java.lang.Integer">
+        select count(*) from grade
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="gradeId" useGeneratedKeys="true">
         insert into grade(grade_num, grade_name, professional_id)

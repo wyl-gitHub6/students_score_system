@@ -44,6 +44,20 @@
         from teacher
     </select>
 
+    <select id="findByTeacherNumAndPassword" resultType="com.example.entity.Teacher">
+        select *
+        from teacher
+        where teacher_num = #{teacherNum} and teacher_password = #{password}
+    </select>
+
+    <select id="findCount" resultType="java.lang.Integer">
+        select count(*) from teacher
+    </select>
+
+    <select id="findByTeacherNum" resultType="com.example.entity.Teacher">
+        select * from teacher where teacher_num = #{teacherNum};
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="teacherId" useGeneratedKeys="true">
         insert into teacher(teacher_num, teacher_name, teacher_age, teacher_national, teacher_sex, teacher_email, teacher_img, teacher_phone, teacher_password, teacher_card)

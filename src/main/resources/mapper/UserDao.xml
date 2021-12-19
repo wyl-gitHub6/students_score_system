@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.UserDao">
+
+    <resultMap type="com.example.entity.User" id="UserMap">
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userPassword" column="user_password" jdbcType="VARCHAR"/>
+        <result property="userAge" column="user_age" jdbcType="INTEGER"/>
+        <result property="userEmail" column="user_email" jdbcType="VARCHAR"/>
+        <result property="userPhone" column="user_phone" jdbcType="VARCHAR"/>
+        <result property="userSex" column="user_sex" jdbcType="INTEGER"/>
+        <result property="userImg" column="user_img" jdbcType="VARCHAR"/>
+        <result property="userNational" column="user_national" jdbcType="VARCHAR"/>
+        <result property="userCard" column="user_card" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="findById" resultMap="UserMap">
+        select
+          user_id, user_name, user_password, user_age, user_email, user_phone, user_sex, user_img, user_national, user_card
+        from `user`
+        where user_id = #{userId}
+    </select>
+
+    <!--查询所有数据-->
+    <select id="findAll" resultMap="UserMap">
+        select
+          user_id, user_name, user_password, user_age, user_email, user_phone, user_sex, user_img, user_national, user_card
+        from `user`
+    </select>
+
+    <!--登录-->
+    <select id="findByUserNumAndPassword" resultType="com.example.entity.User">
+        select *
+        from `user`
+        where user_num = #{userNum} and user_password = #{password}
+    </select>
+
+    <select id="findList" resultType="com.example.entity.User">
+        select *
+        from `user`
+        where 1=1
+        <if test="userName != ''">
+            and user_name like concat('%',#{userName},'%')
+        </if>
+        <if test="userNum != ''">
+            or user_num like concat('%',#{userNum},'%')
+        </if>
+        order by user_id desc
+    </select>
+
+    <select id="findByUserNum" resultType="com.example.entity.User">
+        select *
+        from `user` where user_num = #{userNum}
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
+        insert into `user`(user_num, user_name, user_password, user_age, user_email, user_phone, user_sex, user_img, user_national, user_card)
+        values (#{userNum}, #{userName}, #{userPassword}, #{userAge}, #{userEmail}, #{userPhone}, #{userSex}, #{userImg}, #{userNational}, #{userCard})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update `user`
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="userNum != null and userNum != ''">
+                user_num = #{userNum},
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                user_password = #{userPassword},
+            </if>
+            <if test="userAge != null">
+                user_age = #{userAge},
+            </if>
+            <if test="userEmail != null and userEmail != ''">
+                user_email = #{userEmail},
+            </if>
+            <if test="userPhone != null and userPhone != ''">
+                user_phone = #{userPhone},
+            </if>
+            <if test="userSex != null">
+                user_sex = #{userSex},
+            </if>
+            <if test="userImg != null and userImg != ''">
+                user_img = #{userImg},
+            </if>
+            <if test="userNational != null and userNational != ''">
+                user_national = #{userNational},
+            </if>
+            <if test="userCard != null and userCard != ''">
+                user_card = #{userCard},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from `user` where user_id = #{userId}
+    </delete>
+
+    <!--批量删除-->
+    <delete id="deleteBatch" >
+        delete from `user` where user_id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
+

@@ -121,7 +121,7 @@ public class UserController {
      * @param password
      * @return
      */
-    @GetMapping("/login")
+    /*@GetMapping("/login")
     public Result login(@RequestParam("userNum") String userNum,
                         @RequestParam("password") String password){
         String pwd = SecureUtil.md5(password);
@@ -130,7 +130,7 @@ public class UserController {
             return Result.success(login,"登录成功!");
         }
         return Result.error("用户名或密码错误!");
-    }
+    }*/
 
     /**
      * 发送邮箱验证码

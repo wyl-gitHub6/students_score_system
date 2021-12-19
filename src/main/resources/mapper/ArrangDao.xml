@@ -7,17 +7,17 @@
             <result property="classesNum" column="classes_num" jdbcType="VARCHAR"/>
             <result property="classesName" column="classes_name" jdbcType="VARCHAR"/>
             <result property="classesAllNumber" column="classes_all_number" jdbcType="INTEGER"/>
-        <collection property="courseList" ofType="course">
-            <id property="courseId" column="course_id" />
-            <result property="courseName" column="course_name"/>
-            <result property="courseNum" column="course_num"/>
-            <result property="courseDesc" column="course_desc"/>
-            <result property="courseState" column="course_state"/>
-            <result property="courseImg" column="course_img"/>
-            <result property="courseCredit" column="course_credit"/>
-            <result property="startTime" column="start_time"/>
-            <result property="endTime" column="end_time"/>
-        </collection>
+            <collection property="courseList" ofType="course">
+                <id property="courseId" column="course_id" />
+                <result property="courseName" column="course_name"/>
+                <result property="courseNum" column="course_num"/>
+                <result property="courseDesc" column="course_desc"/>
+                <result property="courseState" column="course_state"/>
+                <result property="courseImg" column="course_img"/>
+                <result property="courseCredit" column="course_credit"/>
+                <result property="startTime" column="start_time"/>
+                <result property="endTime" column="end_time"/>
+            </collection>
     </resultMap>
 
     <delete id="delete">
@@ -32,6 +32,56 @@
         LEFT OUTER JOIN classes AS cl
         ON a.classes_id = cl.classes_id
         where cl.classes_id = #{classesId}
+    </select>
+
+    <resultMap type="com.example.entity.Classes" id="ClassesMap">
+        <result property="classesId" column="classes_id" jdbcType="INTEGER"/>
+        <result property="classesNum" column="classes_num" jdbcType="VARCHAR"/>
+        <result property="classesName" column="classes_name" jdbcType="VARCHAR"/>
+        <result property="classesAllNumber" column="classes_all_number" jdbcType="INTEGER"/>
+        <association property="grade" javaType="grade">
+            <result property="gradeId" column="grade_id" jdbcType="INTEGER"/>
+            <result property="gradeNum" column="grade_num" jdbcType="VARCHAR"/>
+            <result property="gradeName" column="grade_name" jdbcType="VARCHAR"/>
+            <association property="professional" javaType="professional">
+                <result property="professionalId" column="professional_id" jdbcType="INTEGER"/>
+                <result property="professionalNum" column="professional_num" jdbcType="VARCHAR"/>
+                <result property="professionalName" column="professional_name" jdbcType="VARCHAR"/>
+                <association property="college" javaType="college">
+                    <result property="collegeId" column="college_id" jdbcType="INTEGER"/>
+                    <result property="collegeNum" column="college_num" jdbcType="VARCHAR"/>
+                    <result property="collegeName" column="college_name" jdbcType="VARCHAR"/>
+                </association>
+            </association>
+        </association>
+        <association property="teacher" javaType="teacher">
+            <result property="teacherId" column="teacher_id" jdbcType="INTEGER"/>
+            <result property="teacherNum" column="teacher_num" jdbcType="VARCHAR"/>
+            <result property="teacherName" column="teacher_name" jdbcType="VARCHAR"/>
+            <result property="teacherAge" column="teacher_age" jdbcType="VARCHAR"/>
+            <result property="teacherCard" column="teacher_card" jdbcType="VARCHAR"/>
+            <result property="teacherNational" column="teacher_national" jdbcType="VARCHAR"/>
+            <result property="teacherSex" column="teacher_sex" jdbcType="VARCHAR"/>
+            <result property="teacherEmail" column="teacher_email" jdbcType="VARCHAR"/>
+            <result property="teacherImg" column="teacher_img" jdbcType="VARCHAR"/>
+            <result property="teacherPhone" column="teacher_phone" jdbcType="INTEGER"/>
+            <result property="teacherPassword" column="teacher_password" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
+    <!--根据课程ID查询-->
+    <select id="findByCourseId" resultMap="ClassesMap">
+        select *
+        FROM classes AS c LEFT OUTER JOIN grade AS g
+        ON c.grade_id = g.grade_id
+        LEFT OUTER JOIN professional AS p
+        ON g.professional_id = p.professional_id
+        LEFT OUTER JOIN college AS co
+        ON p.college_id = co.college_id
+        LEFT OUTER JOIN teacher as t
+        ON c.teacher_id = t.teacher_id
+        LEFT OUTER JOIN arrang AS a
+        ON a.classes_id = c.classes_id
+        where a.course_id = #{courseId}
     </select>
 
     <!--查询所有数据-->
@@ -97,8 +147,6 @@
         insert into arrang(classes_id, course_id)
         values (#{classes.classesId}, #{course.courseId})
     </insert>
-
-
 
 </mapper>
 

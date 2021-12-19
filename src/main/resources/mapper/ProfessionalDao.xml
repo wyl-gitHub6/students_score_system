@@ -65,6 +65,10 @@
         order by professional_id desc
     </select>
 
+    <select id="findCount" resultType="java.lang.Integer">
+        select count(*) from professional
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="professionalId" useGeneratedKeys="true">
         insert into professional(professional_num, professional_name, college_id)

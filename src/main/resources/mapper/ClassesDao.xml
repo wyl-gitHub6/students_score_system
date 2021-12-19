@@ -119,6 +119,21 @@
         order by classes_id desc
     </select>
 
+    <select id="findCount" resultType="java.lang.Integer">
+        select count(*) from classes
+    </select>
+
+    <select id="findByTeacherId" resultMap="ClassesMap">
+        SELECT *
+        FROM classes AS c LEFT OUTER JOIN grade AS g
+        ON c.grade_id = g.grade_id
+        LEFT OUTER JOIN professional AS p
+        ON g.professional_id = p.professional_id
+        LEFT OUTER JOIN college AS co
+        ON p.college_id = co.college_id
+        where c.teacher_id = #{teacherId}
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="classesId" useGeneratedKeys="true">
         insert into classes(classes_num, classes_name, classes_all_number, grade_id, teacher_id)

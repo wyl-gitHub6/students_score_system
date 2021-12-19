@@ -25,6 +25,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -81,10 +85,11 @@
             <scope>test</scope>
         </dependency>
 
+
+        <!--邮箱-->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.56</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
         <!--聊天-->
@@ -98,13 +103,6 @@
             <artifactId>websocket-server</artifactId>
             <version>9.4.7.v20170914</version>
             <scope>test</scope>
-        </dependency>
-
-        <!--支付-->
-        <dependency>
-            <groupId>com.alipay.api</groupId>
-            <artifactId>k12-alipay-sdk</artifactId>
-            <version>0.0.1-beta</version>
         </dependency>
 
         <!-- Execl数据表格导入导出 -->
@@ -124,10 +122,6 @@
             <version>3.14</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

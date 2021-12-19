@@ -128,6 +128,36 @@
         ON p.college_id = co.college_id
     </select>
 
+    <select id="findByStudentNumAndPassword" resultMap="StudentMap">
+        select *
+        FROM student AS s LEFT OUTER JOIN classes AS c
+        ON s.classes_id = c.classes_id
+        LEFT OUTER JOIN grade AS g
+        ON c.grade_id = g.grade_id
+        LEFT OUTER JOIN professional AS p
+        ON g.professional_id = p.professional_id
+        LEFT OUTER JOIN college AS co
+        ON p.college_id = co.college_id
+        where s.student_num = #{studentNum} and s.student_password = #{password}
+    </select>
+
+    <select id="findByClasses" resultMap="StudentMap">
+        SELECT *
+        FROM student AS s LEFT OUTER JOIN classes AS c
+        ON s.classes_id = c.classes_id
+        LEFT OUTER JOIN grade AS g
+        ON c.grade_id = g.grade_id
+        LEFT OUTER JOIN professional AS p
+        ON g.professional_id = p.professional_id
+        LEFT OUTER JOIN college AS co
+        ON p.college_id = co.college_id
+        where s.classes_id = #{classesId} AND s.student_id not in (SELECT student_id from score where course_id = #{courseId})
+    </select>
+
+    <select id="getCount" resultType="java.lang.Integer">
+        select count(*) from student
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="studentId" useGeneratedKeys="true">
         insert into student(student_num, student_name, student_sex, student_age, student_national, student_email, student_card, student_phone, student_img, classes_id, student_password)

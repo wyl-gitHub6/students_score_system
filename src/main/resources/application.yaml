@@ -5,7 +5,7 @@ server:
 logging:
   level: #自定义框架日志级别
     org.springframework: warn
-    com.ambow: debug
+    com.example: debug
 
 spring:
   datasource:
@@ -28,9 +28,20 @@ spring:
       max-lifetime: 1800000
       # 数据库连接超时时间,默认30秒，即30000
       connection-timeout: 30000
-  redis: #配置redis基本信息
-    host: 192.168.153.129
-    port: 6379
+  mail: #邮箱配置
+    host: smtp.qq.com
+    username: 362387242@qq.com
+    password: dccrzwcufxygbjhh
+    port: 587
+    default-encoding: utf-8
+    properties:
+      mail:
+        smtp:
+          timeout: 5000
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
 #Mybatis配置
 mybatis:
@@ -45,4 +56,5 @@ pagehelper:
   reasonable: true #分页合理化，最大最小页时不溢出
   support-methods-arguments: false #是否自动分页
   params: count=countSql
+
 
