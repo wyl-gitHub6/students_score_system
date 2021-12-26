@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.dao.TaskMapper">
+
+    <insert id="insert">
+        insert into
+        task (job_name,description,cron_expression,bean_class,job_status,job_group)
+        values (#{jobName},#{description},#{cronExpression},#{beanClass},#{jobStatus},#{jobGroup})
+    </insert>
+
+    <update id="update">
+        update task
+        <set>
+            <if test="jobName != null and jobName != ''">
+                job_name = #{jobName},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="cronExpression != null and cronExpression != ''">
+                cron_expression = #{cronExpression},
+            </if>
+            <if test="beanClass != null and beanClass != ''">
+                bean_class = #{beanClass},
+            </if>
+            <if test="jobStatus != null and jobStatus != ''">
+                job_status = #{jobStatus},
+            </if>
+            <if test="jobGroup != null and jobGroup != ''">
+                job_group = #{jobGroup}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete from task where id = #{id}
+    </delete>
+
+    <select id="list" resultType="com.example.entity.Task">
+        select id Id,job_name jobName,description,cron_expression cronExpression,
+               bean_class beanClass,job_status jobStatus,job_group jobGroup
+        from task where job_status = 0
+    </select>
+
+    <select id="findList" resultType="com.example.entity.Task">
+        select id Id,job_name jobName,description,cron_expression cronExpression,
+               bean_class beanClass,job_status jobStatus,job_group jobGroup
+        from task
+    </select>
+
+    <select id="findById" resultType="com.example.entity.Task">
+        select id Id,job_name jobName,description,cron_expression cronExpression,
+               bean_class beanClass,job_status jobStatus,job_group jobGroup
+        from task where id = #{id}
+    </select>
+</mapper>
