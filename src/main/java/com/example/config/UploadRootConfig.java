@@ -5,8 +5,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * tomacat 配置虚拟目录
- * @author hasee
+ * 配置虚拟目录
+ * @author wyl
  */
 @Configuration
 public class UploadRootConfig implements WebMvcConfigurer {

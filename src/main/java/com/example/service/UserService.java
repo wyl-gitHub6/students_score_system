@@ -63,7 +63,7 @@ public interface UserService {
      * @param pwd
      * @return
      */
-    /*User login(String userNum, String pwd);*/
+    User login(String userNum, String pwd);
 
     /**
      * 分页查询
@@ -81,4 +81,5 @@ public interface UserService {
      * @return
      */
     User findByUserNum(String userNum);
+
 }

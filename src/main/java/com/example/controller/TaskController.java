@@ -7,6 +7,7 @@ import com.example.task.QuartzJob;
 import com.example.utils.CronUtils;
 import com.example.utils.Result;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/task")
+@Slf4j
 public class TaskController {
 
     @Autowired
@@ -49,8 +51,8 @@ public class TaskController {
      */
     @GetMapping("/checkCourse")
     public Result isCheckCourse(){
-        System.out.println("开启:"+quartzJob.getState());
-        System.out.println("关闭:"+closeJob.getState());
+        log.info("开启:"+quartzJob.getState());
+        log.info("关闭:"+closeJob.getState());
         if (quartzJob.getState() == 1){
             return Result.success(1,"选课关闭中");
         }

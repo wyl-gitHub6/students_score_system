@@ -1,6 +1,7 @@
 package com.example.config;
 
 import cn.hutool.extra.spring.SpringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
  * @author wyl
  */
 @Component
+@Slf4j
 public class SendEmailConfig {
 
     /**
@@ -31,7 +33,7 @@ public class SendEmailConfig {
         SimpleMailMessage message = new SimpleMailMessage();
         //设置标题
         message.setSubject("邮箱验证码");
-        System.out.println("邮箱验证码:"+code);
+        log.info("邮箱验证码:"+code);
         //设置邮件正文
         message.setText("尊敬的用户,您好:\n"
                 + "\n本次请求的邮件验证码为:" + code + ",本验证码5分钟内有效，请及时输入。（请勿泄露此验证码）\n"

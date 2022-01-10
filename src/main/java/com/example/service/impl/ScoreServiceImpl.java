@@ -95,7 +95,7 @@ public class ScoreServiceImpl implements ScoreService {
             sc.setCourseId(score.getCourseId());
             sc.setUsualGrade(score.getUsualGrade());
             sc.setTestGrade(score.getTestGrade());
-            sc.setScoreGrade(score.getScoreGrade());
+            sc.setScoreGrade((double) Math.round(score.getScoreGrade()));
             sc.setGradeState(1);
             if (sc.getScoreGrade()>=60){
                 sc.setCredit(course.getCourseCredit());
@@ -111,7 +111,7 @@ public class ScoreServiceImpl implements ScoreService {
         /*选修课*/
         s.setTestGrade(score.getTestGrade());
         s.setUsualGrade(score.getUsualGrade());
-        s.setScoreGrade(score.getScoreGrade());
+        s.setScoreGrade((double) Math.round(score.getScoreGrade()));
         s.setGradeState(1);
         if (s.getScoreGrade()>=60.0){
             s.setCredit(course.getCourseCredit());

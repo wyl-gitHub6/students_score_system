@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * @author wyl
+ * 全局异常抓捕
  */
 @RestControllerAdvice
 public class AllExceptionHandler {

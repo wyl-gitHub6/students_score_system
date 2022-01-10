@@ -11,6 +11,8 @@ public class Result<T> {
     private int code;
     private String message;
     private T data;
+    private String username;
+    private String id;
 
     public int getCode() {
         return code;
@@ -35,6 +37,18 @@ public class Result<T> {
     public void setData(T data) {
         this.data = data;
     }
+
+    public void setUsername(String username){
+        this.username = username;
+    }
+
+    public String getUsername(){
+        return username;
+    }
+
+    public void setId(String id){ this.id = id; }
+
+    public String getId(){ return id; }
 
     public Result() {
     }
@@ -65,6 +79,25 @@ public class Result<T> {
         result.setCode(0);
         result.setData(data);
         result.setMessage(message);
+        return result;
+    }
+
+    /**
+     * 群聊天使用
+     * @param data
+     * @param message
+     * @param id 聊天者id
+     * @param username 聊天者name
+     * @param <T>
+     * @return
+     */
+    public static <T> Result<T> success(T data,String message,String id, String username){
+        Result<T> result = new Result<>();
+        result.setCode(0);
+        result.setData(data);
+        result.setMessage(message);
+        result.setUsername(username);
+        result.setId(id);
         return result;
     }
 

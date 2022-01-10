@@ -100,10 +100,10 @@ public class UserServiceImpl implements UserService {
      * @param pwd
      * @return
      */
-    /*@Override
+    @Override
     public User login(String userNum, String pwd) {
         return userDao.findByUserNumAndPassword(userNum,pwd);
-    }*/
+    }
 
     @Override
     public List<User> findList(int currentPage, int pageSize, String userName, String userNum) {
