@@ -40,6 +40,7 @@ public interface TaskMapper {
     /**
      * 修改定时任务
      * @param task
+     * @return
      */
     int update(Task task);
 

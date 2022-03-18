@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import com.example.entity.College;
 import com.example.entity.Professional;
 import com.example.service.ProfessionalService;
 import com.example.utils.Result;
@@ -37,7 +36,7 @@ public class ProfessionalController {
                            @RequestParam(value = "professionalNum",defaultValue = "") String professionalNum,
                            @RequestParam(value = "professionalName",defaultValue = "") String professionalName){
         List<Professional> list = professionalService.findList(currentPage, pageSize, professionalNum, professionalName);
-        PageInfo pageInfo = new PageInfo(list);
+        PageInfo<Professional> pageInfo = new PageInfo<>(list);
         return Result.success(pageInfo,"查询成功!");
     }
 
@@ -117,7 +116,7 @@ public class ProfessionalController {
     @DeleteMapping("/deleteById")
     public Result deleteById(@RequestParam("professionalId") int professionalId) {
         boolean i = professionalService.deleteById(professionalId);
-        if (i == true){
+        if (i){
             return Result.success("删除成功!");
         }
         return Result.error("删除失败!");
@@ -131,7 +130,7 @@ public class ProfessionalController {
     @DeleteMapping("deleteBatch")
     public Result deleteBatch(@RequestParam("ids") int[] ids){
         boolean i = professionalService.deleteBatch(ids);
-        if (i == true){
+        if (i){
             return Result.success("删除成功!");
         }
         return Result.error("删除失败!");

@@ -33,7 +33,7 @@ public class ArrangController {
                               @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
                               @RequestParam(value = "classesName",defaultValue = "") String classesName) {
         List<Classes> list = this.arrangService.findClasses(currentPage,pageSize,classesName);
-        PageInfo pageInfo = new PageInfo(list);
+        PageInfo<Classes> pageInfo = new PageInfo<>(list);
         return Result.success(pageInfo,"查询成功!");
     }
 

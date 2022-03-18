@@ -26,7 +26,7 @@
             <if test="beanClass != null and beanClass != ''">
                 bean_class = #{beanClass},
             </if>
-            <if test="jobStatus != null and jobStatus != ''">
+            <if test="jobStatus != null">
                 job_status = #{jobStatus},
             </if>
             <if test="jobGroup != null and jobGroup != ''">

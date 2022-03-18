@@ -231,7 +231,7 @@
 
     <select id="scoreList" resultMap="ScoreMap">
         select *
-        from (SELECT s.*,c.course_name,st.student_name
+        from (SELECT s.*,c.course_name,st.student_name,st.student_num
         from score s LEFT OUTER JOIN course c
         on s.course_id = c.course_id
         LEFT OUTER JOIN student st
@@ -244,6 +244,15 @@
         <if test="studentName != ''">
             or a.student_name like concat('%',#{studentName},'%')
         </if>
+    </select>
+
+    <select id="findCreditStatistical" resultType="java.util.HashMap">
+        SELECT sc.score_id scoreId,c.course_name courseName,AVG(sc.credit) creditAvg,c.course_credit credit
+        FROM score sc
+        LEFT OUTER JOIN course c
+        ON sc.course_id = c.course_id
+        WHERE c.teacher_id = #{teacherId}
+        GROUP BY sc.course_id
     </select>
 
     <!--新增-->

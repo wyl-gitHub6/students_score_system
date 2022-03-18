@@ -10,7 +10,6 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -24,6 +23,7 @@ import javax.annotation.Resource;
 @Service("arrangService")
 @Transactional(rollbackFor = Exception.class)
 public class ArrangServiceImpl implements ArrangService {
+
     @Resource
     private ArrangDao arrangDao;
 
@@ -55,7 +55,7 @@ public class ArrangServiceImpl implements ArrangService {
     @Override
     public String arrangCourse(int[] courseIdr, int classesId) {
 
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuilder = new StringBuilder();
         Arrang a = new Arrang();
         Classes classes = new Classes();
         classes.setClassesId(classesId);
@@ -64,17 +64,17 @@ public class ArrangServiceImpl implements ArrangService {
         for (int courseId:courseIdr) {
             Arrang arrang = arrangDao.findByCourseIdAndClassesId(courseId,classesId);
             if (null != arrang){
-                stringBuffer.append(arrang.getClasses().getClassesName()+"已有"+arrang.getCourse().getCourseName()+"课程！");
+                stringBuilder.append(arrang.getClasses().getClassesName()).append("已有").append(arrang.getCourse().getCourseName()).append("课程！");
             }else {
                 Course cou = courseDao.findById(courseId);
                 course.setCourseId(courseId);
                 a.setClasses(classes);
                 a.setCourse(course);
                 arrangDao.insert(a);
-                stringBuffer.append(cou.getCourseName()+"选择成功!");
+                stringBuilder.append(cou.getCourseName()).append("选择成功!");
             }
         }
-        return stringBuffer.toString();
+        return stringBuilder.toString();
     }
 
     @Override

@@ -2,9 +2,11 @@ package com.example.dao;
 
 import com.example.entity.Course;
 import com.example.entity.Score;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -176,5 +178,12 @@ public interface ScoreDao {
 
     Integer findBjgCount(Integer courseId);
 
+    /**
+     * 查询平均学分
+     * @param teacherId
+     * @return
+     */
+    @MapKey("scoreId")
+    HashMap<String,HashMap<String,String>> findCreditStatistical(String teacherId);
 }
 

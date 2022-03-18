@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.constant.MyConstant;
 import com.example.dao.CourseDao;
 import com.example.entity.Course;
 import com.example.entity.Score;
@@ -9,6 +10,10 @@ import com.example.utils.Result;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -65,11 +70,11 @@ public class ScoreServiceImpl implements ScoreService {
         Score sc = scoreDao.findByStudentIdAndCourseId(studentId, courseId);
         if (null == sc){
             int count = scoreDao.findCountByStudentId(studentId);
-            if (count >= 3){
+            if (count >= MyConstant.CHECK_COURSE_MAX_NUMBER){
                 return Result.error("已选择3门课程,不能再选啦!");
             }else{
-                int i = this.scoreDao.insert(studentId, courseId,0,0);
-                if (i > 0){
+                int i = this.scoreDao.insert(studentId, courseId,MyConstant.ZERO,MyConstant.ZERO);
+                if (i > MyConstant.ZERO){
                     return Result.success("选择课程成功!");
                 }
             }
@@ -88,6 +93,7 @@ public class ScoreServiceImpl implements ScoreService {
         Score s = scoreDao.findByStudentIdAndCourseId(score.getStudentId(), score.getCourseId());
         String msg = "";
         Course course = courseDao.findById(score.getCourseId());
+        double grade = (double) Math.round(score.getScoreGrade());
         if (null == s){
             /*必修课*/
             Score sc = new Score();
@@ -95,13 +101,13 @@ public class ScoreServiceImpl implements ScoreService {
             sc.setCourseId(score.getCourseId());
             sc.setUsualGrade(score.getUsualGrade());
             sc.setTestGrade(score.getTestGrade());
-            sc.setScoreGrade((double) Math.round(score.getScoreGrade()));
-            sc.setGradeState(1);
-            if (sc.getScoreGrade()>=60){
+            sc.setScoreGrade(grade);
+            sc.setGradeState(MyConstant.ONE);
+            if (grade>=MyConstant.PASS_GRADE){
                 sc.setCredit(course.getCourseCredit());
                 msg="成绩录入成功!";
             }else{
-                sc.setCredit(0);
+                sc.setCredit(MyConstant.ZERO);
                 msg="该同学暂无学分，将通知其补考或重修!";
             }
             scoreDao.entryInsert(sc);
@@ -111,9 +117,9 @@ public class ScoreServiceImpl implements ScoreService {
         /*选修课*/
         s.setTestGrade(score.getTestGrade());
         s.setUsualGrade(score.getUsualGrade());
-        s.setScoreGrade((double) Math.round(score.getScoreGrade()));
-        s.setGradeState(1);
-        if (s.getScoreGrade()>=60.0){
+        s.setScoreGrade(grade);
+        s.setGradeState(MyConstant.ONE);
+        if (grade>=MyConstant.PASS_GRADE){
             s.setCredit(course.getCourseCredit());
             msg="成绩录入成功!";
         }else{
@@ -156,7 +162,7 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public int updateState(int studentId, int courseId) {
         Score sc = scoreDao.findByStudentIdAndCourseId(studentId, courseId);
-        sc.setState(1);
+        sc.setState(MyConstant.ONE);
         return scoreDao.update(sc);
     }
 
@@ -219,13 +225,15 @@ public class ScoreServiceImpl implements ScoreService {
     public String update(Score score) {
         Course course = courseDao.findById(score.getCourse().getCourseId());
         String msg = "";
-        if (score.getScoreGrade()>=60){
+        double grade = (double) Math.round(score.getScoreGrade());
+        if (grade>=MyConstant.PASS_GRADE){
             score.setCredit(course.getCourseCredit());
             msg="成绩录入成功!";
         }else{
-            score.setCredit(0);
+            score.setCredit(MyConstant.ZERO);
             msg="该同学暂无学分，将通知其补考或重修!";
         }
+        score.setScoreGrade(grade);
         scoreDao.update(score);
         return msg;
     }
@@ -235,4 +243,18 @@ public class ScoreServiceImpl implements ScoreService {
         return scoreDao.findCourse(studentId);
     }
 
+    @Override
+    public HashMap<String, Object> findCreditStatistical(String teacherId) {
+        HashMap<String, HashMap<String, String>> map = scoreDao.findCreditStatistical(teacherId);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        LinkedList<Object> courseList = new LinkedList<>();
+        LinkedList<Object> creditList = new LinkedList<>();
+        map.values().forEach(s->{
+            courseList.add(ObjectUtils.isEmpty(s.get("courseName"))?"":String.valueOf(s.get("courseName"))+"-[学分:"+String.valueOf(s.get("credit"))+"分]");
+            creditList.add(ObjectUtils.isEmpty(s.get("credit"))?0:s.get("creditAvg"));
+        });
+        hashMap.put("courseName",courseList);
+        hashMap.put("credit",creditList);
+        return hashMap;
+    }
 }

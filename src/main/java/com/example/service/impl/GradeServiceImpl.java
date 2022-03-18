@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
+import com.example.constant.MyConstant;
 import com.example.entity.Grade;
 import com.example.dao.GradeDao;
 import com.example.service.GradeService;
@@ -52,7 +53,7 @@ public class GradeServiceImpl implements GradeService {
      */
     @Override
     public int insert(Grade grade) {
-        grade.setGradeNum(RandomUtil.randomString(9));
+        grade.setGradeNum(RandomUtil.randomString(MyConstant.NUM_BIT));
         return this.gradeDao.insert(grade);
     }
 

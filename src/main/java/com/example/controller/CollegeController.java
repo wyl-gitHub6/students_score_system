@@ -36,7 +36,7 @@ public class CollegeController {
                            @RequestParam(value = "collegeNum",defaultValue = "") String collegeNum,
                            @RequestParam(value = "collegeName",defaultValue = "") String collegeName){
         List<College> list = collegeService.findList(currentPage, pageSize, collegeNum, collegeName);
-        PageInfo pageInfo = new PageInfo(list);
+        PageInfo<College> pageInfo = new PageInfo<>(list);
         return Result.success(pageInfo,"查询成功!");
     }
 
@@ -100,7 +100,7 @@ public class CollegeController {
     @DeleteMapping("/deleteById")
     public Result deleteById(@RequestParam("collegeId") int collegeId) {
         boolean i = collegeService.deleteById(collegeId);
-        if (i == true){
+        if (i){
             return Result.success("删除成功!");
         }
         return Result.error("删除失败!");
@@ -114,7 +114,7 @@ public class CollegeController {
     @DeleteMapping("deleteBatch")
     public Result deleteBatch(@RequestParam("ids") int[] ids){
         boolean i = collegeService.deleteBatch(ids);
-        if (i == true){
+        if (i){
             return Result.success("删除成功!");
         }
         return Result.error("删除失败!");

@@ -1,5 +1,6 @@
 package com.example.task;
 
+import com.example.constant.MyConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -20,16 +21,11 @@ public class QuartzJob implements Job {
     /**
      * 0开启1关闭
      */
-    private static int state = 1;
+    private static int state = MyConstant.ONE;
 
     @Override
-    public void execute(JobExecutionContext context) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                state = 0;
-            }
-        }).start();
+    public synchronized void execute(JobExecutionContext context) {
+        state = MyConstant.ZERO;
         log.info(state+"学生选课开始：");
     }
 

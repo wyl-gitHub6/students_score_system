@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.constant.MyConstant;
 import com.example.entity.Course;
 import com.example.entity.Score;
 import com.example.service.*;
@@ -41,7 +42,7 @@ public class ScoreController {
                            @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
                            @RequestParam(value = "courseName",defaultValue = "") String courseName){
         List<Score> list = scoreService.findList(currentPage, pageSize, courseName);
-        PageInfo pageInfo = new PageInfo(list);
+        PageInfo<Score> pageInfo = new PageInfo<>(list);
         return Result.success(pageInfo,"查询成功!");
     }
 
@@ -59,7 +60,7 @@ public class ScoreController {
                            @RequestParam(value = "courseName",defaultValue = "") String courseName,
                            @RequestParam(value = "studentName",defaultValue = "") String studentName){
         List<Score> list = scoreService.scoreList(currentPage, pageSize, courseName,studentName);
-        PageInfo pageInfo = new PageInfo(list);
+        PageInfo<Score> pageInfo = new PageInfo<>(list);
         return Result.success(pageInfo,"查询成功!");
     }
 
@@ -95,8 +96,7 @@ public class ScoreController {
     @GetMapping("/insert")
     public Result insert(@RequestParam("studentId") int studentId,
                          @RequestParam("courseId") int courseId) {
-        Result res = scoreService.insert(studentId,courseId);
-        return res;
+        return scoreService.insert(studentId,courseId);
     }
 
     /**
@@ -120,7 +120,7 @@ public class ScoreController {
     @DeleteMapping("/deleteById")
     public Result deleteById(@RequestParam("scoreId") int scoreId) {
         boolean i = scoreService.deleteById(scoreId);
-        if (i == true){
+        if (i){
             return Result.success("删除成功!");
         }
         return Result.error("删除失败!");
@@ -165,7 +165,7 @@ public class ScoreController {
                                  @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
                                  @RequestParam("courseId") int courseId){
         List<Course> list = scoreService.findByCourseId(currentPage,pageSize,courseId);
-        PageInfo pageInfo = new PageInfo(list);
+        PageInfo<Course> pageInfo = new PageInfo<>(list);
         return Result.success(pageInfo,"查询成功!");
     }
 
@@ -235,7 +235,7 @@ public class ScoreController {
     public Result deleteCheck(@RequestParam("courseId") int courseId){
         /*查看选修该课程人数*/
         int count = scoreService.checkCount(courseId);
-        if (count >= 25){
+        if (count >= MyConstant.COURSE_MIN_NUMBER){
             return Result.error("该课程已满足开课要求!不可停课");
         }
 
@@ -285,13 +285,24 @@ public class ScoreController {
             jg.add(ObjectUtils.isEmpty(jgCount)?0:jgCount);
             bjg.add(ObjectUtils.isEmpty(bjgCount)?0:bjgCount);
         });
-        HashMap<Object, Object> map = new HashMap<>();
+        HashMap<Object, Object> map = new HashMap<>(5);
         map.put("courseName",courseNames);
         map.put("yx",yx);
         map.put("lh",lh);
         map.put("jg",jg);
         map.put("bjg",bjg);
         return Result.success(map,"查询成功！");
+    }
+
+    /**
+     * 查询平均学分
+     * @param teacherId
+     * @return
+     */
+    @GetMapping("/findCreditStatistical/{teacherId}")
+    public Result findCreditStatistical(@PathVariable("teacherId") String teacherId){
+        HashMap<String, Object> maps = scoreService.findCreditStatistical(teacherId);
+        return Result.success(maps,"查询成功");
     }
 }
 

@@ -16,7 +16,7 @@ public class SchedulerJobInitListener implements CommandLineRunner {
     private TaskService taskService;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         taskService.initSchedule();
     }
 }

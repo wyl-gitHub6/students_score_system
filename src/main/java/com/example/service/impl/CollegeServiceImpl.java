@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
+import com.example.constant.MyConstant;
 import com.example.entity.College;
 import com.example.dao.CollegeDao;
 import com.example.service.CollegeService;
@@ -52,7 +53,7 @@ public class CollegeServiceImpl implements CollegeService {
      */
     @Override
     public int insert(College college) {
-        college.setCollegeNum(RandomUtil.randomString(9));
+        college.setCollegeNum(RandomUtil.randomString(MyConstant.NUM_BIT));
         return this.collegeDao.insert(college);
     }
 

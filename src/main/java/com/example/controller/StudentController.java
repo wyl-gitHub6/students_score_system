@@ -4,7 +4,6 @@ import cn.hutool.crypto.SecureUtil;
 import com.example.config.SendEmailConfig;
 import com.example.entity.Classes;
 import com.example.entity.Student;
-import com.example.entity.Teacher;
 import com.example.service.StudentService;
 import com.example.utils.Result;
 import com.example.utils.UploadXls;
@@ -46,7 +45,7 @@ public class StudentController {
                            @RequestParam(value = "studentNum",defaultValue = "") String studentNum,
                            @RequestParam(value = "studentName",defaultValue = "") String studentName){
         List<Student> list = studentService.findList(currentPage, pageSize, studentNum, studentName);
-        PageInfo pageInfo = new PageInfo(list);
+        PageInfo<Student> pageInfo = new PageInfo<>(list);
         return Result.success(pageInfo,"查询成功!");
     }
 
@@ -81,9 +80,6 @@ public class StudentController {
     public Result insert(@RequestBody Student student) {
         Student stu = studentService.findByStudentNum(student.getStudentNum());
         if (null == stu){
-            Classes classes = new Classes();
-            classes.setClassesId(0);
-            student.setClasses(classes);
             int i = studentService.insert(student);
             if (i > 0){
                 return Result.success("添加成功!");
@@ -121,7 +117,7 @@ public class StudentController {
     @DeleteMapping("/deleteById")
     public Result deleteById(@RequestParam("studentId") int studentId) {
         boolean i = studentService.deleteById(studentId);
-        if (i == true){
+        if (i){
             return Result.success("删除成功!");
         }
         return Result.error("删除失败!");
@@ -135,7 +131,7 @@ public class StudentController {
     @DeleteMapping("deleteBatch")
     public Result deleteBatch(@RequestParam("ids") int[] ids){
         boolean i = studentService.deleteBatch(ids);
-        if (i == true){
+        if (i){
             return Result.success("删除成功!");
         }
         return Result.error("删除失败!");
@@ -204,8 +200,8 @@ public class StudentController {
                                   @RequestParam(value = "studentNum",defaultValue = "") String  studentNum,
                                   @RequestParam(value = "studentName",defaultValue = "") String studentName){
         List<Student> list = studentService.findByClassesId(currentPage,pageSize,classesId,studentNum,studentName);
-        PageInfo pageInfo = new PageInfo(list);
-        if (pageInfo == null){
+        PageInfo<Student> pageInfo = new PageInfo<>(list);
+        if (list.isEmpty()){
             return Result.error("暂无数据！");
         }
         return Result.success(pageInfo,"查询成功!");

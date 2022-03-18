@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
+import com.example.constant.MyConstant;
 import com.example.entity.Course;
 import com.example.dao.CourseDao;
 import com.example.service.CourseService;
@@ -55,7 +56,7 @@ public class CourseServiceImpl implements CourseService {
      */
     @Override
     public int insert(Course course) {
-        course.setCourseNum(RandomUtil.randomString(9));
+        course.setCourseNum(RandomUtil.randomString(MyConstant.NUM_BIT));
         course.setNumber(ObjectUtils.isEmpty(course.getNumber())?0:course.getNumber());
         return this.courseDao.insert(course);
     }

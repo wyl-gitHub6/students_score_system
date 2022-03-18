@@ -31,7 +31,7 @@ public class UserController {
                            @RequestParam(value = "userName",defaultValue = "") String userName,
                            @RequestParam(value = "userNum",defaultValue = "") String userNum){
         List<User> list = userService.findList(currentPage, pageSize, userName, userNum);
-        PageInfo pageInfo = new PageInfo(list);
+        PageInfo<User> pageInfo = new PageInfo<>(list);
         return Result.success(pageInfo,"查询成功!");
     }
 
@@ -95,7 +95,7 @@ public class UserController {
     @DeleteMapping("/deleteById")
     public Result deleteById(@RequestParam("userId") int userId) {
         boolean i = userService.deleteById(userId);
-        if (i == true){
+        if (i){
             return Result.success("删除成功!");
         }
         return Result.error("删除失败!");
@@ -109,7 +109,7 @@ public class UserController {
     @DeleteMapping("deleteBatch")
     public Result deleteBatch(@RequestParam("ids") int[] ids){
         boolean i = userService.deleteBatch(ids);
-        if (i == true){
+        if (i){
             return Result.success("删除成功!");
         }
         return Result.error("删除失败!");

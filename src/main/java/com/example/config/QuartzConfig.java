@@ -20,7 +20,6 @@ import java.util.Properties;
 @Configuration
 public class QuartzConfig {
 
-
     @Autowired
     private JobFactory jobFactory;
 

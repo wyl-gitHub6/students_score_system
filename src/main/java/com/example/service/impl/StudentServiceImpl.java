@@ -1,6 +1,8 @@
 package com.example.service.impl;
 
 import cn.hutool.crypto.SecureUtil;
+import com.example.constant.MyConstant;
+import com.example.entity.Classes;
 import com.example.entity.Student;
 import com.example.dao.StudentDao;
 import com.example.service.StudentService;
@@ -52,7 +54,10 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public int insert(Student student) {
-        student.setStudentPassword(SecureUtil.md5("123"));
+        Classes classes = new Classes();
+        classes.setClassesId(MyConstant.ZERO);
+        student.setStudentPassword(SecureUtil.md5(MyConstant.DEFAULT_PASSWORD));
+        student.setClasses(classes);
         return this.studentDao.insert(student);
     }
 

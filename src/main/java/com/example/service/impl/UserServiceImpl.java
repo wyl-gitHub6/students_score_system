@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.example.constant.MyConstant;
 import com.example.entity.User;
 import com.example.dao.UserDao;
 import com.example.service.UserService;
@@ -53,8 +54,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public int insert(User user) {
-        user.setUserPassword(SecureUtil.md5("123"));
-        user.setUserNum(RandomUtil.randomString(9));
+        user.setUserPassword(SecureUtil.md5(MyConstant.DEFAULT_PASSWORD));
+        user.setUserNum(RandomUtil.randomString(MyConstant.NUM_BIT));
         return this.userDao.insert(user);
     }
 

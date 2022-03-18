@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.constant.MyConstant;
 import com.example.entity.Task;
 import com.example.service.TaskService;
 import com.example.task.CloseJob;
@@ -53,13 +54,13 @@ public class TaskController {
     public Result isCheckCourse(){
         log.info("开启:"+quartzJob.getState());
         log.info("关闭:"+closeJob.getState());
-        if (quartzJob.getState() == 1){
-            return Result.success(1,"选课关闭中");
+        if (quartzJob.getState() == MyConstant.ONE){
+            return Result.success(MyConstant.ONE,"选课关闭中");
         }
-        if (closeJob.getState() == 0){
-            return Result.success(0,"快开始选课吧");
+        if (closeJob.getState() == MyConstant.ZERO){
+            return Result.success(MyConstant.ZERO,"快开始选课吧");
         }
-        return Result.success(1,"选课关闭中");
+        return Result.success(MyConstant.ONE,"选课关闭中");
     }
 
     /**

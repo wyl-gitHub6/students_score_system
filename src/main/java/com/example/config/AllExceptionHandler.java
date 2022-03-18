@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class AllExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public Result ExceptionHandler(Exception e){
+    public Result exceptionHandler(Exception e){
         return Result.error(e.getMessage()+"-"+e.getClass());
     }
 }

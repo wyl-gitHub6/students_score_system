@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.constant.MyConstant;
 import com.example.dao.TaskMapper;
 import com.example.entity.Task;
 import com.example.quartz.QuartzScheduler;
@@ -26,10 +27,6 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private QuartzScheduler quartzScheduler;
 
-    private final String open = "0";
-
-    private final String shutdown = "1";
-
     @Override
     public List<Task> findList(int currentPage, int pageSize) {
         PageHelper.startPage(currentPage,pageSize);
@@ -39,19 +36,19 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public int insert(Task task) {
         int i = taskMapper.insert(task);
-        if (i > 0 && task.getJobStatus().equals(open)){
+        if (i > 0 && task.getJobStatus().equals(MyConstant.ZERO_STR)){
             quartzScheduler.addJob(task);
         }
         return i;
     }
 
     @Override
-    public int update(Task task) throws SchedulerException {
+    public synchronized int update(Task task) throws SchedulerException {
         Task t = taskMapper.findById(task.getId());
         int i = taskMapper.update(task);
         if (i > 0){
             quartzScheduler.deleteJob(t);
-            if (task.getJobStatus().equals(open)){
+            if (task.getJobStatus().equals(MyConstant.ZERO_STR)){
                 quartzScheduler.addJob(task);
             }
         }
@@ -74,14 +71,14 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public int updateStatus(int id, String jobStatus) throws SchedulerException {
+    public synchronized int updateStatus(int id, String jobStatus) throws SchedulerException {
         Task task = taskMapper.findById(id);
         task.setJobStatus(jobStatus);
         int i = taskMapper.update(task);
         if (i > 0){
-            if (jobStatus.equals(open)){
+            if (jobStatus.equals(MyConstant.ZERO_STR)){
                 quartzScheduler.addJob(task);
-            }else if (jobStatus.equals(shutdown)){
+            }else if (jobStatus.equals(MyConstant.ONE_STR)){
                 quartzScheduler.deleteJob(task);
             }else{
                 return 0;

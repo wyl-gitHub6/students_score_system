@@ -28,7 +28,7 @@ public class ClassesController {
                            @RequestParam(value = "classesNum",defaultValue = "") String classesNum,
                            @RequestParam(value = "classesName",defaultValue = "") String classesName){
         List<Classes> list = classesService.findList(currentPage, pageSize, classesNum, classesName);
-        PageInfo pageInfo = new PageInfo(list);
+        PageInfo<Classes> pageInfo = new PageInfo<>(list);
         return Result.success(pageInfo,"查询成功!");
     }
 
@@ -101,7 +101,7 @@ public class ClassesController {
     @DeleteMapping("/deleteById")
     public Result deleteById(@RequestParam("classesId") int classesId) {
         boolean i = classesService.deleteById(classesId);
-        if (i == true){
+        if (i){
             return Result.success("删除成功!");
         }
         return Result.error("删除失败!");
@@ -115,7 +115,7 @@ public class ClassesController {
     @DeleteMapping("deleteBatch")
     public Result deleteBatch(@RequestParam("ids") int[] ids){
         boolean i = classesService.deleteBatch(ids);
-        if (i == true){
+        if (i){
             return Result.success("删除成功!");
         }
         return Result.error("删除失败!");

@@ -1,10 +1,10 @@
 package com.example.service;
 
-import com.example.entity.Classes;
 import com.example.entity.Course;
 import com.example.entity.Score;
 import com.example.utils.Result;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -159,4 +159,6 @@ public interface ScoreService {
      * @return
      */
     String update(Score score);
+
+    HashMap<String, Object> findCreditStatistical(String teacherId);
 }

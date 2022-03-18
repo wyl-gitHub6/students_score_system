@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
+import com.example.constant.MyConstant;
 import com.example.entity.Professional;
 import com.example.dao.ProfessionalDao;
 import com.example.service.ProfessionalService;
@@ -52,7 +53,7 @@ public class ProfessionalServiceImpl implements ProfessionalService {
      */
     @Override
     public int insert(Professional professional) {
-        professional.setProfessionalNum(RandomUtil.randomString(9));
+        professional.setProfessionalNum(RandomUtil.randomString(MyConstant.NUM_BIT));
         return this.professionalDao.insert(professional);
     }
 

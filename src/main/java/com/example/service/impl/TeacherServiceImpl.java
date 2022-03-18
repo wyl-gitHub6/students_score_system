@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.example.constant.MyConstant;
 import com.example.entity.Teacher;
 import com.example.dao.TeacherDao;
 import com.example.service.TeacherService;
@@ -92,8 +93,8 @@ public class TeacherServiceImpl implements TeacherService {
      */
     @Override
     public int insert(Teacher teacher) {
-        teacher.setTeacherNum(RandomUtil.randomString(9));
-        teacher.setTeacherPassword(SecureUtil.md5("123"));
+        teacher.setTeacherNum(RandomUtil.randomString(MyConstant.NUM_BIT));
+        teacher.setTeacherPassword(SecureUtil.md5(MyConstant.DEFAULT_PASSWORD));
         return this.teacherDao.insert(teacher);
     }
 
