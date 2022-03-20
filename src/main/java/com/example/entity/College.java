@@ -21,7 +21,7 @@ public class College implements Serializable {
 
     private String collegeName;
 
-    private String collegeCode;
+
 
 }
 

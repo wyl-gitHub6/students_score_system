@@ -74,7 +74,16 @@ public interface StudentDao {
      * @param studentNum
      * @return
      */
-    Student findByStudentNum(String studentNum);
+    Student findByStudentNum(Integer studentNum);
+
+    /**
+     * 修改时 唯一性检查
+     * @param studentNum
+     * @param studentId
+     * @return
+     */
+    Student findByStudentNumAndId(@Param("studentNum") Integer studentNum,
+                                  @Param("studentId") Integer studentId);
 
     /**
      * 查询班级人数
@@ -117,12 +126,5 @@ public interface StudentDao {
      * @return
      */
     int getCount();
-
-    /**
-     * 获取班级最大学号
-     * @param classesId
-     * @return
-     */
-    Long findMaxCode(int classesId);
 }
 

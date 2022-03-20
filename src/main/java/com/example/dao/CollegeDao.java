@@ -72,12 +72,5 @@ public interface CollegeDao {
      * @return
      */
     int findCount();
-
-    /**
-     * 查询最大的院系编码
-     * @return
-     */
-    String findMaxCode();
-
 }
 

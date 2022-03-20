@@ -30,20 +30,6 @@ public class MyConstant {
      */
     public static final String DEFAULT_PASSWORD = "123";
 
-    /**
-     * 院系、专业默认编码
-     */
-    public static final String DEFAULT_CODE = "10";
-
-    /**
-     * 班级默认编码
-     */
-    public static final String CLASSES_DEFAULT_CODE = "100";
-
-    public static final String STUDENT_DEFAULT_CODE = "01";
-
-    public static final String NULL = "null";
-
     public static final int ZERO = 0;
 
     public static final int ONE = 1;
@@ -51,5 +37,4 @@ public class MyConstant {
     public static final String ZERO_STR = "0";
 
     public static final String ONE_STR = "1";
-
 }

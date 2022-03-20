@@ -87,6 +87,13 @@
         where student_num = #{studentNum}
     </select>
 
+    <!--修改时唯一性检查-->
+    <select id="findByStudentNumAndId" resultMap="StudentMap">
+        SELECT *
+        FROM student
+        where student_num = #{studentNum} and student_id != #{studentId}
+    </select>
+
     <!--分页查询-->
     <select id="findList" resultMap="StudentMap">
         SELECT *
@@ -161,11 +168,11 @@
     <update id="update">
         update student
         <set>
-            <if test="studentName != null and studentName != ''">
-                student_name = #{studentName},
-            </if>
             <if test="studentNum != null and studentNum != ''">
                 student_num = #{studentNum},
+            </if>
+            <if test="studentName != null and studentName != ''">
+                student_name = #{studentName},
             </if>
             <if test="studentSex != null">
                 student_sex = #{studentSex},
@@ -210,9 +217,5 @@
             #{id}
         </foreach>
     </delete>
-
-    <select id="findMaxCode" resultType="Long">
-        SELECT MAX(student_num)+1 FROM student WHERE classes_id = #{classesId}
-    </select>
 </mapper>
 

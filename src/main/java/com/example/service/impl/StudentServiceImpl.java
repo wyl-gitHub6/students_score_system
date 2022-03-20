@@ -6,16 +6,9 @@ import com.example.entity.Classes;
 import com.example.entity.Student;
 import com.example.dao.StudentDao;
 import com.example.service.StudentService;
-import com.example.utils.OverAll;
-import com.example.utils.UploadXls;
 import com.github.pagehelper.PageHelper;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -29,12 +22,8 @@ import javax.annotation.Resource;
 @Service("studentService")
 @Transactional(rollbackFor = Exception.class)
 public class StudentServiceImpl implements StudentService {
-
     @Resource
     private StudentDao studentDao;
-
-    @Resource
-    private OverAll overAll;
 
     /**
      * 通过ID查询单条数据
@@ -115,8 +104,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student findByStudentNum(String studentNum) {
+    public Student findByStudentNum(Integer studentNum) {
         return studentDao.findByStudentNum(studentNum);
+    }
+
+    @Override
+    public Student findByStudentNumAndId(Integer studentNum, Integer studentId) {
+        return studentDao.findByStudentNumAndId(studentNum,studentId);
     }
 
     @Override
@@ -138,51 +132,5 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public int findCount() {
         return studentDao.getCount();
-    }
-
-    @Override
-    public int uploadXls(MultipartFile file) throws IOException {
-        HSSFSheet sheet = UploadXls.uploadXls(file);
-        // 4.从表中获取到行数据  从第二行开始 到 最后一行  getLastRowNum() 获取最后一行的下标
-        int lastRowNum = sheet.getLastRowNum();
-        int i;
-        for (i = 1; i <= lastRowNum; i++) {
-            //通过下标获取行
-            HSSFRow row = sheet.getRow(i);
-            //从行中获取数据
-
-            /**
-             * getNumericCellValue() 获取数字
-             * getStringCellValue 获取String
-             */
-            String studentName = row.getCell(0).getStringCellValue();
-            int age = (int)row.getCell(1).getNumericCellValue();
-            int sex = (int)row.getCell(2).getNumericCellValue();
-            String email = row.getCell(3).getStringCellValue();
-            String phone = row.getCell(4).getStringCellValue();
-            String national = row.getCell(5).getStringCellValue();
-            String card = row.getCell(6).getStringCellValue();
-            int classesId = (int)row.getCell(7).getNumericCellValue();
-
-            Student s = new Student();
-            /**
-             * 获取学号
-             */
-            String studentNum = overAll.getStudentNum(classesId);
-
-            s.setStudentNum(studentNum);
-            s.setStudentAge(age);
-            s.setStudentSex(sex);
-            s.setStudentEmail(email);
-            s.setStudentPhone(phone);
-            s.setStudentNational(national);
-            s.setStudentCard(card);
-            s.setStudentName(studentName);
-            Classes classes = new Classes();
-            classes.setClassesId(classesId);
-            s.setClasses(classes);
-            studentDao.insert(s);
-        }
-        return i-1;
     }
 }

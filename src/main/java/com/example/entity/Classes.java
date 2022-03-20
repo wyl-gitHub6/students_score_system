@@ -30,10 +30,6 @@ public class Classes implements Serializable {
      * 当前人数
      */
     private Integer classesNumber;
-    /**
-     * 班级编码
-     */
-    private String classesCode;
 
     /**
      * 状态 0--未满 1--满

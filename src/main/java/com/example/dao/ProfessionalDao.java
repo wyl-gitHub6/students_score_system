@@ -101,11 +101,5 @@ public interface ProfessionalDao {
      * @return
      */
     int findCount();
-
-    /**
-     * 查询最大编码
-     * @return
-     */
-    String findMaxCode();
 }
 

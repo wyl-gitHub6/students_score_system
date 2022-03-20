@@ -128,16 +128,39 @@ public class TeacherController {
         return Result.error("删除失败!");
     }
 
-    /**
-     * 导入
-     * @param file
-     * @return
-     * @throws IOException
-     */
     @PostMapping("/uploadXls")
     public Result uploadXls(MultipartFile file) throws IOException {
-        int i = teacherService.uploadXls(file);
-        return Result.success("共导入"+i+"条数据!");
+        HSSFSheet sheet = UploadXls.uploadXls(file);
+        // 4.从表中获取到行数据  从第二行开始 到 最后一行  getLastRowNum() 获取最后一行的下标
+        int lastRowNum = sheet.getLastRowNum();
+        int j = 0;
+        for (int i = 1; i <= lastRowNum; i++) {
+            //通过下标获取行
+            HSSFRow row = sheet.getRow(i);
+            /**
+             * 从行中获取数据
+             * getNumericCellValue() 获取数字
+             * getStringCellValue 获取String
+             */
+            String name = row.getCell(0).getStringCellValue();
+            double age = row.getCell(1).getNumericCellValue();
+            double sex = row.getCell(2).getNumericCellValue();
+            String email = row.getCell(3).getStringCellValue();
+            String phone = row.getCell(4).getStringCellValue();
+            String national = row.getCell(5).getStringCellValue();
+            String card = row.getCell(6).getStringCellValue();
+            Teacher t = new Teacher();
+                j++;
+                t.setTeacherName(name);
+                t.setTeacherAge((int)age);
+                t.setTeacherSex((int)sex);
+                t.setTeacherEmail(email);
+                t.setTeacherPhone(phone);
+                t.setTeacherNational(national);
+                t.setTeacherCard(card);
+                teacherService.insert(t);
+        }
+        return Result.success("共导入"+j+"条数据!");
     }
 
     /**
