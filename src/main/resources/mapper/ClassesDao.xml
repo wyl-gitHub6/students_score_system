@@ -7,6 +7,7 @@
         <result property="classesNum" column="classes_num" jdbcType="VARCHAR"/>
         <result property="classesName" column="classes_name" jdbcType="VARCHAR"/>
         <result property="classesAllNumber" column="classes_all_number" jdbcType="INTEGER"/>
+        <result property="classesCode" column="classes_code" jdbcType="INTEGER"/>
         <association property="grade" javaType="grade">
             <result property="gradeId" column="grade_id" jdbcType="INTEGER"/>
             <result property="gradeNum" column="grade_num" jdbcType="VARCHAR"/>
@@ -37,8 +38,7 @@
         </association>
     </resultMap>
 
-    <!--查询单个-->
-    <select id="findById" resultMap="ClassesMap">
+    <sql id="find">
         SELECT *
         FROM classes AS c LEFT OUTER JOIN grade AS g
         ON c.grade_id = g.grade_id
@@ -48,6 +48,11 @@
         ON p.college_id = co.college_id
         LEFT OUTER JOIN teacher as t
         ON c.teacher_id = t.teacher_id
+    </sql>
+
+    <!--查询单个-->
+    <select id="findById" resultMap="ClassesMap">
+        <include refid="find"/>
         where c.classes_id = #{classesId}
     </select>
 
@@ -67,28 +72,12 @@
 
     <!--查询所有数据-->
     <select id="findAll" resultMap="ClassesMap">
-        SELECT *
-        FROM classes AS c LEFT OUTER JOIN grade AS g
-        ON c.grade_id = g.grade_id
-        LEFT OUTER JOIN professional AS p
-        ON g.professional_id = p.professional_id
-        LEFT OUTER JOIN college AS co
-        ON p.college_id = co.college_id
-        LEFT OUTER JOIN teacher as t
-        ON c.teacher_id = t.teacher_id
+        <include refid="find"/>
     </select>
 
     <!--分页查询-->
     <select id="findList" resultMap="ClassesMap">
-        SELECT *
-        FROM classes AS c LEFT OUTER JOIN grade AS g
-        ON c.grade_id = g.grade_id
-        LEFT OUTER JOIN professional AS p
-        ON g.professional_id = p.professional_id
-        LEFT OUTER JOIN college AS co
-        ON p.college_id = co.college_id
-        LEFT OUTER JOIN teacher as t
-        ON c.teacher_id = t.teacher_id
+        <include refid="find"/>
         where 1=1
         <if test="classesNum != ''">
             and classes_num like concat('%',#{classesNum},'%')
@@ -100,15 +89,7 @@
     </select>
 
     <select id="findByGradeId" resultMap="ClassesMap">
-        SELECT *
-        FROM classes AS c LEFT OUTER JOIN grade AS g
-        ON c.grade_id = g.grade_id
-        LEFT OUTER JOIN professional AS p
-        ON g.professional_id = p.professional_id
-        LEFT OUTER JOIN college AS co
-        ON p.college_id = co.college_id
-        LEFT OUTER JOIN teacher as t
-        ON c.teacher_id = t.teacher_id
+        <include refid="find"/>
         where c.grade_id = #{gradeId}
         <if test="classesNum != ''">
             and classes_num like concat('%',#{classesNum},'%')
@@ -123,21 +104,36 @@
         select count(*) from classes
     </select>
 
-    <select id="findByTeacherId" resultMap="ClassesMap">
-        SELECT *
+    <sql id="select">
         FROM classes AS c LEFT OUTER JOIN grade AS g
         ON c.grade_id = g.grade_id
         LEFT OUTER JOIN professional AS p
         ON g.professional_id = p.professional_id
         LEFT OUTER JOIN college AS co
         ON p.college_id = co.college_id
+    </sql>
+
+    <select id="findByTeacherId" resultMap="ClassesMap">
+        SELECT *
+        <include refid="select"/>
         where c.teacher_id = #{teacherId}
+    </select>
+
+    <select id="findMaxCode" resultType="string">
+        select MAX(classes_code)+1 from classes
+    </select>
+
+    <select id="findCode" resultType="java.util.Map">
+        SELECT co.college_code collegeCode,p.professional_code professionalCode,
+               g.grade_name gradeName,c.classes_code classesCode
+        <include refid="select"/>
+        WHERE c.classes_id = #{classesId}
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="classesId" useGeneratedKeys="true">
-        insert into classes(classes_num, classes_name, classes_all_number, grade_id, teacher_id)
-        values (#{classesNum}, #{classesName}, #{classesAllNumber}, #{grade.gradeId}, #{teacher.teacherId})
+        insert into classes(classes_num, classes_name, classes_all_number, classes_code, grade_id, teacher_id)
+        values (#{classesNum}, #{classesName}, #{classesAllNumber}, #{classesCode}, #{grade.gradeId}, #{teacher.teacherId})
     </insert>
 
     <!--通过主键修改数据-->
@@ -152,6 +148,9 @@
             </if>
             <if test="classesAllNumber != null">
                 classes_all_number = #{classesAllNumber},
+            </if>
+            <if test="classesCode != null and classesCode != ''">
+                classes_code = #{classesCode},
             </if>
             <if test="grade.gradeId != null">
                 grade_id = #{grade.gradeId},

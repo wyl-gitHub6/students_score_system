@@ -21,9 +21,9 @@ public class Professional implements Serializable {
 
     private String professionalName;
 
+    private String professionalCode;
+
     private College college;
-
-
 
 }
 

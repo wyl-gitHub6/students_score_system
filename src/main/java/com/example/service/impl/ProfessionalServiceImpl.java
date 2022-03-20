@@ -54,6 +54,8 @@ public class ProfessionalServiceImpl implements ProfessionalService {
     @Override
     public int insert(Professional professional) {
         professional.setProfessionalNum(RandomUtil.randomString(MyConstant.NUM_BIT));
+        String maxCode = professionalDao.findMaxCode();
+        professional.setProfessionalCode(null == maxCode || maxCode.equals(MyConstant.ONE_STR)?MyConstant.DEFAULT_CODE:maxCode);
         return this.professionalDao.insert(professional);
     }
 

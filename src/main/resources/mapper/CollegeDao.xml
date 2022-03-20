@@ -6,21 +6,24 @@
         <result property="collegeId" column="college_id" jdbcType="INTEGER"/>
         <result property="collegeNum" column="college_num" jdbcType="VARCHAR"/>
         <result property="collegeName" column="college_name" jdbcType="VARCHAR"/>
+        <result property="collegeCode" column="college_code" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="findById" resultMap="CollegeMap">
-        select
-          college_id, college_num, college_name
-        from college
+        <include refid="find"/>
         where college_id = #{collegeId}
     </select>
 
+    <sql id="find">
+        select
+          college_id, college_num, college_name,college_code
+        from college
+    </sql>
+
     <!--分页查询-->
     <select id="findList" resultMap="CollegeMap">
-        select
-          college_id, college_num, college_name
-        from college
+        <include refid="find"/>
         where 1=1
         <if test="collegeNum != ''">
             and college_num like concat('%',#{collegeNum},'%')
@@ -33,19 +36,21 @@
 
     <!--查询所有数据-->
     <select id="findAll" resultMap="CollegeMap">
-        select
-          college_id, college_num, college_name
-        from college
+        <include refid="find"/>
     </select>
 
     <select id="findCount" resultType="java.lang.Integer">
         select count(*) from college
     </select>
 
+    <select id="findMaxCode" resultType="string">
+        SELECT MAX(college_code)+1 FROM college
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="collegeId" useGeneratedKeys="true">
-        insert into college(college_num, college_name)
-        values (#{collegeNum}, #{collegeName})
+        insert into college(college_num, college_name,college_code)
+        values (#{collegeNum}, #{collegeName},#{collegeCode})
     </insert>
 
     <!--通过主键修改数据-->
@@ -57,6 +62,9 @@
             </if>
             <if test="collegeName != null and collegeName != ''">
                 college_name = #{collegeName},
+            </if>
+            <if test="collegeCode != null and collegeCode != ''">
+                college_code = #{collegeCode},
             </if>
         </set>
         where college_id = #{collegeId}

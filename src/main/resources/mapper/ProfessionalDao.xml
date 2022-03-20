@@ -6,6 +6,7 @@
         <result property="professionalId" column="professional_id" jdbcType="INTEGER"/>
         <result property="professionalNum" column="professional_num" jdbcType="VARCHAR"/>
         <result property="professionalName" column="professional_name" jdbcType="VARCHAR"/>
+        <result property="professionalCode" column="professional_code" jdbcType="VARCHAR"/>
         <association property="college" javaType="college">
             <result property="collegeId" column="college_id" jdbcType="INTEGER"/>
             <result property="collegeNum" column="college_num" jdbcType="VARCHAR"/>
@@ -13,19 +14,21 @@
         </association>
     </resultMap>
 
-    <!--查询单个-->
-    <select id="findById" resultMap="ProfessionalMap">
+    <sql id="find">
         SELECT *
         FROM professional AS p LEFT OUTER JOIN college AS c
         ON p.college_id = c.college_id
+    </sql>
+
+    <!--查询单个-->
+    <select id="findById" resultMap="ProfessionalMap">
+        <include refid="find"/>
         where professional_id = #{professionalId}
     </select>
 
     <!--根据院系ID查专业-->
     <select id="findByCollegeId" resultMap="ProfessionalMap">
-        SELECT *
-        FROM professional AS p LEFT OUTER JOIN college AS c
-        ON p.college_id = c.college_id
+        <include refid="find"/>
         where p.college_id = #{collegeId}
     </select>
 
@@ -45,16 +48,12 @@
 
     <!--查询所有数据-->
     <select id="findAll" resultMap="ProfessionalMap">
-        SELECT *
-        FROM professional AS p LEFT OUTER JOIN college AS c
-        ON p.college_id = c.college_id
+        <include refid="find"/>
     </select>
 
     <!--分页查询-->
     <select id="findList" resultMap="ProfessionalMap">
-        SELECT *
-        FROM professional AS p LEFT OUTER JOIN college AS c
-        ON p.college_id = c.college_id
+        <include refid="find"/>
         where 1=1
         <if test="professionalNum != ''">
             and professional_num like concat('%',#{professionalNum},'%')
@@ -69,10 +68,14 @@
         select count(*) from professional
     </select>
 
+    <select id="findMaxCode" resultType="string">
+        SELECT MAX(professional_code)+1 FROM professional
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="professionalId" useGeneratedKeys="true">
-        insert into professional(professional_num, professional_name, college_id)
-        values (#{professionalNum}, #{professionalName}, #{college.collegeId})
+        insert into professional(professional_num, professional_name, professional_code, college_id)
+        values (#{professionalNum}, #{professionalName}, #{professionalCode}, #{college.collegeId})
     </insert>
 
     <!--通过主键修改数据-->
@@ -84,6 +87,9 @@
             </if>
             <if test="professionalName != null and professionalName != ''">
                 professional_name = #{professionalName},
+            </if>
+            <if test="professionalCode != null and professionalCode != ''">
+                professional_code = #{professionalCode},
             </if>
             <if test="college.collegeId != null">
                 college_id = #{college.collegeId},
