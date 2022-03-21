@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (Classes)表数据库访问层
@@ -12,7 +13,7 @@ import java.util.List;
  * @author wyl
  * @since 2021-10-09 11:02:58
  */
- @Mapper
+@Mapper
 public interface ClassesDao {
 
     /**
@@ -113,5 +114,19 @@ public interface ClassesDao {
      * @return
      */
     List<Classes> findByTeacherId(int teacherId);
+
+    /**
+     * 查询最大编码
+     * @return
+     */
+    String findMaxCode();
+
+    /**
+     * 查询编码
+     * @param classesId
+     * @return
+     */
+    Map<String,String> findCode(int classesId);
+
 }
 

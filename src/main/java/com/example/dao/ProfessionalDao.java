@@ -12,7 +12,7 @@ import java.util.List;
  * @author wyl
  * @since 2021-10-07 18:02:09
  */
- @Mapper
+@Mapper
 public interface ProfessionalDao {
 
     /**
@@ -101,5 +101,11 @@ public interface ProfessionalDao {
      * @return
      */
     int findCount();
+
+    /**
+     * 查询最大编码
+     * @return
+     */
+    String findMaxCode();
 }
 

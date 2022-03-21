@@ -60,7 +60,7 @@ public class StudentController {
         return Result.success(this.studentService.findById(studentId),"查询成功!");
     }
 
-     /**
+    /**
      * 查询所有数据
      *
      * @return 数据数组
@@ -97,15 +97,11 @@ public class StudentController {
      */
     @PutMapping("/update")
     public Result update(@RequestBody Student student) {
-        Student stu = studentService.findByStudentNumAndId(student.getStudentNum(), student.getStudentId());
-        if (null == stu){
-            int i = studentService.update(student);
-            if (i > 0){
-                return Result.success("编辑成功!");
-            }
-            return Result.error("编辑失败!");
+        int i = studentService.update(student);
+        if (i > 0){
+            return Result.success("编辑成功!");
         }
-        return Result.error("学号重复!");
+        return Result.error("编辑失败!");
     }
 
     /**
@@ -123,7 +119,7 @@ public class StudentController {
         return Result.error("删除失败!");
     }
 
-     /**
+    /**
      * 批量删除
      * @param ids
      * @return
@@ -145,47 +141,8 @@ public class StudentController {
      */
     @PostMapping("/uploadXls")
     public Result uploadXls(MultipartFile file) throws IOException {
-        HSSFSheet sheet = UploadXls.uploadXls(file);
-        // 4.从表中获取到行数据  从第二行开始 到 最后一行  getLastRowNum() 获取最后一行的下标
-        int lastRowNum = sheet.getLastRowNum();
-        int j = 0;
-        for (int i = 1; i <= lastRowNum; i++) {
-            //通过下标获取行
-            HSSFRow row = sheet.getRow(i);
-            //从行中获取数据
-
-            /**
-             * getNumericCellValue() 获取数字
-             * getStringCellValue 获取String
-             */
-            String studentName = row.getCell(0).getStringCellValue();
-            double num = row.getCell(1).getNumericCellValue();
-            double age = row.getCell(2).getNumericCellValue();
-            double sex = row.getCell(3).getNumericCellValue();
-            String email = row.getCell(4).getStringCellValue();
-            String phone = row.getCell(5).getStringCellValue();
-            String national = row.getCell(6).getStringCellValue();
-            String card = row.getCell(7).getStringCellValue();
-            double classesId = row.getCell(8).getNumericCellValue();
-            Student s = new Student();
-            s.setStudentNum((int)num);
-            Student student = studentService.findByStudentNum(s.getStudentNum());
-            if(student == null) {
-                j++;
-                s.setStudentAge((int)age);
-                s.setStudentSex((int)sex);
-                s.setStudentEmail(email);
-                s.setStudentPhone(phone);
-                s.setStudentNational(national);
-                s.setStudentCard(card);
-                s.setStudentName(studentName);
-                Classes classes = new Classes();
-                classes.setClassesId((int)classesId);
-                s.setClasses(classes);
-                studentService.insert(s);
-            }
-        }
-        return Result.success("共导入"+j+"条数据!");
+        int i = studentService.uploadXls(file);
+        return Result.success("共导入"+i+"条数据!");
     }
 
     /**
@@ -271,7 +228,7 @@ public class StudentController {
      * @return
      */
     @GetMapping("/sendEmail")
-    public Result sendEmail(@RequestParam("studentNum") int studentNum,
+    public Result sendEmail(@RequestParam("studentNum") String studentNum,
                             @RequestParam("emailAddress") String emailAddress){
         Student student = studentService.findByStudentNum(studentNum);
         if (null == student){

@@ -7,10 +7,12 @@ import com.example.entity.Classes;
 import com.example.dao.ClassesDao;
 import com.example.entity.Student;
 import com.example.service.ClassesService;
+import com.example.utils.OverAll;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -28,6 +30,9 @@ public class ClassesServiceImpl implements ClassesService {
 
     @Resource
     private StudentDao studentDao;
+
+    @Resource
+    private OverAll overAll;
 
     /**
      * 通过ID查询单条数据
@@ -67,6 +72,8 @@ public class ClassesServiceImpl implements ClassesService {
         classes.setClassesNum(RandomUtil.randomString(MyConstant.NUM_BIT));
         /*默认状态为未满--0*/
         classes.setClassesState(MyConstant.ZERO);
+        String maxCode = classesDao.findMaxCode();
+        classes.setClassesCode(null == maxCode || maxCode.equals(MyConstant.ONE_STR)?MyConstant.CLASSES_DEFAULT_CODE:maxCode);
         return this.classesDao.insert(classes);
     }
 
@@ -140,9 +147,11 @@ public class ClassesServiceImpl implements ClassesService {
             int count = studentDao.findCount(classesId);
             /*如果班级未满 则添加学生*/
             if (count < classes.getClassesAllNumber()){
+                String studentNum = overAll.getStudentNum(classesId);
                 Student student = new Student();
                 classes.setClassesId(classesId);
                 student.setStudentId(studentId);
+                student.setStudentNum(studentNum);
                 student.setClasses(classes);
                 studentDao.update(student);
                 i++;

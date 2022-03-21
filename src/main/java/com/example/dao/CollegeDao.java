@@ -10,7 +10,7 @@ import java.util.List;
  * @author wyl
  * @since 2021-10-07 18:01:30
  */
- @Mapper
+@Mapper
 public interface CollegeDao {
 
     /**
@@ -72,5 +72,12 @@ public interface CollegeDao {
      * @return
      */
     int findCount();
+
+    /**
+     * 查询最大的院系编码
+     * @return
+     */
+    String findMaxCode();
+
 }
 

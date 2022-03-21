@@ -1,6 +1,9 @@
 package com.example.service;
 
 import com.example.entity.Student;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -72,15 +75,7 @@ public interface StudentService {
      * @param studentNum
      * @return
      */
-    Student findByStudentNum(Integer studentNum);
-
-    /**
-     * 修改时唯一性检查
-     * @param studentNum
-     * @param studentId
-     * @return
-     */
-    Student findByStudentNumAndId(Integer studentNum, Integer studentId);
+    Student findByStudentNum(String studentNum);
 
     /**
      * 根据班级查询
@@ -114,4 +109,12 @@ public interface StudentService {
      * @return
      */
     int findCount();
+
+    /**
+     * 导入
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    int uploadXls(MultipartFile file) throws IOException;
 }

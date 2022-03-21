@@ -8,6 +8,8 @@ import com.example.service.CollegeService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -54,6 +56,8 @@ public class CollegeServiceImpl implements CollegeService {
     @Override
     public int insert(College college) {
         college.setCollegeNum(RandomUtil.randomString(MyConstant.NUM_BIT));
+        String maxCode = collegeDao.findMaxCode();
+        college.setCollegeCode(null == maxCode || maxCode.equals(MyConstant.ONE_STR)?MyConstant.DEFAULT_CODE:maxCode);
         return this.collegeDao.insert(college);
     }
 
