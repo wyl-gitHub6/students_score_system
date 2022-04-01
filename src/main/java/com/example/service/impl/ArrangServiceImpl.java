@@ -64,7 +64,8 @@ public class ArrangServiceImpl implements ArrangService {
         for (int courseId:courseIdr) {
             Arrang arrang = arrangDao.findByCourseIdAndClassesId(courseId,classesId);
             if (null != arrang){
-                stringBuilder.append(arrang.getClasses().getClassesName()).append("已有").append(arrang.getCourse().getCourseName()).append("课程！");
+                stringBuilder.append(arrang.getClasses().getClassesName())
+                        .append("已有").append(arrang.getCourse().getCourseName()).append("课程！");
             }else {
                 Course cou = courseDao.findById(courseId);
                 course.setCourseId(courseId);

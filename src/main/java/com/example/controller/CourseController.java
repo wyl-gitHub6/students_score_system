@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * (Course)表控制层
+ * 课程
  *
  * @author wyl
  * @since 2021-10-11 22:26:53
@@ -22,14 +22,16 @@ public class CourseController {
     @Resource
     private CourseService courseService;
 
+
     /**
-     * 分页查询
-     * @param currentPage
-     * @param pageSize
-     * @param courseNum
-     * @param courseName
-     * @param courseState
-     * @return
+     * 查询课程
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param courseNum   当然num
+     * @param courseName  课程名称
+     * @param courseState 课程状态
+     * @return {@link Result}
      */
     @GetMapping("/findList")
     public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
@@ -108,10 +110,11 @@ public class CourseController {
         return Result.error("删除失败!");
     }
 
-     /**
-     * 批量删除
-     * @param ids
-     * @return
+    /**
+     * 删除批处理
+     *
+     * @param ids 课程id数组
+     * @return {@link Result}
      */
     @DeleteMapping("/deleteBatch")
     public Result deleteBatch(@RequestParam("ids") int[] ids){
@@ -122,10 +125,12 @@ public class CourseController {
         return Result.error("删除失败!");
     }
 
+
     /**
      * 根据课程类型查询
-     * @param courseState
-     * @return
+     *
+     * @param courseState 课程状态
+     * @return {@link Result}
      */
     @GetMapping("/findByCourseState")
     public Result findByCourseState(@RequestParam("courseState") int courseState){
@@ -134,9 +139,11 @@ public class CourseController {
     }
 
     /**
+     * 查询通过老师id
      * 查询教师所教授课程
-     * @param teacherId
-     * @return
+     *
+     * @param teacherId 老师id
+     * @return {@link Result}
      */
     @GetMapping("/findByTeacherId")
     public Result findByTeacherId(@RequestParam("teacherId") int teacherId){

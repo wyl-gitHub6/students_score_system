@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * (Teacher)表控制层
+ * 教师
  *
  * @author wyl
  * @since 2021-10-06 18:43:28
@@ -30,17 +30,19 @@ public class TeacherController {
     @Resource
     private TeacherService teacherService;
 
+
     /**
-     * 分页查询
-     * @param currentPage
-     * @param pageSize
-     * @param teacherNum
-     * @param teacherName
-     * @return
+     * 查询教师
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param teacherNum  老师num
+     * @param teacherName 老师名字
+     * @return {@link Result}
      */
     @GetMapping("/findList")
     public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
-                           @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                           @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "teacherNum",defaultValue = "") String teacherNum,
                            @RequestParam(value = "teacherName",defaultValue = "") String teacherName){
         List<Teacher> list = teacherService.findList(currentPage, pageSize, teacherNum, teacherName);
@@ -115,9 +117,10 @@ public class TeacherController {
     }
 
     /**
-     * 批量删除
-     * @param ids
-     * @return
+     * 删除批处理
+     *
+     * @param ids id
+     * @return {@link Result}
      */
     @DeleteMapping("deleteBatch")
     public Result deleteBatch(@RequestParam("ids") int[] ids){
@@ -129,10 +132,11 @@ public class TeacherController {
     }
 
     /**
-     * 导入
-     * @param file
-     * @return
-     * @throws IOException
+     * 上传xls
+     *
+     * @param file 文件
+     * @return {@link Result}
+     * @throws IOException ioexception
      */
     @PostMapping("/uploadXls")
     public Result uploadXls(MultipartFile file) throws IOException {
@@ -142,9 +146,10 @@ public class TeacherController {
 
     /**
      * 登录
-     * @param teacherNum
-     * @param password
-     * @return
+     *
+     * @param teacherNum 老师职工编号
+     * @param password   密码
+     * @return {@link Result}
      */
     @GetMapping("/login")
     public Result login(@RequestParam("teacherNum") String teacherNum,
@@ -158,7 +163,8 @@ public class TeacherController {
 
     /**
      * 查询教师数量
-     * @return
+     *
+     * @return {@link Result}
      */
     @GetMapping("findCount")
     public Result findCount(){
@@ -168,9 +174,10 @@ public class TeacherController {
 
     /**
      * 修改密码判断与旧密码加密后是否相同
-     * @param teacherId
-     * @param password
-     * @return
+     *
+     * @param teacherId 老师id
+     * @param password  密码
+     * @return {@link Result}
      */
     @GetMapping("/updatePassword")
     public Result updatePassword(@RequestParam("teacherId") int teacherId,
@@ -183,10 +190,11 @@ public class TeacherController {
     }
 
     /**
-     * 发送邮箱验证码
-     * @param teacherNum
-     * @param emailAddress
-     * @return
+     * 发送电子邮件
+     *
+     * @param teacherNum   老师num
+     * @param emailAddress 电子邮件地址
+     * @return {@link Result}
      */
     @GetMapping("/sendEmail")
     public Result sendEmail(@RequestParam("teacherNum") String teacherNum,

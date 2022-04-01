@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * (Grade)表控制层
+ * 年级
  *
  * @author wyl
  * @since 2021-10-07 18:01:30
@@ -22,17 +22,19 @@ public class GradeController {
     @Resource
     private GradeService gradeService;
 
+
     /**
-     * 分页查询
-     * @param currentPage
-     * @param pageSize
-     * @param gradeNum
-     * @param gradeName
-     * @return
+     * 查询年级
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param gradeNum    年级编号
+     * @param gradeName   年级名字
+     * @return {@link Result}
      */
     @GetMapping("/findList")
     public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
-                           @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                           @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "gradeNum",defaultValue = "") String gradeNum,
                            @RequestParam(value = "gradeName",defaultValue = "") String gradeName){
         List<Grade> list = gradeService.findList(currentPage, pageSize, gradeNum, gradeName);
@@ -42,8 +44,9 @@ public class GradeController {
 
     /**
      * 根据专业ID查询
-     * @param professionalId
-     * @return
+     *
+     * @param professionalId 专业id
+     * @return {@link Result}
      */
     @GetMapping("/findByProfessionalId")
     public Result findByProfessionalId(@RequestParam("professionalId") int professionalId){
@@ -127,10 +130,11 @@ public class GradeController {
         return Result.error("删除失败!");
     }
 
-     /**
-     * 批量删除
-     * @param ids
-     * @return
+    /**
+     * 删除批处理
+     *
+     * @param ids id
+     * @return {@link Result}
      */
     @DeleteMapping("deleteBatch")
     public Result deleteBatch(@RequestParam("ids") int[] ids){
@@ -143,7 +147,8 @@ public class GradeController {
 
     /**
      * 查询年级数量
-     * @return
+     *
+     * @return {@link Result}
      */
     @GetMapping("findCount")
     public Result findCount(){

@@ -8,8 +8,10 @@ import org.quartz.JobExecutionContext;
 import org.springframework.stereotype.Component;
 
 /**
- * @author wyl
- * @date 2021年12月23日  11:30
+ * 开启选课
+ *
+ * @author Wangyl
+ * @date 2022/12/23
  */
 @Component
 @DisallowConcurrentExecution

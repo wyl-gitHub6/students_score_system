@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
- * (Score)表控制层
+ * 成绩
  *
  * @author wyl
  * @since 2021-10-13 22:19:55
@@ -30,16 +31,18 @@ public class ScoreController {
     @Resource
     private CourseService courseService;
 
+
     /**
      * 分页查询选修课不重复
-     * @param currentPage
-     * @param pageSize
-     * @param courseName
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param courseName  课程名称
+     * @return {@link Result}
      */
     @GetMapping("/findList")
     public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
-                           @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                           @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "courseName",defaultValue = "") String courseName){
         List<Score> list = scoreService.findList(currentPage, pageSize, courseName);
         PageInfo<Score> pageInfo = new PageInfo<>(list);
@@ -128,8 +131,9 @@ public class ScoreController {
 
     /**
      * 修改成绩
-     * @param score
-     * @return
+     *
+     * @param score 分数
+     * @return {@link Result}
      */
     @PutMapping("/update")
     public Result update(@RequestBody Score score){
@@ -139,9 +143,10 @@ public class ScoreController {
 
     /**
      * 修改选修状态
-     * @param studentId
-     * @param courseId
-     * @return
+     *
+     * @param studentId 学生id
+     * @param courseId  课程id
+     * @return {@link Result}
      */
     @GetMapping("/updateState")
     public Result updateState(@RequestParam("studentId") int studentId,
@@ -155,10 +160,11 @@ public class ScoreController {
 
     /**
      * 根据课程ID查询学生分页  只查询选择选修课
-     * @param currentPage
-     * @param pageSize
-     * @param courseId
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param courseId    课程id
+     * @return {@link Result}
      */
     @GetMapping("/findByCourseId")
     public Result findByCourseId(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
@@ -171,7 +177,8 @@ public class ScoreController {
 
     /**
      * 选修课统计
-     * @return
+     *
+     * @return {@link Result}
      */
     @GetMapping("/statistical")
     public Result statistical(){
@@ -181,8 +188,9 @@ public class ScoreController {
 
     /**
      * 根据课程查询无成绩学生信息
-     * @param courseId
-     * @return
+     *
+     * @param courseId 课程id
+     * @return {@link Result}
      */
     @GetMapping("/findByCourse")
     public Result findByCourse(@RequestParam("courseId") int courseId){
@@ -195,8 +203,9 @@ public class ScoreController {
 
     /**
      * 学生查看必修课和选修课成绩
-     * @param studentId
-     * @return
+     *
+     * @param studentId 学生id
+     * @return {@link Result}
      */
     @GetMapping("/findScore")
     public Result findScore(@RequestParam("studentId") int studentId){
@@ -216,8 +225,9 @@ public class ScoreController {
 
     /**
      * 查看所有选课  包括取消的
-     * @param studentId
-     * @return
+     *
+     * @param studentId 学生id
+     * @return {@link Result}
      */
     @GetMapping("/findCourse")
     public Result findCourse(@RequestParam("studentId") int studentId){
@@ -228,8 +238,9 @@ public class ScoreController {
 
     /**
      * 停止选修课程
-     * @param courseId
-     * @return
+     *
+     * @param courseId 进程id
+     * @return {@link Result}
      */
     @GetMapping("/deleteCheck")
     public Result deleteCheck(@RequestParam("courseId") int courseId){
@@ -248,8 +259,9 @@ public class ScoreController {
 
     /**
      * 根据课程ID查询成绩
-     * @param courseId
-     * @return
+     *
+     * @param courseId 进程id
+     * @return {@link Result}
      */
     @GetMapping("/findScoreByCourseId")
     public Result findScoreByCourseId(@RequestParam("courseId") int courseId){
@@ -262,17 +274,18 @@ public class ScoreController {
 
     /**
      * 教师查看各科成绩统计
-     * @param teacherId
-     * @return
+     *
+     * @param teacherId 老师id
+     * @return {@link Result}
      */
     @GetMapping("/statistical/{teacherId}")
     public Result statistical(@PathVariable("teacherId") int teacherId){
         List<Course> courses = courseService.findByTeacherId(teacherId);
-        List<String> courseNames = new ArrayList<>();
-        List<Integer> yx = new ArrayList<>();
-        List<Integer> lh = new ArrayList<>();
-        List<Integer> jg = new ArrayList<>();
-        List<Integer> bjg = new ArrayList<>();
+        List<String> courseNames = new LinkedList<>();
+        List<Integer> yx = new LinkedList<>();
+        List<Integer> lh = new LinkedList<>();
+        List<Integer> jg = new LinkedList<>();
+        List<Integer> bjg = new LinkedList<>();
         courses.forEach(c->{
             Course course = courseService.findById(c.getCourseId());
             Integer yxCount = scoreService.findYxCount(c.getCourseId());
@@ -296,8 +309,9 @@ public class ScoreController {
 
     /**
      * 查询平均学分
-     * @param teacherId
-     * @return
+     *
+     * @param teacherId 老师id
+     * @return {@link Result}
      */
     @GetMapping("/findCreditStatistical/{teacherId}")
     public Result findCreditStatistical(@PathVariable("teacherId") String teacherId){

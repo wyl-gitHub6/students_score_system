@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * (College)表控制层
+ * 学院
  *
  * @author wyl
  * @since 2021-10-07 18:01:30
@@ -22,17 +22,19 @@ public class CollegeController {
     @Resource
     private CollegeService collegeService;
 
+
     /**
-     * 分页查询
-     * @param currentPage
-     * @param pageSize
-     * @param collegeNum
-     * @param collegeName
-     * @return
+     * 查询学院
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param collegeNum  学院编号
+     * @param collegeName 学院名称
+     * @return {@link Result}
      */
     @GetMapping("/findList")
     public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
-                           @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                           @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "collegeNum",defaultValue = "") String collegeNum,
                            @RequestParam(value = "collegeName",defaultValue = "") String collegeName){
         List<College> list = collegeService.findList(currentPage, pageSize, collegeNum, collegeName);
@@ -106,10 +108,11 @@ public class CollegeController {
         return Result.error("删除失败!");
     }
 
-     /**
-     * 批量删除
-     * @param ids
-     * @return
+    /**
+     * 删除批处理
+     *
+     * @param ids id
+     * @return {@link Result}
      */
     @DeleteMapping("deleteBatch")
     public Result deleteBatch(@RequestParam("ids") int[] ids){
@@ -122,7 +125,8 @@ public class CollegeController {
 
     /**
      * 查询院系数量
-     * @return
+     *
+     * @return {@link Result}
      */
     @GetMapping("findCount")
     public Result findCount(){

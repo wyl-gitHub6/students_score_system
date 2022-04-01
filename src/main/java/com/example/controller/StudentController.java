@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * (Student)表控制层
+ * 学生
  *
  * @author wyl
  * @since 2021-10-10 11:26:20
@@ -31,17 +31,19 @@ public class StudentController {
     @Resource
     private StudentService studentService;
 
+
     /**
-     * 分页
-     * @param currentPage
-     * @param pageSize
-     * @param studentNum
-     * @param studentName
-     * @return
+     * 查询学生
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param studentNum  学生编号
+     * @param studentName 学生名字
+     * @return {@link Result}
      */
     @GetMapping("/findList")
     public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
-                           @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                           @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "studentNum",defaultValue = "") String studentNum,
                            @RequestParam(value = "studentName",defaultValue = "") String studentName){
         List<Student> list = studentService.findList(currentPage, pageSize, studentNum, studentName);
@@ -120,9 +122,10 @@ public class StudentController {
     }
 
     /**
-     * 批量删除
-     * @param ids
-     * @return
+     * 删除批处理
+     *
+     * @param ids id
+     * @return {@link Result}
      */
     @DeleteMapping("deleteBatch")
     public Result deleteBatch(@RequestParam("ids") int[] ids){
@@ -134,10 +137,11 @@ public class StudentController {
     }
 
     /**
-     * 导入
-     * @param file
-     * @return
-     * @throws IOException
+     * 上传xls
+     *
+     * @param file 文件
+     * @return {@link Result}
+     * @throws IOException ioexception
      */
     @PostMapping("/uploadXls")
     public Result uploadXls(MultipartFile file) throws IOException {
@@ -147,8 +151,13 @@ public class StudentController {
 
     /**
      * 根据班级查询
-     * @param classesId
-     * @return
+     *
+     * @param classesId   班级id
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param studentNum  学生学号
+     * @param studentName 学生名字
+     * @return {@link Result}
      */
     @GetMapping("/findByClassesId")
     public Result findByClassesId(@RequestParam("classesId") int classesId,
@@ -166,9 +175,10 @@ public class StudentController {
 
     /**
      * 登录
-     * @param studentNum
-     * @param password
-     * @return
+     *
+     * @param studentNum 学生学号
+     * @param password   密码
+     * @return {@link Result}
      */
     @GetMapping("/login")
     public Result login(@RequestParam("studentNum") String studentNum,
@@ -182,8 +192,10 @@ public class StudentController {
 
     /**
      * 必修课录入成绩时查询该课程没成绩的学生
-     * @param classesId
-     * @return
+     *
+     * @param classesId 班级id
+     * @param courseId  课程id
+     * @return {@link Result}
      */
     @GetMapping("/findByClasses")
     public Result findByClasses(@RequestParam("classesId") int classesId,
@@ -197,7 +209,8 @@ public class StudentController {
 
     /**
      * 查询学生数量
-     * @return
+     *
+     * @return {@link Result}
      */
     @GetMapping("findCount")
     public Result findCount(){
@@ -207,9 +220,10 @@ public class StudentController {
 
     /**
      * 修改密码判断与旧密码加密后是否相同
-     * @param studentId
-     * @param password
-     * @return
+     *
+     * @param studentId 学生证
+     * @param password  密码
+     * @return {@link Result}
      */
     @GetMapping("/updatePassword")
     public Result updatePassword(@RequestParam("studentId") int studentId,
@@ -222,10 +236,11 @@ public class StudentController {
     }
 
     /**
-     * 发送邮箱验证码
-     * @param studentNum
-     * @param emailAddress
-     * @return
+     * 发送电子邮件
+     *
+     * @param studentNum   学生学号
+     * @param emailAddress 电子邮件地址
+     * @return {@link Result}
      */
     @GetMapping("/sendEmail")
     public Result sendEmail(@RequestParam("studentNum") String studentNum,

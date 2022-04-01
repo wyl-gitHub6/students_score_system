@@ -99,6 +99,7 @@ public class TeacherServiceImpl implements TeacherService {
             t.setTeacherPhone(phone);
             t.setTeacherNational(national);
             t.setTeacherCard(card);
+            t.setTeacherPassword(SecureUtil.md5(MyConstant.DEFAULT_PASSWORD));
             t.setTeacherNum(RandomUtil.randomString(MyConstant.NUM_BIT));
             teacherDao.insert(t);
         }

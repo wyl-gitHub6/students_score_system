@@ -10,7 +10,10 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @author wyl
+ * 上传
+ *
+ * @author Wangyl
+ * @date 2022/04/01
  */
 @RestController
 @RequestMapping("/uploadController")
@@ -19,11 +22,14 @@ public class UploadController {
      * 上传的地址
      */
     private final String IMAGE_URL = "D:\\image_upload\\";
-    /**
-     * 上传的服务器返回路径
-     */
-    private final String RETURN_URL = "http://localhost:8080/image_upload/";
 
+    /**
+     * 上传图片
+     *
+     * @param file 文件
+     * @return {@link Result}
+     * @throws IOException ioexception
+     */
     @PostMapping("/upload")
     public Result upload(MultipartFile file) throws IOException {
         //获取图片名称
@@ -37,10 +43,18 @@ public class UploadController {
         fileName = uuid + suffix;
         //上传 第一个参数文件流，第二个参数写到哪
         FileUtil.writeBytes(file.getBytes(),new File(IMAGE_URL+fileName));
-        System.out.println(RETURN_URL+fileName);
-        return Result.success(RETURN_URL+fileName);
+        //上传的服务器返回路径
+        String returnUrl = "http://localhost:8080/image_upload/";
+        System.out.println(returnUrl +fileName);
+        return Result.success(returnUrl +fileName);
     }
 
+    /**
+     * 删除图片
+     *
+     * @param deleteUrl 删除网址
+     * @return {@link Result}
+     */
     @DeleteMapping("/deleteImage")
     public Result deleteImage(@RequestParam("deleteUrl") String deleteUrl){
         //获取文件名

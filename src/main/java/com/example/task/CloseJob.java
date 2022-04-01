@@ -8,7 +8,10 @@ import org.quartz.JobExecutionContext;
 import org.springframework.stereotype.Component;
 
 /**
- * @author wyl
+ * 关闭选课
+ *
+ * @author Wangyl
+ * @date 2022/12/23
  */
 @Component
 @DisallowConcurrentExecution
@@ -17,7 +20,7 @@ public class CloseJob implements Job {
 
     public static final String CLASS_NAME = "com.example.task.CloseJob";
 
-    private static int state = MyConstant.ZERO;
+    private static int  state = MyConstant.ZERO;
 
     @Override
     public synchronized void execute(JobExecutionContext context) {

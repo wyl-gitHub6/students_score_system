@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * (Professional)表控制层
+ * 专业
  *
  * @author wyl
  * @since 2021-10-07 18:02:09
@@ -22,17 +22,19 @@ public class ProfessionalController {
     @Resource
     private ProfessionalService professionalService;
 
+
     /**
-     * 分页查询
-     * @param currentPage
-     * @param pageSize
-     * @param professionalNum
-     * @param professionalName
-     * @return
+     * 查询专业
+     *
+     * @param currentPage      当前页面
+     * @param pageSize         页面大小
+     * @param professionalNum  专业编号
+     * @param professionalName 专业名称
+     * @return {@link Result}
      */
     @GetMapping("/findList")
     public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
-                           @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                           @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "professionalNum",defaultValue = "") String professionalNum,
                            @RequestParam(value = "professionalName",defaultValue = "") String professionalName){
         List<Professional> list = professionalService.findList(currentPage, pageSize, professionalNum, professionalName);
@@ -122,10 +124,11 @@ public class ProfessionalController {
         return Result.error("删除失败!");
     }
 
-     /**
-     * 批量删除
-     * @param ids
-     * @return
+    /**
+     * 删除批处理
+     *
+     * @param ids id
+     * @return {@link Result}
      */
     @DeleteMapping("deleteBatch")
     public Result deleteBatch(@RequestParam("ids") int[] ids){
@@ -138,7 +141,8 @@ public class ProfessionalController {
 
     /**
      * 查询专业数量
-     * @return
+     *
+     * @return {@link Result}
      */
     @GetMapping("findCount")
     public Result findCount(){

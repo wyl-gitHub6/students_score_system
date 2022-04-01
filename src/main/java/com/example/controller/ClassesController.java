@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * (Classes)表控制层
+ * 班级
  *
  * @author wyl
  * @since 2021-10-09 11:02:58
@@ -24,7 +24,7 @@ public class ClassesController {
 
     @GetMapping("/findList")
     public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
-                           @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                           @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "classesNum",defaultValue = "") String classesNum,
                            @RequestParam(value = "classesName",defaultValue = "") String classesName){
         List<Classes> list = classesService.findList(currentPage, pageSize, classesNum, classesName);
@@ -123,12 +123,13 @@ public class ClassesController {
 
     /**
      * 根据所在年级查询
-     * @param currentPage
-     * @param pageSize
-     * @param gradeId
-     * @param classesNum
-     * @param classesName
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param gradeId     年级id
+     * @param classesNum  班级编号
+     * @param classesName 班级名称
+     * @return {@link Result}
      */
     @GetMapping("/findByGradeId")
     public Result findByGradeId(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
@@ -143,9 +144,10 @@ public class ClassesController {
 
     /**
      * 分班
-     * @param ids
-     * @param classesId
-     * @return
+     *
+     * @param ids       学生数组
+     * @param classesId 班级id
+     * @return {@link Result}
      */
     @GetMapping("/driver")
     public Result driver(@RequestParam("ids") int[] ids,
@@ -156,7 +158,8 @@ public class ClassesController {
 
     /**
      * 查询班级数量
-     * @return
+     *
+     * @return {@link Result}
      */
     @GetMapping("findCount")
     public Result findCount(){
@@ -166,8 +169,9 @@ public class ClassesController {
 
     /**
      * 查询教师所带班级
-     * @param teacherId
-     * @return
+     *
+     * @param teacherId 老师id
+     * @return {@link Result}
      */
     @GetMapping("/findByTeacherId")
     public Result findByTeacherId(@RequestParam("teacherId") int teacherId){

@@ -149,7 +149,6 @@ public class StudentServiceImpl implements StudentService {
         for (i = 1; i <= lastRowNum; i++) {
             //通过下标获取行
             HSSFRow row = sheet.getRow(i);
-            //从行中获取数据
 
             /**
              * getNumericCellValue() 获取数字
@@ -178,6 +177,7 @@ public class StudentServiceImpl implements StudentService {
             s.setStudentNational(national);
             s.setStudentCard(card);
             s.setStudentName(studentName);
+            s.setStudentPassword(SecureUtil.md5(MyConstant.DEFAULT_PASSWORD));
             Classes classes = new Classes();
             classes.setClassesId(classesId);
             s.setClasses(classes);

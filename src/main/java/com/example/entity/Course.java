@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 /**
- * (Course)
+ * 课程
  *
- * @author wyl
- * @since 2021-10-11 22:26:53
+ * @author Wangyl
+ * @date 2022/04/01
  */
 @Data
 @NoArgsConstructor
@@ -65,5 +65,10 @@ public class Course implements Serializable {
      */
     private int value;
     private String name;
+
+    /**
+     * 选修课已选人数
+     */
+    private Integer checkNumber;
 }
 

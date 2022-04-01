@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
+ * 定时任务
  * @author wyl
  */
 @RestController
@@ -34,13 +35,14 @@ public class TaskController {
 
     /**
      * 查询所有定时任务
-     * @param currentPage
-     * @param pageSize
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @return {@link Result}
      */
     @GetMapping("/findList")
     public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
-                           @RequestParam(value = "pageSize",defaultValue = "5") int pageSize){
+                           @RequestParam(value = "pageSize",defaultValue = "8") int pageSize){
         List<Task> list = taskService.findList(currentPage,pageSize);
         PageInfo<Task> pageInfo = new PageInfo<>(list);
         return Result.success(pageInfo,"查询成功!");
@@ -48,7 +50,8 @@ public class TaskController {
 
     /**
      * 判断选课功能是否开启
-     * @return
+     *
+     * @return {@link Result}
      */
     @GetMapping("/checkCourse")
     public Result isCheckCourse(){
@@ -65,7 +68,9 @@ public class TaskController {
 
     /**
      * 添加定时任务
-     * @return
+     *
+     * @param task 任务
+     * @return {@link Result}
      */
     @PostMapping("/insert")
     public Result insert(@RequestBody Task task){
@@ -81,8 +86,10 @@ public class TaskController {
 
     /**
      * 修改定时任务
-     * @param task
-     * @return
+     *
+     * @param task 任务
+     * @return {@link Result}
+     * @throws SchedulerException 调度程序异常
      */
     @PutMapping("/update")
     public Result update(@RequestBody Task task) throws SchedulerException {
@@ -98,8 +105,10 @@ public class TaskController {
 
     /**
      * 删除定时任务
-     * @param id
-     * @return
+     *
+     * @param id 任务ID
+     * @return {@link Result}
+     * @throws SchedulerException 调度程序异常
      */
     @DeleteMapping("/delete")
     public Result delete(@RequestParam("id") int id) throws SchedulerException {
@@ -112,8 +121,9 @@ public class TaskController {
 
     /**
      * 根据Id查询定时任务
-     * @param id
-     * @return
+     *
+     * @param id 任务ID
+     * @return {@link Result}
      */
     @GetMapping("/findById")
     public Result findById(@RequestParam("id") int id){
@@ -122,10 +132,11 @@ public class TaskController {
 
     /**
      * 定时任务开关修改
-     * @param id
-     * @param jobStatus
-     * @return
-     * @throws SchedulerException
+     *
+     * @param id  任务id
+     * @param jobStatus 作业状态
+     * @return {@link Result}
+     * @throws SchedulerException 调度程序异常
      */
     @GetMapping("/updateStatus")
     public Result updateStatus(@RequestParam("id") int id,

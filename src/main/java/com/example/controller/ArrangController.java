@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * (Arrang)表控制层
+ * 排课
  *
  * @author wyl
  * @since 2021-10-13 22:58:58
@@ -23,14 +23,17 @@ public class ArrangController {
     @Resource
     private ArrangService arrangService;
 
-     /**
+    /**
      * 查询班级
      *
-     * @return 数据数组
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param classesName 班级名字
+     * @return {@link Result}
      */
     @GetMapping("/findClasses")
     public Result findClasses(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
-                              @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                              @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                               @RequestParam(value = "classesName",defaultValue = "") String classesName) {
         List<Classes> list = this.arrangService.findClasses(currentPage,pageSize,classesName);
         PageInfo<Classes> pageInfo = new PageInfo<>(list);
@@ -52,11 +55,13 @@ public class ArrangController {
         return Result.error("添加失败!");
     }
 
+
     /**
      * 安排必修课
-     * @param courseIdr
-     * @param classesId
-     * @return
+     *
+     * @param courseIdr 课程数组
+     * @param classesId 班级id
+     * @return {@link Result}
      */
     @GetMapping("/arrangCourse")
     public Result arrangCourse(@RequestParam("courseIdr") int[] courseIdr,
@@ -67,8 +72,9 @@ public class ArrangController {
 
     /**
      * 根据班级ID查询
-     * @param classesId
-     * @return
+     *
+     * @param classesId 班级id
+     * @return {@link Result}
      */
     @GetMapping("/findByClassesId")
     public Result findByClassesId(@RequestParam("classesId") int classesId){
@@ -78,9 +84,10 @@ public class ArrangController {
 
     /**
      * 根据课程ID和班级ID删除
-     * @param courseId
-     * @param classesId
-     * @return
+     *
+     * @param courseId  课程id
+     * @param classesId 班级id
+     * @return {@link Result}
      */
     @DeleteMapping("/delete")
     public Result delete(@RequestParam("courseId") int courseId,
@@ -94,8 +101,9 @@ public class ArrangController {
 
     /**
      * 根据课程ID查询
-     * @param courseId
-     * @return
+     *
+     * @param courseId 课程id
+     * @return {@link Result}
      */
     @GetMapping("/findByCourseId")
     public Result findByCourseId(@RequestParam("courseId") int courseId){

@@ -13,6 +13,7 @@
         <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
         <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
         <result property="number" column="number" jdbcType="TIMESTAMP"/>
+        <result property="checkNumber" column="count(*)" jdbcType="TIMESTAMP"/>
         <association property="teacher" javaType="teacher">
             <result property="teacherId" column="teacher_id" jdbcType="INTEGER"/>
             <result property="teacherNum" column="teacher_num" jdbcType="VARCHAR"/>
@@ -28,26 +29,26 @@
         </association>
     </resultMap>
 
-    <!--查询单个-->
-    <select id="findById" resultMap="CourseMap">
+    <sql id="find">
         SELECT *
         FROM course AS c LEFT OUTER JOIN teacher AS t
         ON c.teacher_id = t.teacher_id
+    </sql>
+
+    <!--查询单个-->
+    <select id="findById" resultMap="CourseMap">
+        <include refid="find" />
         where c.course_id = #{courseId}
     </select>
 
     <!--查询所有数据-->
     <select id="findAll" resultMap="CourseMap">
-        SELECT *
-        FROM course AS c LEFT OUTER JOIN teacher AS t
-        ON c.teacher_id = t.teacher_id
+        <include refid="find" />
     </select>
 
     <!--分页查询-->
     <select id="findList" resultMap="CourseMap">
-        SELECT *
-        FROM course AS c LEFT OUTER JOIN teacher AS t
-        ON c.teacher_id = t.teacher_id
+        <include refid="find" />
         where 1=1
         <if test="courseNum != ''">
             and c.course_num like concat('%',#{courseNum},'%')
@@ -63,10 +64,15 @@
 
     <!--根据课程类型查询-->
     <select id="findByCourseState" resultMap="CourseMap">
-        SELECT *
-        FROM course AS c LEFT OUTER JOIN teacher AS t
-        ON c.teacher_id = t.teacher_id
-        where c.course_state = #{courseState}
+        <include refid="find" />
+        <if test="courseState == 0">
+            where c.course_state = #{courseState};
+        </if>
+        <if test="courseState == 1">
+            LEFT OUTER JOIN (SELECT count(*),course_id  FROM score GROUP BY course_id) AS s
+            ON c.course_id = s.course_id
+            where c.course_state =  #{courseState};
+        </if>
     </select>
 
     <!--根据教师ID查询-->

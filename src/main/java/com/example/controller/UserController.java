@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * (User)表控制层
+ * 用户
  *
  * @author wyl
  * @since 2021-10-28 16:16:51
@@ -25,9 +25,18 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    /**
+     * 查询用户
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param userName    用户名
+     * @param userNum     用户编号
+     * @return {@link Result}
+     */
     @GetMapping("/findList")
     public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
-                           @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
+                           @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "userName",defaultValue = "") String userName,
                            @RequestParam(value = "userNum",defaultValue = "") String userNum){
         List<User> list = userService.findList(currentPage, pageSize, userName, userNum);
@@ -101,10 +110,11 @@ public class UserController {
         return Result.error("删除失败!");
     }
 
-     /**
-     * 批量删除
-     * @param ids
-     * @return
+    /**
+     * 删除批处理
+     *
+     * @param ids id
+     * @return {@link Result}
      */
     @DeleteMapping("deleteBatch")
     public Result deleteBatch(@RequestParam("ids") int[] ids){
@@ -117,9 +127,10 @@ public class UserController {
 
     /**
      * 登录
-     * @param userNum
-     * @param password
-     * @return
+     *
+     * @param userNum  用户num
+     * @param password 密码
+     * @return {@link Result}
      */
     @GetMapping("/login")
     public Result login(@RequestParam("userNum") String userNum,
@@ -133,10 +144,11 @@ public class UserController {
     }
 
     /**
-     * 发送邮箱验证码
-     * @param userNum
-     * @param emailAddress
-     * @return
+     * 发送电子邮件
+     *
+     * @param userNum      用户num
+     * @param emailAddress 电子邮件地址
+     * @return {@link Result}
      */
     @GetMapping("/sendEmail")
     public Result sendEmail(@RequestParam("userNum") String userNum,
@@ -156,9 +168,10 @@ public class UserController {
 
     /**
      * 修改密码判断与旧密码加密后是否相同
-     * @param userId
-     * @param password
-     * @return
+     *
+     * @param userId   用户id
+     * @param password 密码
+     * @return {@link Result}
      */
     @GetMapping("/updatePassword")
     public Result updatePassword(@RequestParam("userId") int userId,

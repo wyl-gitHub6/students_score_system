@@ -5,7 +5,7 @@ import java.io.Serializable;
 import lombok.*;
 
 /**
- * (Arrang)
+ * 排课
  *
  * @author wyl
  * @since 2021-10-13 22:58:58

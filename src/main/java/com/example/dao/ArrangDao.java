@@ -16,10 +16,12 @@ import java.util.List;
  @Mapper
 public interface ArrangDao {
 
+
     /**
      * 查询班级
-     * @param classesName
-     * @return
+     *
+     * @param classesName 班级名称
+     * @return {@link List}<{@link Classes}>
      */
     List<Classes> findClasses(String classesName);
 
@@ -33,33 +35,37 @@ public interface ArrangDao {
 
     /**
      * 根据课程ID和班级ID查询
-     * @param courseId
-     * @param classesId
-     * @return
+     *
+     * @param courseId  课程id
+     * @param classesId 班级id
+     * @return {@link Arrang}
      */
     Arrang findByCourseIdAndClassesId(@Param("courseId") int courseId,
                                       @Param("classesId") int classesId);
 
     /**
      * 根据班级ID查询
-     * @param classesId
-     * @return
+     *
+     * @param classesId 班级id
+     * @return {@link List}<{@link Classes}>
      */
     List<Classes> findByClassesId(int classesId);
 
     /**
-     * 删除
-     * @param courseId
-     * @param classesId
-     * @return
+     * 根据课程ID和班级ID删除
+     *
+     * @param courseId  课程id
+     * @param classesId 班级id
+     * @return boolean
      */
     boolean delete(@Param("courseId") int courseId,
                    @Param("classesId") int classesId);
 
     /**
      * 根据课程ID查询
-     * @param courseId
-     * @return
+     *
+     * @param courseId 课程id
+     * @return {@link List}<{@link Classes}>
      */
     List<Classes> findByCourseId(int courseId);
 }
