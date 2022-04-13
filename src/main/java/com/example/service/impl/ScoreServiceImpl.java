@@ -246,7 +246,7 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public HashMap<String, Object> findCreditStatistical(String teacherId) {
         HashMap<String, HashMap<String, String>> map = scoreDao.findCreditStatistical(teacherId);
-        HashMap<String, Object> hashMap = new HashMap<>();
+        HashMap<String, Object> hashMap = new HashMap<>(2);
         LinkedList<Object> courseList = new LinkedList<>();
         LinkedList<Object> creditList = new LinkedList<>();
         map.values().forEach(s->{

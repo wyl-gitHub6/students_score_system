@@ -158,15 +158,17 @@ public interface ScoreDao {
 
     /**
      * 查看选修人数
-     * @param courseId
-     * @return
+     *
+     * @param courseId 进程id
+     * @return int
      */
     int checkCount(int courseId);
 
     /**
-     * 根据课程ID查询成绩
-     * @param courseId
-     * @return
+     * 查询分数通过课程id
+     *
+     * @param courseId 进程id
+     * @return {@link List}<{@link Score}>
      */
     List<Score> findScoreByCourseId(int courseId);
 
@@ -180,10 +182,11 @@ public interface ScoreDao {
 
     /**
      * 查询平均学分
-     * @param teacherId
-     * @return
+     *
+     * @param teacherId 老师id
+     * @return {@link HashMap}<{@link String}, {@link HashMap}<{@link String}, {@link String}>>
      */
-    @MapKey("scoreId")
+    @MapKey("courseId")
     HashMap<String,HashMap<String,String>> findCreditStatistical(String teacherId);
 }
 

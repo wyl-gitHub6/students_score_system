@@ -31,7 +31,6 @@ public class ScoreController {
     @Resource
     private CourseService courseService;
 
-
     /**
      * 分页查询选修课不重复
      *
@@ -51,11 +50,12 @@ public class ScoreController {
 
     /**
      * 成绩查询分页
-     * @param currentPage
-     * @param pageSize
-     * @param courseName
-     * @param studentName
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param courseName  课程名称
+     * @param studentName 学生学号
+     * @return {@link Result}
      */
     @GetMapping("/scoreList")
     public Result scoreList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
@@ -66,8 +66,6 @@ public class ScoreController {
         PageInfo<Score> pageInfo = new PageInfo<>(list);
         return Result.success(pageInfo,"查询成功!");
     }
-
-
 
     /**
      * 通过主键查询单条数据
@@ -92,9 +90,10 @@ public class ScoreController {
 
     /**
      * 添加选修课
-     * @param studentId
-     * @param courseId
-     * @return
+     *
+     * @param studentId 学生id
+     * @param courseId  课程id
+     * @return {@link Result}
      */
     @GetMapping("/insert")
     public Result insert(@RequestParam("studentId") int studentId,

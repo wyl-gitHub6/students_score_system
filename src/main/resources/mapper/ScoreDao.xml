@@ -247,7 +247,7 @@
     </select>
 
     <select id="findCreditStatistical" resultType="java.util.HashMap">
-        SELECT sc.score_id scoreId,c.course_name courseName,AVG(sc.credit) creditAvg,c.course_credit credit
+        SELECT c.course_id courseId,c.course_name courseName,AVG(sc.credit) creditAvg,c.course_credit credit
         FROM score sc
         LEFT OUTER JOIN course c
         ON sc.course_id = c.course_id
