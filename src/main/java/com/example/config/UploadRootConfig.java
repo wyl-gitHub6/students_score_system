@@ -14,7 +14,7 @@ public class UploadRootConfig implements WebMvcConfigurer {
     /**
      * addResourceHandler注册项目名称
      * addResourceLocations指定访问的本地路径
-     * @param registry
+     * @param registry 注册表
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

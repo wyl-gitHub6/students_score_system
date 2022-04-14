@@ -28,7 +28,7 @@ public class UploadController {
      *
      * @param file 文件
      * @return {@link Result}
-     * @throws IOException ioexception
+     * @throws IOException
      */
     @PostMapping("/upload")
     public Result upload(MultipartFile file) throws IOException {
@@ -44,7 +44,7 @@ public class UploadController {
         //上传 第一个参数文件流，第二个参数写到哪
         FileUtil.writeBytes(file.getBytes(),new File(IMAGE_URL+fileName));
         //上传的服务器返回路径
-        String returnUrl = "http://localhost:8080/image_upload/";
+        String returnUrl = "image_upload/";
         System.out.println(returnUrl +fileName);
         return Result.success(returnUrl +fileName);
     }
