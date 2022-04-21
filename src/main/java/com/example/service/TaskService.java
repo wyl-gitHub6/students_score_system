@@ -18,48 +18,54 @@ public interface TaskService {
 
     /**
      * 查询所有定时任务
-     * @param currentPage
-     * @param pageSize
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @return {@link List}<{@link Task}>
      */
     List<Task> findList(int currentPage, int pageSize);
 
     /**
      * 添加定时任务
-     * @param task
-     * @return
+     *
+     * @param task 任务
+     * @return int
      */
     int insert(Task task);
 
     /**
      * 修改定时任务
-     * @param task
-     * @return
-     * @throws SchedulerException
+     *
+     * @param task 任务
+     * @return int
+     * @throws SchedulerException 调度程序异常
      */
     int update(Task task) throws SchedulerException;
 
     /**
      * 删除定时任务
-     * @param id
-     * @return
-     * @throws SchedulerException
+     *
+     * @param id id
+     * @return int
+     * @throws SchedulerException 调度程序异常
      */
     int delete(int id) throws SchedulerException;
 
     /**
      * 根据Id查询定时任务
-     * @param id
-     * @return
+     *
+     * @param id id
+     * @return {@link Task}
      */
     Task findById(int id);
 
     /**
      * 定时任务开关修改
-     * @param id
-     * @param jobStatus
-     * @return
-     * @throws SchedulerException
+     *
+     * @param id        id
+     * @param jobStatus 作业状态
+     * @return int
+     * @throws SchedulerException 调度程序异常
      */
     int updateStatus(int id, String jobStatus) throws SchedulerException;
 }

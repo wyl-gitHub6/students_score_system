@@ -27,12 +27,6 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @Autowired
-    private QuartzJob quartzJob;
-
-    @Autowired
-    private CloseJob closeJob;
-
     /**
      * 查询所有定时任务
      *
@@ -55,12 +49,10 @@ public class TaskController {
      */
     @GetMapping("/checkCourse")
     public Result isCheckCourse(){
-        log.info("开启:"+quartzJob.getState());
-        log.info("关闭:"+closeJob.getState());
-        if (quartzJob.getState() == MyConstant.ONE){
+        if (QuartzJob.state.get() == MyConstant.ONE){
             return Result.success(MyConstant.ONE,"选课关闭中");
         }
-        if (closeJob.getState() == MyConstant.ZERO){
+        if (CloseJob.state.get() == MyConstant.ZERO){
             return Result.success(MyConstant.ZERO,"快开始选课吧");
         }
         return Result.success(MyConstant.ONE,"选课关闭中");
@@ -74,7 +66,7 @@ public class TaskController {
      */
     @PostMapping("/insert")
     public Result insert(@RequestBody Task task){
-        if (!CronUtils.isValid(task.getCronExpression())){
+        if (CronUtils.isValid(task.getCronExpression())){
             return Result.error("cron表达式错误!");
         }
         int i = taskService.insert(task);
@@ -93,7 +85,7 @@ public class TaskController {
      */
     @PutMapping("/update")
     public Result update(@RequestBody Task task) throws SchedulerException {
-        if (!CronUtils.isValid(task.getCronExpression())){
+        if (CronUtils.isValid(task.getCronExpression())){
             return Result.error("cron表达式错误!");
         }
         int i = taskService.update(task);

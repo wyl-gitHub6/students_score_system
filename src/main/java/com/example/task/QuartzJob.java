@@ -1,11 +1,12 @@
 package com.example.task;
 
-import com.example.constant.MyConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 开启选课
@@ -23,19 +24,11 @@ public class QuartzJob implements Job {
     /**
      * 0开启1关闭
      */
-    private static int state = MyConstant.ONE;
+    public static AtomicInteger state = new AtomicInteger(1);
 
     @Override
     public synchronized void execute(JobExecutionContext context) {
-        state = MyConstant.ZERO;
+        state.set(0);
         log.info(state+"学生选课开始：");
-    }
-
-    public int getState(){
-        return state;
-    }
-
-    public void setState(int s){
-        state = s;
     }
 }

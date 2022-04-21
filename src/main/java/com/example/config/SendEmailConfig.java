@@ -8,7 +8,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 /**
- * @author wyl
+ * 发送电子邮件配置
+ *
+ * @author Wangyl
+ * @date 2022/04/21
  */
 @Component
 @Slf4j

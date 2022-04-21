@@ -23,8 +23,8 @@ public class OverAll {
     /**
      * 按照院系、专业、年级、班级、生成学生学号
      *
-     * @param classesId
-     * @return
+     * @param classesId 类id
+     * @return {@link String}
      */
     public String getStudentNum(int classesId) {
 
@@ -43,7 +43,6 @@ public class OverAll {
 
             return gradeName + collegeCode + professionalCode + classesCode + MyConstant.STUDENT_DEFAULT_CODE;
         }
-
         return maxCode;
     }
 }

@@ -8,8 +8,8 @@ import java.util.Date;
 /**
  * cron表达式工具类
  *
- * @author wyl
- *
+ * @author Wangyl
+ * @date 2022/04/21
  */
 public class CronUtils
 {
@@ -21,7 +21,7 @@ public class CronUtils
      */
     public static boolean isValid(String cronExpression)
     {
-        return CronExpression.isValidExpression(cronExpression);
+        return !CronExpression.isValidExpression(cronExpression);
     }
 
     /**

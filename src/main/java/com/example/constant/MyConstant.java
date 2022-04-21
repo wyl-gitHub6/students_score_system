@@ -1,7 +1,9 @@
 package com.example.constant;
 
 /**
- * @author wyl
+ *
+ * @author Wangyl
+ * @date 2022/04/21
  */
 public class MyConstant {
 

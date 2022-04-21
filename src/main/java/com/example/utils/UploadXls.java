@@ -18,8 +18,7 @@ public class UploadXls {
         //2.通过poi解析流 HSSFWorkbook 处理流得到的对象中 就封装了Excel文件所有的数据
         try (HSSFWorkbook workbook = new HSSFWorkbook(inputStream)) {
             //3.从文件中获取表对象  getSheetAt通过下标获取
-            HSSFSheet sheet = workbook.getSheetAt(0);
-            return sheet;
+            return workbook.getSheetAt(0);
         }
     }
 }
