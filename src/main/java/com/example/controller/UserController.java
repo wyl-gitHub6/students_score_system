@@ -25,6 +25,9 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private SendEmailConfig sendEmailConfig;
+
     /**
      * 查询用户
      *
@@ -161,7 +164,7 @@ public class UserController {
             return Result.error("请输入绑定的邮箱！");
         }
         String code = VerCode.getVerCode();
-        SendEmailConfig.sendEmail(emailAddress,code);
+        sendEmailConfig.sendEmail(emailAddress,code);
         user.setCode(code);
         return Result.success(user,"发送成功,注意查收！");
     }

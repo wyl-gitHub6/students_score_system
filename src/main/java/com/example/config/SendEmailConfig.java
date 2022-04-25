@@ -20,19 +20,15 @@ public class SendEmailConfig {
     /**
      * 使用内置JavaMailSender发送邮件
      */
-    private static JavaMailSender mailSender;
+    private JavaMailSender mailSender;
 
     /**
      * 邮箱验证码发送者
      */
-    private static String sender;
-
     @Value("${spring.mail.username}")
-    public void sender(String username){
-        sender = username;
-    }
+    private String sender;
 
-    public static void sendEmail(String emailAddress,String code){
+    public synchronized void sendEmail(String emailAddress,String code){
         SimpleMailMessage message = new SimpleMailMessage();
         //设置标题
         message.setSubject("邮箱验证码");

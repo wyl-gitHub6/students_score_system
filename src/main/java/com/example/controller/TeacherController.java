@@ -5,11 +5,8 @@ import com.example.config.SendEmailConfig;
 import com.example.entity.Teacher;
 import com.example.service.TeacherService;
 import com.example.utils.Result;
-import com.example.utils.UploadXls;
 import com.example.utils.VerCode;
 import com.github.pagehelper.PageInfo;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +26,9 @@ public class TeacherController {
 
     @Resource
     private TeacherService teacherService;
+
+    @Resource
+    private SendEmailConfig sendEmailConfig;
 
 
     /**
@@ -207,7 +207,7 @@ public class TeacherController {
             return Result.error("请输入绑定的邮箱！");
         }
         String code = VerCode.getVerCode();
-        SendEmailConfig.sendEmail(emailAddress,code);
+        sendEmailConfig.sendEmail(emailAddress,code);
         teacher.setCode(code);
         return Result.success(teacher,"发送成功,注意查收！");
     }
