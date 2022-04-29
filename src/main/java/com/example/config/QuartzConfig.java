@@ -2,25 +2,26 @@ package com.example.config;
 
 import com.example.quartz.JobFactory;
 import org.quartz.Scheduler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Properties;
 
 /**
- * @author wyl
  * 任务调度配置
- * @date 2021年12月23日  10:21
+ *
+ * @author Wangyl
+ * @date 2022/04/27
  */
 @Configuration
 public class QuartzConfig {
 
-    @Autowired
+    @Resource
     private JobFactory jobFactory;
 
     @Bean

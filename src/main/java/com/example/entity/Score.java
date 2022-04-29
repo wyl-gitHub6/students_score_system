@@ -47,6 +47,10 @@ public class Score implements Serializable {
      */
     private Double testGrade;
     /**
+     * 阶段成绩
+     */
+    private String stageGrade;
+    /**
      * 最终成绩
      */
     private Double scoreGrade;

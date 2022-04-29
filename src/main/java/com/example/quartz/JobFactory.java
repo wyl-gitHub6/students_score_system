@@ -7,9 +7,10 @@ import org.springframework.scheduling.quartz.AdaptableJobFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * @author wyl
  * 解决quartz无法注入spring bean问题
- * @date 2021年12月23日  11:29
+ *
+ * @author Wangyl
+ * @date 2022/04/27
  */
 @Component
 public class JobFactory extends AdaptableJobFactory {

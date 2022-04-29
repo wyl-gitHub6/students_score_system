@@ -95,7 +95,6 @@ public class MyWebSocket {
     public  void broadcast(String message,String id, String username){
         for (MyWebSocket item : WEB_SOCKET_LIST) {
             /*同步异步说明参考：http://blog.csdn.net/who_is_xiaoming/article/details/53287691
-            this.session.getBasicRemote().sendText(message);*/
             /*异步发送消息.*/
             item.session.getAsyncRemote().sendText(JSONUtil.toJsonStr(Result.success(WEB_SOCKET_LIST.size(),message,id,username)));
         }

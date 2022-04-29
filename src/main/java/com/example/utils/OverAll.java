@@ -3,9 +3,15 @@ package com.example.utils;
 import com.example.constant.MyConstant;
 import com.example.dao.ClassesDao;
 import com.example.dao.StudentDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.val;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -14,10 +20,10 @@ import java.util.Map;
 @Component
 public class OverAll {
 
-    @Autowired
+    @Resource
     private ClassesDao classesDao;
 
-    @Autowired
+    @Resource
     private StudentDao studentDao;
 
     /**
@@ -44,5 +50,39 @@ public class OverAll {
             return gradeName + collegeCode + professionalCode + classesCode + MyConstant.STUDENT_DEFAULT_CODE;
         }
         return maxCode;
+    }
+
+    public Pair<String, BigDecimal> calculate(Object obj, double usualGrade, double testGrade){
+        val list = (ArrayList<Map<String, Integer>>)obj;
+
+        StringBuilder builder = new StringBuilder();
+        BigDecimal value = BigDecimal.valueOf(0);
+
+        if (list.size() == 0){
+            //没阶段成绩 按照平时成绩的百分之30 期末成绩的百分之70
+            BigDecimal scoreGrade = BigDecimal.valueOf(testGrade).multiply(BigDecimal.valueOf(0.7))
+                    .add(BigDecimal.valueOf(usualGrade).multiply(BigDecimal.valueOf(0.3)))
+                    .setScale(1, RoundingMode.HALF_UP);
+
+            return ImmutablePair.of(builder.toString(), scoreGrade);
+        }
+
+        int i =0;
+        for (Map<String, Integer> item : list) {
+            i++;
+            Integer stageGrade = item.get("value");
+            //获取阶段总成绩
+            value = value.add(BigDecimal.valueOf(stageGrade));
+            builder.append("阶段").append(i).append(":").append(stageGrade).append(" ");
+        }
+
+        //计算总分 阶段平均成绩的百分之40 期末成绩的百分之40 平时成绩的百分之20
+        BigDecimal scoreGrade = value.divide(BigDecimal.valueOf(i), 1, RoundingMode.HALF_UP)
+                .add(BigDecimal.valueOf(testGrade))
+                .multiply(BigDecimal.valueOf(0.4))
+                .add(BigDecimal.valueOf(usualGrade).multiply(BigDecimal.valueOf(0.2)))
+                .setScale(1, RoundingMode.HALF_UP);
+
+        return ImmutablePair.of(builder.toString(),scoreGrade);
     }
 }

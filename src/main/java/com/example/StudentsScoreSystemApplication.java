@@ -6,7 +6,10 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
- * @author hasee
+ * 学生成绩系统应用
+ *
+ * @author Wangyl
+ * @date 2022/04/27
  */
 @SpringBootApplication
 public class StudentsScoreSystemApplication extends SpringBootServletInitializer {

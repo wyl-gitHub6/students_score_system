@@ -35,11 +35,12 @@ public interface ScoreDao {
 
     /**
      * 选课
-     * @param studentId
-     * @param courseId
-     * @param state
-     * @param gradeState
-     * @return
+     *
+     * @param studentId  学生证
+     * @param courseId   进程id
+     * @param state      状态
+     * @param gradeState 级状态
+     * @return int
      */
     int insert(@Param("studentId") int studentId,
                @Param("courseId") int courseId,
@@ -64,95 +65,108 @@ public interface ScoreDao {
 
     /**
      * 根据学生ID和课程ID查询
-     * @param studentId
-     * @param courseId
-     * @return
+     *
+     * @param studentId 学生证
+     * @param courseId  进程id
+     * @return {@link Score}
      */
     Score findByStudentIdAndCourseId(@Param("studentId") int studentId,
                                      @Param("courseId") int courseId);
 
     /**
      * 根据学生ID查询数量
-     * @param studentId
-     * @return
+     *
+     * @param studentId 学生证
+     * @return int
      */
     int findCountByStudentId(int studentId);
 
     /**
      * 根据课程ID查询数量
-     * @param courseId
-     * @return
+     *
+     * @param courseId 进程id
+     * @return int
      */
     int findCountByCourseId(int courseId);
 
     /**
      * 根据课程名称模糊查询选修课不重复
-     * @param courseName
-     * @return
+     *
+     * @param courseName 课程名称
+     * @return {@link List}<{@link Score}>
      */
     List<Score> findList(String courseName);
 
     /**
-     * 根据课程名模糊查询选修课  所有
-     * @param courseName
-     * @param studentName
-     * @return
+     * 根据课程名模糊查询查询所有课程 不包含取消的
+     *
+     * @param courseName  课程名称
+     * @param studentName 学生名字
+     * @return {@link List}<{@link Score}>
      */
     List<Score> scoreList(@Param("courseName") String courseName,
                           @Param("studentName") String studentName);
 
     /**
      * 根据课程ID查询学生  只查询选择选修课
-     * @param courseId
-     * @return
+     *
+     * @param courseId 进程id
+     * @return {@link List}<{@link Course}>
      */
     List<Course> findByCourseId(int courseId);
 
     /**
      * 选修课统计
-     * @return
+     *
+     * @return {@link List}<{@link Score}>
      */
     List<Score> statistical();
 
     /**
      * 根据课程查询无成绩学生
-     * @param courseId
-     * @return
+     *
+     * @param courseId 进程id
+     * @return {@link List}<{@link Course}>
      */
     List<Course> findByCourse(int courseId);
 
     /**
      * 必修课录入成绩
-     * @param sc
-     * @return
+     *
+     * @param sc sc
+     * @return int
      */
     int entryInsert(Score sc);
 
     /**
      * 根据学生ID查询选修课  选择的
-     * @param studentId
-     * @return
+     *
+     * @param studentId 学生证
+     * @return {@link List}<{@link Score}>
      */
     List<Score> findByStudentId(int studentId);
 
     /**
      * 查看学生所有选课  包含取消的
-     * @param studentId
-     * @return
+     *
+     * @param studentId 学生证
+     * @return {@link List}<{@link Score}>
      */
     List<Score> findCourse(int studentId);
 
     /**
      * 查询必修课
-     * @param studentId
-     * @return
+     *
+     * @param studentId 学生证
+     * @return {@link List}<{@link Score}>
      */
     List<Score> findBxCourse(int studentId);
 
     /**
      * 删除选课
-     * @param courseId
-     * @return
+     *
+     * @param courseId 进程id
+     * @return int
      */
     int deleteCheck(int courseId);
 
@@ -172,12 +186,36 @@ public interface ScoreDao {
      */
     List<Score> findScoreByCourseId(int courseId);
 
+    /**
+     * 查询优秀数
+     *
+     * @param courseId 进程id
+     * @return {@link Integer}
+     */
     Integer findYxCount(Integer courseId);
 
+    /**
+     * 查询良好数
+     *
+     * @param courseId 进程id
+     * @return {@link Integer}
+     */
     Integer findLhCount(Integer courseId);
 
+    /**
+     * 查询及格数
+     *
+     * @param courseId 进程id
+     * @return {@link Integer}
+     */
     Integer findJgCount(Integer courseId);
 
+    /**
+     * 查询不及格数
+     *
+     * @param courseId 进程id
+     * @return {@link Integer}
+     */
     Integer findBjgCount(Integer courseId);
 
     /**

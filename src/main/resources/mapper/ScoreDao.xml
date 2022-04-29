@@ -9,6 +9,7 @@
         <result property="usualGrade" column="usual_grade" jdbcType="NUMERIC"/>
         <result property="testGrade" column="test_grade" jdbcType="NUMERIC"/>
         <result property="scoreGrade" column="score_grade" jdbcType="NUMERIC"/>
+        <result property="stageGrade" column="stage_grade" jdbcType="NUMERIC"/>
         <result property="state" column="state" jdbcType="NUMERIC"/>
         <result property="gradeState" column="grade_state" jdbcType="NUMERIC"/>
         <association property="course" column="course">
@@ -29,19 +30,21 @@
         </association>
     </resultMap>
 
+    <sql id="find">
+        select
+            score_id, student_id, course_id, credit, usual_grade, test_grade, stage_grade, score_grade
+        from score
+    </sql>
+
     <!--查询单个-->
     <select id="findById" resultMap="ScoreMap">
-        select
-          score_id, student_id, course_id, credit, usual_grade, test_grade, score_grade
-        from score
-        where score_id = #{scoreId} and state = 0
+        <include refid="find"/>
+        where score_id = #{scoreId}
     </select>
 
     <!--查询所有数据-->
     <select id="findAll" resultMap="ScoreMap">
-        select
-          score_id, student_id, course_id, time, credit, usual_grade, test_grade, score_grade
-        from score
+        <include refid="find"/>
         where state = 0
     </select>
 
@@ -138,59 +141,52 @@
         </collection>
 
     </resultMap>
-    <select id="findByCourseId" resultMap="findStudentMap">
+
+    <sql id="findAll">
         select *
         from score as sc LEFT OUTER JOIN course as cou
-        on sc.course_id = cou.course_id
-        LEFT OUTER JOIN student AS s
-        on sc.student_id = s.student_id
-        LEFT OUTER JOIN classes AS c
-        ON s.classes_id = c.classes_id
-        LEFT OUTER JOIN grade AS g
-        ON c.grade_id = g.grade_id
-        LEFT OUTER JOIN professional AS p
-        ON g.professional_id = p.professional_id
-        LEFT OUTER JOIN college AS co
-        ON p.college_id = co.college_id
+                                         on sc.course_id = cou.course_id
+                         LEFT OUTER JOIN student AS s
+                                         on sc.student_id = s.student_id
+                         LEFT OUTER JOIN classes AS c
+                                         ON s.classes_id = c.classes_id
+                         LEFT OUTER JOIN grade AS g
+                                         ON c.grade_id = g.grade_id
+                         LEFT OUTER JOIN professional AS p
+                                         ON g.professional_id = p.professional_id
+                         LEFT OUTER JOIN college AS co
+                                         ON p.college_id = co.college_id
+    </sql>
+
+    <select id="findByCourseId" resultMap="findStudentMap">
+        <include refid="findAll"/>
         where cou.course_id = #{courseId} and sc.state = 0
     </select>
 
     <select id="findByCourse" resultMap="findStudentMap">
-        select *
-        from score as sc LEFT OUTER JOIN course as cou
-        on sc.course_id = cou.course_id
-        LEFT OUTER JOIN student AS s
-        on sc.student_id = s.student_id
-        LEFT OUTER JOIN classes AS c
-        ON s.classes_id = c.classes_id
-        LEFT OUTER JOIN grade AS g
-        ON c.grade_id = g.grade_id
-        LEFT OUTER JOIN professional AS p
-        ON g.professional_id = p.professional_id
-        LEFT OUTER JOIN college AS co
-        ON p.college_id = co.college_id
+        <include refid="findAll"/>
         where cou.course_id = #{courseId} and sc.grade_state=0
     </select>
 
-    <select id="findByStudentId" resultMap="ScoreMap">
+    <sql id="findLeftCourse">
         select *
         from score as sc LEFT OUTER JOIN course as co
         on sc.course_id = co.course_id
+    </sql>
+
+    <select id="findByStudentId" resultMap="ScoreMap">
+        <include refid="findLeftCourse"/>
         where sc.student_id = #{studentId} and sc.state = 0
     </select>
 
     <select id="findCourse" resultMap="ScoreMap">
-        select *
-        from score as sc LEFT OUTER JOIN course as co
-        on sc.course_id = co.course_id
+        <include refid="findLeftCourse"/>
         where sc.student_id = #{studentId} and sc.state = 0 or sc.state = 1
     </select>
 
     <select id="findBxCourse" resultMap="ScoreMap">
-        select *
-        from score as sc LEFT OUTER JOIN course as co
-        on sc.course_id = co.course_id
-        where sc.student_id = #{studentId} and sc.state is null
+        <include refid="findLeftCourse"/>
+        where sc.student_id = #{studentId} and sc.state = 2
     </select>
 
     <!--查看选修人数-->
@@ -200,9 +196,7 @@
     </select>
 
     <select id="findScoreByCourseId" resultMap="ScoreMap">
-        select *
-        from score as sc LEFT OUTER JOIN course as co
-        on sc.course_id = co.course_id
+        <include refid="findLeftCourse"/>
         left outer join student s
         on sc.student_id = s.student_id
         where co.course_id = #{courseId}
@@ -213,19 +207,21 @@
         from score
         WHERE score_grade >= 90 AND course_id = #{courseId}
     </select>
-    <select id="findLhCount" resultType="java.lang.Integer">
+
+    <sql id="findCount">
         SELECT count(*) count
         from score
+    </sql>
+    <select id="findLhCount" resultType="java.lang.Integer">
+        <include refid="findCount"/>
         WHERE score_grade >= 80 AND  90 > score_grade AND course_id = #{courseId}
     </select>
     <select id="findJgCount" resultType="java.lang.Integer">
-        SELECT count(*) count
-        from score
+        <include refid="findCount"/>
         WHERE score_grade >= 60 AND  80 > score_grade AND course_id = #{courseId}
     </select>
     <select id="findBjgCount" resultType="java.lang.Integer">
-        SELECT count(*) count
-        from score
+        <include refid="findCount"/>
         WHERE 60 > score_grade AND course_id = #{courseId}
     </select>
 
@@ -236,7 +232,7 @@
         on s.course_id = c.course_id
         LEFT OUTER JOIN student st
         on s.student_id = st.student_id
-        where s.state = 0) as a
+        where s.state != 1 ) as a
         where 1 = 1
         <if test="courseName != ''">
             and a.course_name like concat('%',#{courseName},'%')
@@ -262,8 +258,8 @@
 
     <!--必修课录入成绩-->
     <insert id="entryInsert">
-        insert into score(student_id, course_id, state, grade_state,credit,usual_grade,test_grade,score_grade)
-        values (#{studentId}, #{courseId}, #{state}, #{gradeState}, #{credit},#{usualGrade},#{testGrade},#{scoreGrade})
+        insert into score(student_id, course_id, state, grade_state,credit,usual_grade,test_grade,score_grade,stage_grade)
+        values (#{studentId}, #{courseId}, #{state}, #{gradeState}, #{credit},#{usualGrade},#{testGrade},#{scoreGrade},#{stageGrade})
     </insert>
 
     <!--通过主键修改数据-->
@@ -284,6 +280,9 @@
             </if>
             <if test="testGrade != null">
                 test_grade = #{testGrade},
+            </if>
+            <if test="stageGrade != null">
+                stage_grade = #{stageGrade},
             </if>
             <if test="scoreGrade != null">
                 score_grade = #{scoreGrade},

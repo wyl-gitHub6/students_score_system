@@ -34,7 +34,7 @@ public class CourseController {
      * @return {@link Result}
      */
     @GetMapping("/findList")
-    public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+    public Result<PageInfo<Course>> findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                            @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
                            @RequestParam(value = "courseNum",defaultValue = "") String courseNum,
                            @RequestParam(value = "courseName",defaultValue = "") String courseName,

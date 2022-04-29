@@ -33,7 +33,7 @@ public class CollegeController {
      * @return {@link Result}
      */
     @GetMapping("/findList")
-    public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+    public Result<PageInfo<College>> findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                            @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "collegeNum",defaultValue = "") String collegeNum,
                            @RequestParam(value = "collegeName",defaultValue = "") String collegeName){

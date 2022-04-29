@@ -6,6 +6,7 @@ import com.example.utils.Result;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (Score)表服务接口
@@ -32,19 +33,20 @@ public interface ScoreService {
 
     /**
      * 添加选修课
-     * @param studentId
-     * @param courseId
-     * @return
+     *
+     * @param studentId 学生证
+     * @param courseId  进程id
+     * @return {@link Result}<{@link String}>
      */
-    Result insert(int studentId, int courseId);
+    Result<String> insert(int studentId, int courseId);
 
     /**
      * 成绩录入
      *
-     * @param score 实例对象
-     * @return 实例对象
+     * @param map 地图
+     * @return {@link String}
      */
-    String entry(Score score);
+    String entry(Map<String,Object> map);
 
     /**
      * 通过主键删除数据
@@ -140,8 +142,9 @@ public interface ScoreService {
 
     /**
      * 根据课程ID查询成绩
-     * @param courseId
-     * @return
+     *
+     * @param courseId 进程id
+     * @return {@link List}<{@link Score}>
      */
     List<Score> findScoreByCourseId(int courseId);
 
@@ -155,10 +158,11 @@ public interface ScoreService {
 
     /**
      * 修改成绩
-     * @param score
-     * @return
+     *
+     * @param map 地图
+     * @return {@link String}
      */
-    String update(Score score);
+    String update(Map<String, Object> map);
 
     HashMap<String, Object> findCreditStatistical(String teacherId);
 }

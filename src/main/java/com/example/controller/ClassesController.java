@@ -23,7 +23,7 @@ public class ClassesController {
     private ClassesService classesService;
 
     @GetMapping("/findList")
-    public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+    public Result<PageInfo<Classes>> findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                            @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "classesNum",defaultValue = "") String classesNum,
                            @RequestParam(value = "classesName",defaultValue = "") String classesName){
@@ -39,7 +39,7 @@ public class ClassesController {
      * @return 单条数据
      */
     @GetMapping("/findById")
-    public Result findById(@RequestParam("classesId") int classesId) {
+    public Result<Classes> findById(@RequestParam("classesId") int classesId) {
         return Result.success(this.classesService.findById(classesId),"查询成功!");
     }
 
@@ -49,7 +49,7 @@ public class ClassesController {
      * @return 数据数组
      */
     @GetMapping("/findAll")
-    public Result findAll() {
+    public Result<List<Classes>> findAll() {
         return Result.success(this.classesService.findAll(),"查询成功!");
     }
 
@@ -60,7 +60,7 @@ public class ClassesController {
      * @return 新增结果
      */
     @PostMapping("/insert")
-    public Result insert(@RequestBody Classes classes) {
+    public Result<String> insert(@RequestBody Classes classes) {
         Classes cla = classesService.findByGradeIdAndClassesName(classes.getGrade().getGradeId(), classes.getClassesName());
         if (null == cla){
             int i = classesService.insert(classes);
@@ -79,7 +79,7 @@ public class ClassesController {
      * @return 编辑结果
      */
     @PutMapping("/update")
-    public Result update(@RequestBody Classes classes) {
+    public Result<String> update(@RequestBody Classes classes) {
         Classes cla = classesService.findByIdGradeIdAndClassesName(classes.getClassesId(),
                 classes.getGrade().getGradeId(), classes.getClassesName());
         if (null == cla){
@@ -99,7 +99,7 @@ public class ClassesController {
      * @return 删除是否成功
      */
     @DeleteMapping("/deleteById")
-    public Result deleteById(@RequestParam("classesId") int classesId) {
+    public Result<String> deleteById(@RequestParam("classesId") int classesId) {
         boolean i = classesService.deleteById(classesId);
         if (i){
             return Result.success("删除成功!");
@@ -107,13 +107,14 @@ public class ClassesController {
         return Result.error("删除失败!");
     }
 
-     /**
-     * 批量删除
-     * @param ids
-     * @return
+    /**
+     * 删除批处理
+     *
+     * @param ids id
+     * @return {@link Result}<{@link String}>
      */
     @DeleteMapping("deleteBatch")
-    public Result deleteBatch(@RequestParam("ids") int[] ids){
+    public Result<String> deleteBatch(@RequestParam("ids") int[] ids){
         boolean i = classesService.deleteBatch(ids);
         if (i){
             return Result.success("删除成功!");
@@ -132,13 +133,13 @@ public class ClassesController {
      * @return {@link Result}
      */
     @GetMapping("/findByGradeId")
-    public Result findByGradeId(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+    public Result<PageInfo<Classes>> findByGradeId(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                            @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
                            @RequestParam(value = "gradeId") int gradeId,
                            @RequestParam(value = "classesNum",defaultValue = "") String classesNum,
                            @RequestParam(value = "classesName",defaultValue = "") String classesName){
         List<Classes> list = classesService.findByGradeId(currentPage, pageSize,gradeId, classesNum, classesName);
-        PageInfo pageInfo = new PageInfo(list);
+        PageInfo<Classes> pageInfo = new PageInfo(list);
         return Result.success(pageInfo,"查询成功!");
     }
 

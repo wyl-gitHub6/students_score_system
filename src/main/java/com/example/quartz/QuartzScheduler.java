@@ -5,8 +5,9 @@ import com.example.entity.Task;
 import com.example.task.CloseJob;
 import com.example.task.QuartzJob;
 import org.quartz.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * @author wyl
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class QuartzScheduler {
 
-    @Autowired
+    @Resource
     private Scheduler scheduler;
 
     /**

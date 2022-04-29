@@ -50,8 +50,18 @@ public class MyConstant {
 
     public static final int ONE = 1;
 
+    public static final int TWO = 2;
+
     public static final String ZERO_STR = "0";
 
     public static final String ONE_STR = "1";
+
+    public static final String COURSE_NAME = "courseName";
+
+    public static final String CREDIT = "credit";
+
+    public static final String ENTRY_GRADE_PASS = "成绩录入成功!";
+
+    public static final String ENTRY_GRADE_FAILED = "该同学暂无学分，将通知其补考或重修!";
 
 }

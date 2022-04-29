@@ -10,10 +10,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 成绩
@@ -37,10 +34,10 @@ public class ScoreController {
      * @param currentPage 当前页面
      * @param pageSize    页面大小
      * @param courseName  课程名称
-     * @return {@link Result}
+     * @return {@link Result}<{@link PageInfo}<{@link Score}>>
      */
     @GetMapping("/findList")
-    public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+    public Result<PageInfo<Score>> findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                            @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "courseName",defaultValue = "") String courseName){
         List<Score> list = scoreService.findList(currentPage, pageSize, courseName);
@@ -54,11 +51,11 @@ public class ScoreController {
      * @param currentPage 当前页面
      * @param pageSize    页面大小
      * @param courseName  课程名称
-     * @param studentName 学生学号
-     * @return {@link Result}
+     * @param studentName 学生名字
+     * @return {@link Result}<{@link PageInfo}<{@link Score}>>
      */
     @GetMapping("/scoreList")
-    public Result scoreList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+    public Result<PageInfo<Score>> scoreList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                            @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
                            @RequestParam(value = "courseName",defaultValue = "") String courseName,
                            @RequestParam(value = "studentName",defaultValue = "") String studentName){
@@ -74,7 +71,7 @@ public class ScoreController {
      * @return 单条数据
      */
     @GetMapping("/findById")
-    public Result findById(@RequestParam("scoreId") int scoreId) {
+    public Result<Score> findById(@RequestParam("scoreId") int scoreId) {
         return Result.success(this.scoreService.findById(scoreId),"查询成功!");
     }
 
@@ -84,19 +81,19 @@ public class ScoreController {
      * @return 数据数组
      */
     @GetMapping("/findAll")
-    public Result findAll() {
+    public Result<List<Score>> findAll() {
         return Result.success(this.scoreService.findAll(),"查询成功!");
     }
 
     /**
      * 添加选修课
      *
-     * @param studentId 学生id
-     * @param courseId  课程id
-     * @return {@link Result}
+     * @param studentId 学生证
+     * @param courseId  进程id
+     * @return {@link Result}<{@link String}>
      */
     @GetMapping("/insert")
-    public Result insert(@RequestParam("studentId") int studentId,
+    public Result<String> insert(@RequestParam("studentId") int studentId,
                          @RequestParam("courseId") int courseId) {
         return scoreService.insert(studentId,courseId);
     }
@@ -104,23 +101,23 @@ public class ScoreController {
     /**
      * 成绩录入
      *
-     * @param score 实体
-     * @return 编辑结果
+     * @param map 对象
+     * @return {@link Result}<{@link String}>
      */
     @PutMapping("/entry")
-    public Result entry(@RequestBody Score score) {
-        String msg = scoreService.entry(score);
+    public Result<String> entry(@RequestBody Map<String,Object> map) {
+        String msg = scoreService.entry(map);
         return Result.success(msg);
     }
 
     /**
      * 删除数据
      *
-     * @param scoreId 主键
-     * @return 删除是否成功
+     * @param scoreId 分数id
+     * @return {@link Result}<{@link String}>
      */
     @DeleteMapping("/deleteById")
-    public Result deleteById(@RequestParam("scoreId") int scoreId) {
+    public Result<String> deleteById(@RequestParam("scoreId") int scoreId) {
         boolean i = scoreService.deleteById(scoreId);
         if (i){
             return Result.success("删除成功!");
@@ -131,12 +128,12 @@ public class ScoreController {
     /**
      * 修改成绩
      *
-     * @param score 分数
-     * @return {@link Result}
+     * @param map 地图
+     * @return {@link Result}<{@link String}>
      */
     @PutMapping("/update")
-    public Result update(@RequestBody Score score){
-        String msg = scoreService.update(score);
+    public Result<String> update(@RequestBody Map<String, Object> map){
+        String msg = scoreService.update(map);
         return Result.success(msg);
     }
 
@@ -148,7 +145,7 @@ public class ScoreController {
      * @return {@link Result}
      */
     @GetMapping("/updateState")
-    public Result updateState(@RequestParam("studentId") int studentId,
+    public Result<String> updateState(@RequestParam("studentId") int studentId,
                               @RequestParam("courseId") int courseId){
         int i = scoreService.updateState(studentId,courseId);
         if (i > 0){
@@ -162,11 +159,11 @@ public class ScoreController {
      *
      * @param currentPage 当前页面
      * @param pageSize    页面大小
-     * @param courseId    课程id
-     * @return {@link Result}
+     * @param courseId    进程id
+     * @return {@link Result}<{@link PageInfo}<{@link Course}>>
      */
     @GetMapping("/findByCourseId")
-    public Result findByCourseId(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+    public Result<PageInfo<Course>> findByCourseId(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                                  @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
                                  @RequestParam("courseId") int courseId){
         List<Course> list = scoreService.findByCourseId(currentPage,pageSize,courseId);
@@ -180,7 +177,7 @@ public class ScoreController {
      * @return {@link Result}
      */
     @GetMapping("/statistical")
-    public Result statistical(){
+    public Result<List<Score>> statistical(){
         List<Score> list = scoreService.statistical();
         return Result.success(list,"查询成功!");
     }
@@ -192,7 +189,7 @@ public class ScoreController {
      * @return {@link Result}
      */
     @GetMapping("/findByCourse")
-    public Result findByCourse(@RequestParam("courseId") int courseId){
+    public Result<List<Course>> findByCourse(@RequestParam("courseId") int courseId){
         List<Course> list = scoreService.findByCourse(courseId);
         if (list.isEmpty()){
             return Result.error("暂无数据！");
@@ -203,34 +200,29 @@ public class ScoreController {
     /**
      * 学生查看必修课和选修课成绩
      *
-     * @param studentId 学生id
-     * @return {@link Result}
+     * @param studentId 学生证
+     * @return {@link Result}<{@link HashMap}<{@link Object}, {@link Object}>>
      */
     @GetMapping("/findScore")
-    public Result findScore(@RequestParam("studentId") int studentId){
-
+    public Result<HashMap<Object, Object>> findScore(@RequestParam("studentId") int studentId){
         /*选修课程集合*/
         List<Score> xxList = scoreService.findByStudentId(studentId);
-
-        List<Score> bxList = scoreService.findBxCourse(studentId);
         /*必修课集合*/
-
-        HashMap<Object, Object> hashMap = new HashMap<>();
+        List<Score> bxList = scoreService.findBxCourse(studentId);
+        HashMap<Object, Object> hashMap = new HashMap<>(1);
         hashMap.put("必修",bxList);
         hashMap.put("选修",xxList);
-
         return Result.success(hashMap,"查询成功!");
     }
 
     /**
      * 查看所有选课  包括取消的
      *
-     * @param studentId 学生id
-     * @return {@link Result}
+     * @param studentId 学生证
+     * @return {@link Result}<{@link List}<{@link Score}>>
      */
     @GetMapping("/findCourse")
-    public Result findCourse(@RequestParam("studentId") int studentId){
-
+    public Result<List<Score>> findCourse(@RequestParam("studentId") int studentId){
         List<Score> list = scoreService.findCourse(studentId);
         return Result.success(list,"查询成功!");
     }
@@ -239,10 +231,10 @@ public class ScoreController {
      * 停止选修课程
      *
      * @param courseId 进程id
-     * @return {@link Result}
+     * @return {@link Result}<{@link String}>
      */
     @GetMapping("/deleteCheck")
-    public Result deleteCheck(@RequestParam("courseId") int courseId){
+    public Result<String> deleteCheck(@RequestParam("courseId") int courseId){
         /*查看选修该课程人数*/
         int count = scoreService.checkCount(courseId);
         if (count >= MyConstant.COURSE_MIN_NUMBER){
@@ -260,10 +252,10 @@ public class ScoreController {
      * 根据课程ID查询成绩
      *
      * @param courseId 进程id
-     * @return {@link Result}
+     * @return {@link Result}<{@link List}<{@link Score}>>
      */
     @GetMapping("/findScoreByCourseId")
-    public Result findScoreByCourseId(@RequestParam("courseId") int courseId){
+    public Result<List<Score>> findScoreByCourseId(@RequestParam("courseId") int courseId){
         List<Score> list = scoreService.findScoreByCourseId(courseId);
         if (list.isEmpty()){
             return Result.error("暂无数据!");
@@ -275,10 +267,10 @@ public class ScoreController {
      * 教师查看各科成绩统计
      *
      * @param teacherId 老师id
-     * @return {@link Result}
+     * @return {@link Result}<{@link HashMap}<{@link Object}, {@link Object}>>
      */
     @GetMapping("/statistical/{teacherId}")
-    public Result statistical(@PathVariable("teacherId") int teacherId){
+    public Result<HashMap<Object, Object>> statistical(@PathVariable("teacherId") int teacherId){
         List<Course> courses = courseService.findByTeacherId(teacherId);
         List<String> courseNames = new LinkedList<>();
         List<Integer> yx = new LinkedList<>();
@@ -310,12 +302,12 @@ public class ScoreController {
      * 查询平均学分
      *
      * @param teacherId 老师id
-     * @return {@link Result}
+     * @return {@link Result}<{@link HashMap}<{@link String}, {@link Object}>>
      */
     @GetMapping("/findCreditStatistical/{teacherId}")
-    public Result findCreditStatistical(@PathVariable("teacherId") String teacherId){
-        HashMap<String, Object> maps = scoreService.findCreditStatistical(teacherId);
-        return Result.success(maps,"查询成功");
+    public Result<HashMap<String, Object>> findCreditStatistical(@PathVariable("teacherId") String teacherId){
+        HashMap<String, Object> map = scoreService.findCreditStatistical(teacherId);
+        return Result.success(map,"查询成功");
     }
 }
 

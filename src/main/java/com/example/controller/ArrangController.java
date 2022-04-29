@@ -32,7 +32,7 @@ public class ArrangController {
      * @return {@link Result}
      */
     @GetMapping("/findClasses")
-    public Result findClasses(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+    public Result<PageInfo<Classes>> findClasses(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                               @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                               @RequestParam(value = "classesName",defaultValue = "") String classesName) {
         List<Classes> list = this.arrangService.findClasses(currentPage,pageSize,classesName);
@@ -47,7 +47,7 @@ public class ArrangController {
      * @return 新增结果
      */
     @PostMapping("/insert")
-    public Result insert(@RequestBody Arrang arrang) {
+    public Result<String> insert(@RequestBody Arrang arrang) {
         int i = arrangService.insert(arrang);
         if (i > 0){
             return Result.success("添加成功!");
@@ -64,7 +64,7 @@ public class ArrangController {
      * @return {@link Result}
      */
     @GetMapping("/arrangCourse")
-    public Result arrangCourse(@RequestParam("courseIdr") int[] courseIdr,
+    public Result<String> arrangCourse(@RequestParam("courseIdr") int[] courseIdr,
                                @RequestParam("classesId") int classesId){
         String msg = arrangService.arrangCourse(courseIdr,classesId);
         return Result.success(msg);
@@ -77,7 +77,7 @@ public class ArrangController {
      * @return {@link Result}
      */
     @GetMapping("/findByClassesId")
-    public Result findByClassesId(@RequestParam("classesId") int classesId){
+    public Result<List<Classes>> findByClassesId(@RequestParam("classesId") int classesId){
         List<Classes> list = arrangService.findByClassesId(classesId);
         return Result.success(list,"查询成功!");
     }
@@ -90,7 +90,7 @@ public class ArrangController {
      * @return {@link Result}
      */
     @DeleteMapping("/delete")
-    public Result delete(@RequestParam("courseId") int courseId,
+    public Result<String> delete(@RequestParam("courseId") int courseId,
                          @RequestParam("classesId") int classesId){
         boolean b = arrangService.delete(courseId,classesId);
         if (b){
@@ -106,7 +106,7 @@ public class ArrangController {
      * @return {@link Result}
      */
     @GetMapping("/findByCourseId")
-    public Result findByCourseId(@RequestParam("courseId") int courseId){
+    public Result<List<Classes>> findByCourseId(@RequestParam("courseId") int courseId){
         List<Classes> list = arrangService.findByCourseId(courseId);
         return Result.success(list,"查询成功!");
     }

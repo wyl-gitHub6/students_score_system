@@ -6,20 +6,22 @@ import com.example.entity.Course;
 import com.example.entity.Score;
 import com.example.dao.ScoreDao;
 import com.example.service.ScoreService;
+import com.example.utils.OverAll;
 import com.example.utils.Result;
 import com.github.pagehelper.PageHelper;
+import lombok.val;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 import javax.annotation.Resource;
 
 /**
- * (Score)表服务实现类
  *
  * @author wyl
  * @since 2021-10-13 22:19:55
@@ -33,33 +35,19 @@ public class ScoreServiceImpl implements ScoreService {
     @Resource
     private CourseDao courseDao;
 
-    /**
-     * 通过ID查询单条数据
-     *
-     * @param scoreId 主键
-     * @return 实例对象
-     */
+    @Resource
+    private OverAll overAll;
+
     @Override
     public Score findById(Integer scoreId) {
         return this.scoreDao.findById(scoreId);
     }
 
-    /**
-     * 查询所有数据
-     *
-     * @return 对象数组
-     */
     @Override
     public List<Score> findAll() {
         return this.scoreDao.findAll();
     }
 
-    /**
-     * 添加选修课
-     * @param studentId
-     * @param courseId
-     * @return
-     */
     @Override
     public Result insert(int studentId, int courseId) {
         Course course = courseDao.findById(courseId);
@@ -82,60 +70,61 @@ public class ScoreServiceImpl implements ScoreService {
         return Result.error("已经选择该课程,不能再选啦!");
     }
 
-    /**
-     * 录入成绩
-     *
-     * @param score 实例对象
-     * @return 实例对象
-     */
     @Override
-    public String entry(Score score) {
-        Score s = scoreDao.findByStudentIdAndCourseId(score.getStudentId(), score.getCourseId());
+    public String entry(Map<String,Object> map) {
+        int studentId = (int) map.get("studentId");
+        int courseId = (int) map.get("courseId");
+        double testGrade = Double.parseDouble((String.valueOf(map.get("testGrade"))));
+        double usualGrade = Double.parseDouble(String.valueOf(map.get("usualGrade")));
+
+        Pair<String, BigDecimal> pair = overAll.calculate(map.get("domains"), testGrade, usualGrade);
+        String builder = pair.getLeft();
+        double scoreGrade = pair.getRight().doubleValue();
+
+        Score s = scoreDao.findByStudentIdAndCourseId(studentId, courseId);
         String msg = "";
-        Course course = courseDao.findById(score.getCourseId());
-        double grade = (double) Math.round(score.getScoreGrade());
+        Course course = courseDao.findById(courseId);
+
         if (null == s){
             /*必修课*/
             Score sc = new Score();
-            sc.setStudentId(score.getStudentId());
-            sc.setCourseId(score.getCourseId());
-            sc.setUsualGrade(score.getUsualGrade());
-            sc.setTestGrade(score.getTestGrade());
-            sc.setScoreGrade(grade);
+            sc.setStudentId(studentId);
+            sc.setCourseId(courseId);
+            sc.setUsualGrade(usualGrade);
+            sc.setTestGrade(testGrade);
+            sc.setScoreGrade(scoreGrade);
+            sc.setStageGrade(builder);
             sc.setGradeState(MyConstant.ONE);
-            if (grade>=MyConstant.PASS_GRADE){
+            sc.setState(MyConstant.TWO);
+            if (scoreGrade>=MyConstant.PASS_GRADE){
                 sc.setCredit(course.getCourseCredit());
-                msg="成绩录入成功!";
+                msg=MyConstant.ENTRY_GRADE_PASS;
             }else{
                 sc.setCredit(MyConstant.ZERO);
-                msg="该同学暂无学分，将通知其补考或重修!";
+                msg=MyConstant.ENTRY_GRADE_FAILED;
             }
+            /*库中没有信息 添加*/
             scoreDao.entryInsert(sc);
-
             return msg;
         }
         /*选修课*/
-        s.setTestGrade(score.getTestGrade());
-        s.setUsualGrade(score.getUsualGrade());
-        s.setScoreGrade(grade);
+        s.setTestGrade(testGrade);
+        s.setUsualGrade(usualGrade);
+        s.setScoreGrade(scoreGrade);
+        s.setStageGrade(builder);
         s.setGradeState(MyConstant.ONE);
-        if (grade>=MyConstant.PASS_GRADE){
+        if (scoreGrade>=MyConstant.PASS_GRADE){
             s.setCredit(course.getCourseCredit());
-            msg="成绩录入成功!";
+            msg=MyConstant.ENTRY_GRADE_PASS;
         }else{
             s.setCredit(0);
-            msg="该同学暂无学分，将通知其补考或重修!";
+            msg=MyConstant.ENTRY_GRADE_FAILED;
         }
+        /*库中已有信息 直接修改*/
         this.scoreDao.update(s);
         return msg;
     }
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param scoreId 主键
-     * @return 是否成功
-     */
     @Override
     public boolean deleteById(Integer scoreId) {
         return this.scoreDao.deleteById(scoreId) > 0;
@@ -222,18 +211,36 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
-    public String update(Score score) {
-        Course course = courseDao.findById(score.getCourse().getCourseId());
+    public String update(Map<String, Object> map) {
+
+        int courseId = (int) map.get("courseId");
+        double testGrade = Double.parseDouble((String.valueOf(map.get("testGrade"))));
+        double usualGrade = Double.parseDouble(String.valueOf(map.get("usualGrade")));
+
+        /*获取课程信息*/
+        Course course = courseDao.findById(courseId);
         String msg = "";
-        double grade = (double) Math.round(score.getScoreGrade());
-        if (grade>=MyConstant.PASS_GRADE){
+
+        Pair<String, BigDecimal> pair = overAll.calculate(map.get("domains"), usualGrade, testGrade);
+        String builder = pair.getLeft();
+        double scoreGrade = pair.getRight().doubleValue();
+
+        Score score = new Score();
+
+        if (scoreGrade>=MyConstant.PASS_GRADE){
+            /*获得学分*/
             score.setCredit(course.getCourseCredit());
-            msg="成绩录入成功!";
+            msg=MyConstant.ENTRY_GRADE_PASS;
         }else{
+            /*学分为0*/
             score.setCredit(MyConstant.ZERO);
-            msg="该同学暂无学分，将通知其补考或重修!";
+            msg=MyConstant.ENTRY_GRADE_FAILED;
         }
-        score.setScoreGrade(grade);
+        score.setStageGrade(builder);
+        score.setTestGrade(testGrade);
+        score.setUsualGrade(usualGrade);
+        score.setScoreGrade(scoreGrade);
+        score.setScoreId((int) map.get("scoreId"));
         scoreDao.update(score);
         return msg;
     }
@@ -250,11 +257,11 @@ public class ScoreServiceImpl implements ScoreService {
         LinkedList<Object> courseList = new LinkedList<>();
         LinkedList<Object> creditList = new LinkedList<>();
         map.values().forEach(s->{
-            courseList.add(ObjectUtils.isEmpty(s.get("courseName"))?"":String.valueOf(s.get("courseName"))+"-[学分:"+String.valueOf(s.get("credit"))+"分]");
-            creditList.add(ObjectUtils.isEmpty(s.get("credit"))?0:s.get("creditAvg"));
+            courseList.add(ObjectUtils.isEmpty(s.get(MyConstant.COURSE_NAME))?"": s.get(MyConstant.COURSE_NAME) +"-[学分:"+ String.valueOf(s.get(MyConstant.CREDIT)) +"分]");
+            creditList.add(ObjectUtils.isEmpty(s.get(MyConstant.CREDIT))?0:s.get("creditAvg"));
         });
-        hashMap.put("courseName",courseList);
-        hashMap.put("credit",creditList);
+        hashMap.put(MyConstant.COURSE_NAME,courseList);
+        hashMap.put(MyConstant.CREDIT,creditList);
         return hashMap;
     }
 }
