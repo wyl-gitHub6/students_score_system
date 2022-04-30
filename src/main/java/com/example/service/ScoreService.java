@@ -58,85 +58,98 @@ public interface ScoreService {
 
     /**
      * 分页只查询选课不重复
-     * @param currentPage
-     * @param pageSize
-     * @param courseName
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param courseName  课程名称
+     * @return {@link List}<{@link Score}>
      */
     List<Score> findList(int currentPage, int pageSize, String courseName);
 
     /**
      * 成绩分页  所有
-     * @param currentPage
-     * @param pageSize
-     * @param courseName
-     * @param studentName
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param courseName  课程名称
+     * @param studentName 学生名字
+     * @return {@link List}<{@link Score}>
      */
     List<Score> scoreList(int currentPage, int pageSize, String courseName, String studentName);
 
     /**
      * 根据课程查询学生 只查询选择选修课
-     * @param currentPage
-     * @param pageSize
-     * @param courseId
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param courseId    进程id
+     * @return {@link List}<{@link Course}>
      */
     List<Course> findByCourseId(int currentPage,int pageSize,int courseId);
 
     /**
      * 修改状态
-     * @param studentId
-     * @param courseId
-     * @return
+     *
+     * @param studentId 学生证
+     * @param courseId  进程id
+     * @return int
      */
     int updateState(int studentId, int courseId);
 
     /**
      * 选修课统计
-     * @return
+     *
+     * @return {@link List}<{@link Score}>
      */
     List<Score> statistical();
 
     /**
      * 根据课程查询学生信息
-     * @param courseId
-     * @return
+     *
+     * @param courseId 进程id
+     * @return {@link List}<{@link Course}>
      */
     List<Course> findByCourse(int courseId);
 
     /**
      * 查询学生选课成绩
-     * @param studentId
-     * @return
+     *
+     * @param studentId 学生证
+     * @return {@link List}<{@link Score}>
      */
     List<Score> findByStudentId(int studentId);
 
     /**
+     * 查询课程
      * 查看所有选课  包含取消的
-     * @param studentId
-     * @return
+     *
+     * @param studentId 学生证
+     * @return {@link List}<{@link Score}>
      */
     List<Score> findCourse(int studentId);
 
     /**
+     * 查询bx课程
      * 查看所有必修课
-     * @param studentId
-     * @return
+     *
+     * @param studentId 学生证
+     * @return {@link List}<{@link Score}>
      */
     List<Score> findBxCourse(int studentId);
 
     /**
      * 删除选课
-     * @param courseId
-     * @return
+     *
+     * @param courseId 进程id
+     * @return int
      */
     int deleteCheck(int courseId);
 
     /**
      * 查看选修人数
-     * @param courseId
-     * @return
+     *
+     * @param courseId 进程id
+     * @return int
      */
     int checkCount(int courseId);
 
@@ -148,14 +161,6 @@ public interface ScoreService {
      */
     List<Score> findScoreByCourseId(int courseId);
 
-    Integer findYxCount(Integer courseId);
-
-    Integer findLhCount(Integer courseId);
-
-    Integer findJgCount(Integer courseId);
-
-    Integer findBjgCount(Integer courseId);
-
     /**
      * 修改成绩
      *
@@ -164,5 +169,19 @@ public interface ScoreService {
      */
     String update(Map<String, Object> map);
 
+    /**
+     * 查询学分统计
+     *
+     * @param teacherId 老师id
+     * @return {@link HashMap}<{@link String}, {@link Object}>
+     */
     HashMap<String, Object> findCreditStatistical(String teacherId);
+
+    /**
+     * 教师查看成绩统计
+     *
+     * @param teacherId 老师id
+     * @return {@link HashMap}<{@link String}, {@link Object}>
+     */
+    HashMap<String, Object> statistical(int teacherId);
 }

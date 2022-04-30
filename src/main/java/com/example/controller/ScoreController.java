@@ -6,7 +6,6 @@ import com.example.entity.Score;
 import com.example.service.*;
 import com.example.utils.Result;
 import com.github.pagehelper.PageInfo;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,9 +24,6 @@ public class ScoreController {
     @Resource
     private ScoreService scoreService;
 
-    @Resource
-    private CourseService courseService;
-
     /**
      * 分页查询选修课不重复
      *
@@ -42,7 +38,7 @@ public class ScoreController {
                            @RequestParam(value = "courseName",defaultValue = "") String courseName){
         List<Score> list = scoreService.findList(currentPage, pageSize, courseName);
         PageInfo<Score> pageInfo = new PageInfo<>(list);
-        return Result.success(pageInfo,"查询成功!");
+        return Result.success(pageInfo,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -61,7 +57,7 @@ public class ScoreController {
                            @RequestParam(value = "studentName",defaultValue = "") String studentName){
         List<Score> list = scoreService.scoreList(currentPage, pageSize, courseName,studentName);
         PageInfo<Score> pageInfo = new PageInfo<>(list);
-        return Result.success(pageInfo,"查询成功!");
+        return Result.success(pageInfo,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -72,7 +68,7 @@ public class ScoreController {
      */
     @GetMapping("/findById")
     public Result<Score> findById(@RequestParam("scoreId") int scoreId) {
-        return Result.success(this.scoreService.findById(scoreId),"查询成功!");
+        return Result.success(this.scoreService.findById(scoreId),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
      /**
@@ -82,7 +78,7 @@ public class ScoreController {
      */
     @GetMapping("/findAll")
     public Result<List<Score>> findAll() {
-        return Result.success(this.scoreService.findAll(),"查询成功!");
+        return Result.success(this.scoreService.findAll(),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -120,9 +116,9 @@ public class ScoreController {
     public Result<String> deleteById(@RequestParam("scoreId") int scoreId) {
         boolean i = scoreService.deleteById(scoreId);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
     /**
@@ -168,7 +164,7 @@ public class ScoreController {
                                  @RequestParam("courseId") int courseId){
         List<Course> list = scoreService.findByCourseId(currentPage,pageSize,courseId);
         PageInfo<Course> pageInfo = new PageInfo<>(list);
-        return Result.success(pageInfo,"查询成功!");
+        return Result.success(pageInfo,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -179,7 +175,7 @@ public class ScoreController {
     @GetMapping("/statistical")
     public Result<List<Score>> statistical(){
         List<Score> list = scoreService.statistical();
-        return Result.success(list,"查询成功!");
+        return Result.success(list,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -192,9 +188,9 @@ public class ScoreController {
     public Result<List<Course>> findByCourse(@RequestParam("courseId") int courseId){
         List<Course> list = scoreService.findByCourse(courseId);
         if (list.isEmpty()){
-            return Result.error("暂无数据！");
+            return Result.error(MyConstant.RES_DATA_NULL);
         }
-        return Result.success(list,"查询成功!");
+        return Result.success(list,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -212,7 +208,7 @@ public class ScoreController {
         HashMap<Object, Object> hashMap = new HashMap<>(1);
         hashMap.put("必修",bxList);
         hashMap.put("选修",xxList);
-        return Result.success(hashMap,"查询成功!");
+        return Result.success(hashMap,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -224,7 +220,7 @@ public class ScoreController {
     @GetMapping("/findCourse")
     public Result<List<Score>> findCourse(@RequestParam("studentId") int studentId){
         List<Score> list = scoreService.findCourse(studentId);
-        return Result.success(list,"查询成功!");
+        return Result.success(list,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -258,9 +254,9 @@ public class ScoreController {
     public Result<List<Score>> findScoreByCourseId(@RequestParam("courseId") int courseId){
         List<Score> list = scoreService.findScoreByCourseId(courseId);
         if (list.isEmpty()){
-            return Result.error("暂无数据!");
+            return Result.error(MyConstant.RES_DATA_NULL);
         }
-        return Result.success(list,"查询成功!");
+        return Result.success(list,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -270,32 +266,12 @@ public class ScoreController {
      * @return {@link Result}<{@link HashMap}<{@link Object}, {@link Object}>>
      */
     @GetMapping("/statistical/{teacherId}")
-    public Result<HashMap<Object, Object>> statistical(@PathVariable("teacherId") int teacherId){
-        List<Course> courses = courseService.findByTeacherId(teacherId);
-        List<String> courseNames = new LinkedList<>();
-        List<Integer> yx = new LinkedList<>();
-        List<Integer> lh = new LinkedList<>();
-        List<Integer> jg = new LinkedList<>();
-        List<Integer> bjg = new LinkedList<>();
-        courses.forEach(c->{
-            Course course = courseService.findById(c.getCourseId());
-            Integer yxCount = scoreService.findYxCount(c.getCourseId());
-            Integer lhCount = scoreService.findLhCount(c.getCourseId());
-            Integer jgCount = scoreService.findJgCount(c.getCourseId());
-            Integer bjgCount = scoreService.findBjgCount(c.getCourseId());
-            courseNames.add(course.getCourseName());
-            yx.add(ObjectUtils.isEmpty(yxCount)?0:yxCount);
-            lh.add(ObjectUtils.isEmpty(lhCount)?0:lhCount);
-            jg.add(ObjectUtils.isEmpty(jgCount)?0:jgCount);
-            bjg.add(ObjectUtils.isEmpty(bjgCount)?0:bjgCount);
-        });
-        HashMap<Object, Object> map = new HashMap<>(5);
-        map.put("courseName",courseNames);
-        map.put("yx",yx);
-        map.put("lh",lh);
-        map.put("jg",jg);
-        map.put("bjg",bjg);
-        return Result.success(map,"查询成功！");
+    public Result<HashMap<String, Object>> statistical(@PathVariable("teacherId") int teacherId){
+        HashMap<String, Object> res = scoreService.statistical(teacherId);
+        if (res.isEmpty()){
+            return Result.error(MyConstant.RES_DATA_NULL);
+        }
+        return Result.success(res,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -307,7 +283,7 @@ public class ScoreController {
     @GetMapping("/findCreditStatistical/{teacherId}")
     public Result<HashMap<String, Object>> findCreditStatistical(@PathVariable("teacherId") String teacherId){
         HashMap<String, Object> map = scoreService.findCreditStatistical(teacherId);
-        return Result.success(map,"查询成功");
+        return Result.success(map,MyConstant.RES_SUCCESS_MESSAGE);
     }
 }
 

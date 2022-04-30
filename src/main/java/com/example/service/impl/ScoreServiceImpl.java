@@ -9,14 +9,12 @@ import com.example.service.ScoreService;
 import com.example.utils.OverAll;
 import com.example.utils.Result;
 import com.github.pagehelper.PageHelper;
-import lombok.val;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 import javax.annotation.Resource;
@@ -49,7 +47,7 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
-    public Result insert(int studentId, int courseId) {
+    public Result<String> insert(int studentId, int courseId) {
         Course course = courseDao.findById(courseId);
         int number = scoreDao.findCountByCourseId(courseId);
         if (number >= course.getNumber()){
@@ -191,26 +189,6 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
-    public Integer findYxCount(Integer courseId) {
-        return scoreDao.findYxCount(courseId);
-    }
-
-    @Override
-    public Integer findLhCount(Integer courseId) {
-        return scoreDao.findLhCount(courseId);
-    }
-
-    @Override
-    public Integer findJgCount(Integer courseId) {
-        return scoreDao.findJgCount(courseId);
-    }
-
-    @Override
-    public Integer findBjgCount(Integer courseId) {
-        return scoreDao.findBjgCount(courseId);
-    }
-
-    @Override
     public String update(Map<String, Object> map) {
 
         int courseId = (int) map.get("courseId");
@@ -263,5 +241,38 @@ public class ScoreServiceImpl implements ScoreService {
         hashMap.put(MyConstant.COURSE_NAME,courseList);
         hashMap.put(MyConstant.CREDIT,creditList);
         return hashMap;
+    }
+
+    @Override
+    public HashMap<String, Object> statistical(int teacherId) {
+        List<Course> courses = courseDao.findByTeacherId(teacherId);
+        List<String> courseNames = new LinkedList<>();
+        List<Integer> yx = new LinkedList<>();
+        List<Integer> lh = new LinkedList<>();
+        List<Integer> zd = new LinkedList<>();
+        List<Integer> jg = new LinkedList<>();
+        List<Integer> bjg = new LinkedList<>();
+        courses.forEach(c->{
+            Course course = courseDao.findById(c.getCourseId());
+            Integer yxCount = scoreDao.findYxCount(c.getCourseId());
+            Integer lhCount = scoreDao.findLhCount(c.getCourseId());
+            Integer zdCount = scoreDao.findZdCount(c.getCourseId());
+            Integer jgCount = scoreDao.findJgCount(c.getCourseId());
+            Integer bjgCount = scoreDao.findBjgCount(c.getCourseId());
+            courseNames.add(course.getCourseName());
+            yx.add(yxCount);
+            lh.add(lhCount);
+            zd.add(zdCount);
+            jg.add(jgCount);
+            bjg.add(bjgCount);
+        });
+        HashMap<String, Object> map = new HashMap<>(1);
+        map.put("courseName",courseNames);
+        map.put("yx",yx);
+        map.put("lh",lh);
+        map.put("zd",zd);
+        map.put("jg",jg);
+        map.put("bjg",bjg);
+        return map;
     }
 }

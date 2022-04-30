@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.constant.MyConstant;
 import com.example.entity.Course;
 import com.example.service.CourseService;
 import com.example.utils.Result;
@@ -41,7 +42,7 @@ public class CourseController {
                            @RequestParam(value = "courseState",defaultValue = "-1") int courseState){
         List<Course> list = courseService.findList(currentPage, pageSize, courseNum, courseName,courseState);
         PageInfo<Course> pageInfo = new PageInfo<>(list);
-        return Result.success(pageInfo,"查询成功!");
+        return Result.success(pageInfo,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -51,8 +52,8 @@ public class CourseController {
      * @return 单条数据
      */
     @GetMapping("/findById")
-    public Result findById(@RequestParam("courseId") int courseId) {
-        return Result.success(this.courseService.findById(courseId),"查询成功!");
+    public Result<Course> findById(@RequestParam("courseId") int courseId) {
+        return Result.success(this.courseService.findById(courseId),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
      /**
@@ -61,8 +62,8 @@ public class CourseController {
      * @return 数据数组
      */
     @GetMapping("/findAll")
-    public Result findAll() {
-        return Result.success(this.courseService.findAll(),"查询成功!");
+    public Result<List<Course>> findAll() {
+        return Result.success(this.courseService.findAll(),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -72,12 +73,12 @@ public class CourseController {
      * @return 新增结果
      */
     @PostMapping("/insert")
-    public Result insert(@RequestBody Course course) {
+    public Result<String> insert(@RequestBody Course course) {
         int i = courseService.insert(course);
         if (i > 0){
-            return Result.success("添加成功!");
+            return Result.success(MyConstant.RES_INSERT_SUCCESS);
         }
-        return Result.error("添加失败!");
+        return Result.error(MyConstant.RES_INSERT_SUCCESS);
     }
 
     /**
@@ -87,12 +88,12 @@ public class CourseController {
      * @return 编辑结果
      */
     @PutMapping("/update")
-    public Result update(@RequestBody Course course) {
+    public Result<String> update(@RequestBody Course course) {
         int i = courseService.update(course);
         if (i > 0){
-            return Result.success("编辑成功!");
+            return Result.success(MyConstant.RES_UPDATE_SUCCESS);
         }
-        return Result.error("编辑失败!");
+        return Result.error(MyConstant.RES_UPDATE_FAILED);
     }
 
     /**
@@ -102,12 +103,12 @@ public class CourseController {
      * @return 删除是否成功
      */
     @DeleteMapping("/deleteById")
-    public Result deleteById(@RequestParam("courseId") int courseId) {
+    public Result<String> deleteById(@RequestParam("courseId") int courseId) {
         boolean i = courseService.deleteById(courseId);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
     /**
@@ -117,12 +118,12 @@ public class CourseController {
      * @return {@link Result}
      */
     @DeleteMapping("/deleteBatch")
-    public Result deleteBatch(@RequestParam("ids") int[] ids){
+    public Result<String> deleteBatch(@RequestParam("ids") int[] ids){
         boolean i = courseService.deleteBatch(ids);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
 
@@ -130,28 +131,27 @@ public class CourseController {
      * 根据课程类型查询
      *
      * @param courseState 课程状态
-     * @return {@link Result}
+     * @return {@link Result}<{@link List}<{@link Course}>>
      */
     @GetMapping("/findByCourseState")
-    public Result findByCourseState(@RequestParam("courseState") int courseState){
+    public Result<List<Course>> findByCourseState(@RequestParam("courseState") int courseState){
         List<Course> list = courseService.findByCourseState(courseState);
-        return Result.success(list,"查询成功!");
+        return Result.success(list, MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
-     * 查询通过老师id
      * 查询教师所教授课程
      *
      * @param teacherId 老师id
-     * @return {@link Result}
+     * @return {@link Result}<{@link List}<{@link Course}>>
      */
     @GetMapping("/findByTeacherId")
-    public Result findByTeacherId(@RequestParam("teacherId") int teacherId){
+    public Result<List<Course>> findByTeacherId(@RequestParam("teacherId") int teacherId){
         List<Course> list = courseService.findByTeacherId(teacherId);
         if (list.isEmpty()){
-            return Result.error("暂无所教授课程");
+            return Result.error(MyConstant.RES_DATA_NULL);
         }
-        return Result.success(list,"查询成功!");
+        return Result.success(list,MyConstant.RES_SUCCESS_MESSAGE);
     }
 }
 

@@ -24,66 +24,32 @@ public class GradeServiceImpl implements GradeService {
     @Resource
     private GradeDao gradeDao;
 
-    /**
-     * 通过ID查询单条数据
-     *
-     * @param gradeId 主键
-     * @return 实例对象
-     */
     @Override
     public Grade findById(Integer gradeId) {
         return this.gradeDao.findById(gradeId);
     }
 
-    /**
-     * 查询所有数据
-     *
-     * @return 对象数组
-     */
     @Override
     public List<Grade> findAll() {
         return this.gradeDao.findAll();
     }
 
-    /**
-     * 新增数据
-     *
-     * @param grade 实例对象
-     * @return 实例对象
-     */
     @Override
     public int insert(Grade grade) {
         grade.setGradeNum(RandomUtil.randomString(MyConstant.NUM_BIT));
         return this.gradeDao.insert(grade);
     }
 
-    /**
-     * 修改数据
-     *
-     * @param grade 实例对象
-     * @return 实例对象
-     */
     @Override
     public int update(Grade grade) {
         return this.gradeDao.update(grade);
     }
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param gradeId 主键
-     * @return 是否成功
-     */
     @Override
     public boolean deleteById(Integer gradeId) {
         return this.gradeDao.deleteById(gradeId) > 0;
     }
 
-    /**
-     * 批量删除
-     * @param ids
-     * @return
-     */
     @Override
     public boolean deleteBatch(int[] ids) {
         return gradeDao.deleteBatch(ids);

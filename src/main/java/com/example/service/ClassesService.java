@@ -51,68 +51,76 @@ public interface ClassesService {
     boolean deleteById(Integer classesId);
 
     /**
-     * 批量删除
-     * @param ids
-     * @return
+     * 删除批处理
+     *
+     * @param ids id
+     * @return boolean
      */
     boolean deleteBatch(int[] ids);
 
     /**
      * 分页查询
-     * @param currentPage
-     * @param pageSize
-     * @param classesNum
-     * @param classesName
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param classesNum  类num
+     * @param classesName 类名字
+     * @return {@link List}<{@link Classes}>
      */
     List<Classes> findList(int currentPage, int pageSize, String classesNum, String classesName);
 
     /**
      * 添加时唯一性检查
-     * @param gradeId
-     * @param classesName
-     * @return
+     *
+     * @param gradeId     年级id
+     * @param classesName 类名字
+     * @return {@link Classes}
      */
     Classes findByGradeIdAndClassesName(Integer gradeId, String classesName);
 
     /**
      * 修改时唯一性检查
-     * @param classesId
-     * @param gradeId
-     * @param classesName
-     * @return
+     *
+     * @param classesId   类id
+     * @param gradeId     年级id
+     * @param classesName 类名字
+     * @return {@link Classes}
      */
     Classes findByIdGradeIdAndClassesName(Integer classesId, Integer gradeId, String classesName);
 
     /**
-     * 根据所在年级查询
-     * @param currentPage
-     * @param pageSize
-     * @param gradeId
-     * @param classesNum
-     * @param classesName
-     * @return
+     * 根据所在年级查询班级 分页
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param gradeId     年级id
+     * @param classesNum  类num
+     * @param classesName 类名字
+     * @return {@link List}<{@link Classes}>
      */
     List<Classes> findByGradeId(int currentPage, int pageSize, int gradeId, String classesNum, String classesName);
 
     /**
      * 分班
-     * @param ids
-     * @param classesId
-     * @return
+     *
+     * @param ids       id
+     * @param classesId 类id
+     * @return int
      */
     int driver(int[] ids, int classesId);
 
     /**
      * 查询班级数量
-     * @return
+     *
+     * @return int
      */
     int findCount();
 
     /**
      * 查询教师所带班级
-     * @param teacherId
-     * @return
+     *
+     * @param teacherId 老师id
+     * @return {@link List}<{@link Classes}>
      */
     List<Classes> findByTeacherId(int teacherId);
 }

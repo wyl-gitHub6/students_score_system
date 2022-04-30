@@ -51,34 +51,38 @@ public interface CourseService {
     boolean deleteById(Integer courseId);
 
     /**
-     * 批量删除
-     * @param ids
-     * @return
+     * 删除批处理
+     *
+     * @param ids id
+     * @return boolean
      */
     boolean deleteBatch(int[] ids);
 
     /**
      * 分页查询
-     * @param currentPage
-     * @param pageSize
-     * @param courseNum
-     * @param courseName
-     * @param courseState
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param courseNum   当然num
+     * @param courseName  课程名称
+     * @param courseState 课程状态
+     * @return {@link List}<{@link Course}>
      */
     List<Course> findList(int currentPage, int pageSize, String courseNum, String courseName, int courseState);
 
     /**
      * 根据课程类被查询
-     * @param courseState
-     * @return
+     *
+     * @param courseState 课程状态
+     * @return {@link List}<{@link Course}>
      */
     List<Course> findByCourseState(int courseState);
 
     /**
      * 查询教师所教授课程
-     * @param teacherId
-     * @return
+     *
+     * @param teacherId 老师id
+     * @return {@link List}<{@link Course}>
      */
     List<Course> findByTeacherId(int teacherId);
 }

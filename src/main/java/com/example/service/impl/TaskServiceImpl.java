@@ -90,9 +90,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void initSchedule() {
         List<Task> jobList = taskMapper.list();
-        jobList.forEach(task->{
-            quartzScheduler.addJob(task);
-        });
+        jobList.forEach(task->quartzScheduler.addJob(task));
     }
 
 }

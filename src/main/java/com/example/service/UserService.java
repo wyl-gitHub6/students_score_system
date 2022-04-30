@@ -51,34 +51,38 @@ public interface UserService {
     boolean deleteById(Integer userId);
 
     /**
-     * 批量删除
-     * @param ids
-     * @return
+     * 删除批处理
+     *
+     * @param ids id
+     * @return boolean
      */
     boolean deleteBatch(int[] ids);
 
     /**
      * 登录
-     * @param userNum
-     * @param pwd
-     * @return
+     *
+     * @param userNum 用户num
+     * @param pwd     密码
+     * @return {@link User}
      */
     User login(String userNum, String pwd);
 
     /**
      * 分页查询
-     * @param currentPage
-     * @param pageSize
-     * @param userName
-     * @param userNum
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param userName    用户名
+     * @param userNum     用户num
+     * @return {@link List}<{@link User}>
      */
     List<User> findList(int currentPage, int pageSize, String userName, String userNum);
 
     /**
      * 根据学生学号查询
-     * @param userNum
-     * @return
+     *
+     * @param userNum 用户num
+     * @return {@link User}
      */
     User findByUserNum(String userNum);
 

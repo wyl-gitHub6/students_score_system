@@ -203,6 +203,14 @@ public interface ScoreDao {
     Integer findLhCount(Integer courseId);
 
     /**
+     * 查询中等数
+     *
+     * @param courseId 进程id
+     * @return {@link Integer}
+     */
+    Integer findZdCount(Integer courseId);
+
+    /**
      * 查询及格数
      *
      * @param courseId 进程id

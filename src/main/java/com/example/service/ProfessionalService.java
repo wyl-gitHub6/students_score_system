@@ -51,49 +51,55 @@ public interface ProfessionalService {
     boolean deleteById(Integer professionalId);
 
     /**
-     * 批量删除
-     * @param ids
-     * @return
+     * 删除批处理
+     *
+     * @param ids id
+     * @return boolean
      */
     boolean deleteBatch(int[] ids);
 
     /**
      * 分页查询
-     * @param currentPage
-     * @param pageSize
-     * @param professionalNum
-     * @param professionalName
-     * @return
+     *
+     * @param currentPage      当前页面
+     * @param pageSize         页面大小
+     * @param professionalNum  专业num
+     * @param professionalName 专业名称
+     * @return {@link List}<{@link Professional}>
      */
     List<Professional> findList(int currentPage, int pageSize, String professionalNum, String professionalName);
 
     /**
      * 根据院系ID查询
-     * @param collegeId
-     * @return
+     *
+     * @param collegeId 大学id
+     * @return {@link List}<{@link Professional}>
      */
     List<Professional> findByCollegeId(int collegeId);
 
     /**
      * 添加时唯一性检查
-     * @param collegeId
-     * @param professionalName
-     * @return
+     *
+     * @param collegeId        大学id
+     * @param professionalName 专业名称
+     * @return {@link Professional}
      */
     Professional findByCollegeIdAndProfessionalName(int collegeId, String professionalName);
 
     /**
      * 修改时唯一性检查
-     * @param professionalId
-     * @param collegeId
-     * @param professionalName
-     * @return
+     *
+     * @param professionalId   专业id
+     * @param collegeId        大学id
+     * @param professionalName 专业名称
+     * @return {@link Professional}
      */
     Professional findByIdAndCollegeIdAndProfessionalName(Integer professionalId, Integer collegeId, String professionalName);
 
     /**
      * 查询专业数量
-     * @return
+     *
+     * @return int
      */
     int findCount();
 }

@@ -51,49 +51,55 @@ public interface GradeService {
     boolean deleteById(Integer gradeId);
 
     /**
-     * 批量删除
-     * @param ids
-     * @return
+     * 删除批处理
+     *
+     * @param ids id
+     * @return boolean
      */
     boolean deleteBatch(int[] ids);
 
     /**
      * 分页查询
-     * @param currentPage
-     * @param pageSize
-     * @param gradeNum
-     * @param gradeName
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param gradeNum    年级num
+     * @param gradeName   年级名字
+     * @return {@link List}<{@link Grade}>
      */
     List<Grade> findList(int currentPage, int pageSize, String gradeNum, String gradeName);
 
     /**
      * 根据专业ID查询
-     * @param professionalId
-     * @return
+     *
+     * @param professionalId 专业id
+     * @return {@link List}<{@link Grade}>
      */
     List<Grade> findByProfessionalId(int professionalId);
 
     /**
      * 添加时唯一性检查
-     * @param professionalId
-     * @param gradeName
-     * @return
+     *
+     * @param professionalId 专业id
+     * @param gradeName      年级名字
+     * @return {@link Grade}
      */
     Grade findByProfessionalIdAndGradeName(Integer professionalId, String gradeName);
 
     /**
      * 修改时唯一性检查
-     * @param gradeId
-     * @param professionalId
-     * @param gradeName
-     * @return
+     *
+     * @param gradeId        年级id
+     * @param professionalId 专业id
+     * @param gradeName      年级名字
+     * @return {@link Grade}
      */
     Grade findByIdAndProfessionalIdAndGradeName(Integer gradeId, Integer professionalId, String gradeName);
 
     /**
      * 查询年级数量
-     * @return
+     *
+     * @return int
      */
     int findCount();
 }

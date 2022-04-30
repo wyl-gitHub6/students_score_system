@@ -25,33 +25,16 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserDao userDao;
 
-    /**
-     * 通过ID查询单条数据
-     *
-     * @param userId 主键
-     * @return 实例对象
-     */
     @Override
     public User findById(Integer userId) {
         return this.userDao.findById(userId);
     }
 
-    /**
-     * 查询所有数据
-     *
-     * @return 对象数组
-     */
     @Override
     public List<User> findAll() {
         return this.userDao.findAll();
     }
 
-    /**
-     * 新增数据
-     *
-     * @param user 实例对象
-     * @return 实例对象
-     */
     @Override
     public int insert(User user) {
         user.setUserPassword(SecureUtil.md5(MyConstant.DEFAULT_PASSWORD));
@@ -59,12 +42,6 @@ public class UserServiceImpl implements UserService {
         return this.userDao.insert(user);
     }
 
-    /**
-     * 修改数据
-     *
-     * @param user 实例对象
-     * @return 实例对象
-     */
     @Override
     public int update(User user) {
         User u = userDao.findById(user.getUserId());
@@ -74,33 +51,16 @@ public class UserServiceImpl implements UserService {
         return this.userDao.update(user);
     }
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param userId 主键
-     * @return 是否成功
-     */
     @Override
     public boolean deleteById(Integer userId) {
         return this.userDao.deleteById(userId) > 0;
     }
 
-    /**
-     * 批量删除
-     * @param ids
-     * @return
-     */
     @Override
     public boolean deleteBatch(int[] ids) {
         return userDao.deleteBatch(ids);
     }
 
-    /**
-     * 登录
-     * @param userNum
-     * @param pwd
-     * @return
-     */
     @Override
     public User login(String userNum, String pwd) {
         return userDao.findByUserNumAndPassword(userNum,pwd);

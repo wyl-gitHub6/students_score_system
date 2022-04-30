@@ -202,23 +202,25 @@
         where co.course_id = #{courseId}
     </select>
 
-    <select id="findYxCount" resultType="int">
-        SELECT count(*) count
-        from score
-        WHERE score_grade >= 90 AND course_id = #{courseId}
-    </select>
-
     <sql id="findCount">
         SELECT count(*) count
         from score
     </sql>
+    <select id="findYxCount" resultType="int">
+        <include refid="findCount"/>
+        WHERE score_grade >= 90 AND course_id = #{courseId}
+    </select>
     <select id="findLhCount" resultType="java.lang.Integer">
         <include refid="findCount"/>
         WHERE score_grade >= 80 AND  90 > score_grade AND course_id = #{courseId}
     </select>
+    <select id="findZdCount" resultType="java.lang.Integer">
+        <include refid="findCount"/>
+        WHERE score_grade >= 70 AND  80 > score_grade AND course_id = #{courseId}
+    </select>
     <select id="findJgCount" resultType="java.lang.Integer">
         <include refid="findCount"/>
-        WHERE score_grade >= 60 AND  80 > score_grade AND course_id = #{courseId}
+        WHERE score_grade >= 60 AND  70 > score_grade AND course_id = #{courseId}
     </select>
     <select id="findBjgCount" resultType="java.lang.Integer">
         <include refid="findCount"/>

@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.constant.MyConstant;
 import com.example.entity.Classes;
 import com.example.service.ClassesService;
 import com.example.utils.Result;
@@ -29,7 +30,7 @@ public class ClassesController {
                            @RequestParam(value = "classesName",defaultValue = "") String classesName){
         List<Classes> list = classesService.findList(currentPage, pageSize, classesNum, classesName);
         PageInfo<Classes> pageInfo = new PageInfo<>(list);
-        return Result.success(pageInfo,"查询成功!");
+        return Result.success(pageInfo,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -40,7 +41,7 @@ public class ClassesController {
      */
     @GetMapping("/findById")
     public Result<Classes> findById(@RequestParam("classesId") int classesId) {
-        return Result.success(this.classesService.findById(classesId),"查询成功!");
+        return Result.success(this.classesService.findById(classesId),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
      /**
@@ -50,7 +51,7 @@ public class ClassesController {
      */
     @GetMapping("/findAll")
     public Result<List<Classes>> findAll() {
-        return Result.success(this.classesService.findAll(),"查询成功!");
+        return Result.success(this.classesService.findAll(),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -65,9 +66,9 @@ public class ClassesController {
         if (null == cla){
             int i = classesService.insert(classes);
             if (i > 0){
-                return Result.success("添加成功!");
+                return Result.success(MyConstant.RES_INSERT_SUCCESS);
             }
-            return Result.error("添加失败!");
+            return Result.error(MyConstant.RES_INSERT_SUCCESS);
         }
         return Result.error("该年级下已有此班级!");
     }
@@ -85,9 +86,9 @@ public class ClassesController {
         if (null == cla){
             int i = classesService.update(classes);
             if (i > 0){
-                return Result.success("编辑成功!");
+                return Result.success(MyConstant.RES_UPDATE_SUCCESS);
             }
-            return Result.error("编辑失败!");
+            return Result.error(MyConstant.RES_UPDATE_FAILED);
         }
         return Result.error("该年级下已有此班级!");
     }
@@ -102,9 +103,9 @@ public class ClassesController {
     public Result<String> deleteById(@RequestParam("classesId") int classesId) {
         boolean i = classesService.deleteById(classesId);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
     /**
@@ -117,9 +118,9 @@ public class ClassesController {
     public Result<String> deleteBatch(@RequestParam("ids") int[] ids){
         boolean i = classesService.deleteBatch(ids);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
     /**
@@ -130,7 +131,7 @@ public class ClassesController {
      * @param gradeId     年级id
      * @param classesNum  班级编号
      * @param classesName 班级名称
-     * @return {@link Result}
+     * @return {@link Result}<{@link PageInfo}<{@link Classes}>>
      */
     @GetMapping("/findByGradeId")
     public Result<PageInfo<Classes>> findByGradeId(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
@@ -140,7 +141,7 @@ public class ClassesController {
                            @RequestParam(value = "classesName",defaultValue = "") String classesName){
         List<Classes> list = classesService.findByGradeId(currentPage, pageSize,gradeId, classesNum, classesName);
         PageInfo<Classes> pageInfo = new PageInfo(list);
-        return Result.success(pageInfo,"查询成功!");
+        return Result.success(pageInfo, MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -151,7 +152,7 @@ public class ClassesController {
      * @return {@link Result}
      */
     @GetMapping("/driver")
-    public Result driver(@RequestParam("ids") int[] ids,
+    public Result<String> driver(@RequestParam("ids") int[] ids,
                          @RequestParam("classesId") int classesId){
         int i = classesService.driver(ids, classesId);
         return Result.success("本次共为"+i+"位同学分班");
@@ -163,21 +164,20 @@ public class ClassesController {
      * @return {@link Result}
      */
     @GetMapping("findCount")
-    public Result findCount(){
-        int count = classesService.findCount();
-        return Result.success(count,"查询成功!");
+    public Result<Integer> findCount(){
+        return Result.success(classesService.findCount(),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
      * 查询教师所带班级
      *
      * @param teacherId 老师id
-     * @return {@link Result}
+     * @return {@link Result}<{@link List}<{@link Classes}>>
      */
     @GetMapping("/findByTeacherId")
-    public Result findByTeacherId(@RequestParam("teacherId") int teacherId){
+    public Result<List<Classes>> findByTeacherId(@RequestParam("teacherId") int teacherId){
         List<Classes> classes = classesService.findByTeacherId(teacherId);
-        return Result.success(classes,"查询成功!");
+        return Result.success(classes,MyConstant.RES_SUCCESS_MESSAGE);
     }
 }
 

@@ -36,33 +36,16 @@ public class StudentServiceImpl implements StudentService {
     @Resource
     private OverAll overAll;
 
-    /**
-     * 通过ID查询单条数据
-     *
-     * @param studentId 主键
-     * @return 实例对象
-     */
     @Override
     public Student findById(Integer studentId) {
         return this.studentDao.findById(studentId);
     }
 
-    /**
-     * 查询所有数据
-     *
-     * @return 对象数组
-     */
     @Override
     public List<Student> findAll() {
         return this.studentDao.findAll();
     }
 
-    /**
-     * 新增数据
-     *
-     * @param student 实例对象
-     * @return 实例对象
-     */
     @Override
     public int insert(Student student) {
         Classes classes = new Classes();
@@ -72,12 +55,6 @@ public class StudentServiceImpl implements StudentService {
         return this.studentDao.insert(student);
     }
 
-    /**
-     * 修改数据
-     *
-     * @param student 实例对象
-     * @return 实例对象
-     */
     @Override
     public int update(Student student) {
         Student s = studentDao.findById(student.getStudentId());
@@ -87,22 +64,11 @@ public class StudentServiceImpl implements StudentService {
         return this.studentDao.update(student);
     }
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param studentId 主键
-     * @return 是否成功
-     */
     @Override
     public boolean deleteById(Integer studentId) {
         return this.studentDao.deleteById(studentId) > 0;
     }
 
-    /**
-     * 批量删除
-     * @param ids
-     * @return
-     */
     @Override
     public boolean deleteBatch(int[] ids) {
         return studentDao.deleteBatch(ids);
@@ -150,9 +116,9 @@ public class StudentServiceImpl implements StudentService {
             //通过下标获取行
             HSSFRow row = sheet.getRow(i);
 
-            /**
-             * getNumericCellValue() 获取数字
-             * getStringCellValue 获取String
+            /*
+              getNumericCellValue() 获取数字
+              getStringCellValue 获取String
              */
             String studentName = row.getCell(0).getStringCellValue();
             int age = (int)row.getCell(1).getNumericCellValue();
@@ -164,8 +130,8 @@ public class StudentServiceImpl implements StudentService {
             int classesId = (int)row.getCell(7).getNumericCellValue();
 
             Student s = new Student();
-            /**
-             * 获取学号
+            /*
+              获取学号
              */
             String studentNum = overAll.getStudentNum(classesId);
 

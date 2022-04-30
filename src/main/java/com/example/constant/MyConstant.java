@@ -25,7 +25,7 @@ public class MyConstant {
     /**
      * 课程开课人数要求
      */
-    public static final int COURSE_MIN_NUMBER = 25;
+    public static final int COURSE_MIN_NUMBER = 15;
 
     /**
      * 默认密码
@@ -63,5 +63,21 @@ public class MyConstant {
     public static final String ENTRY_GRADE_PASS = "成绩录入成功!";
 
     public static final String ENTRY_GRADE_FAILED = "该同学暂无学分，将通知其补考或重修!";
+
+    public static final String RES_SUCCESS_MESSAGE = "查询成功!";
+
+    public static final String RES_DATA_NULL = "暂无数据!";
+
+    public static final String RES_DELETE_SUCCESS = "删除成功!";
+
+    public static final String RES_DELETE_FAILED = "删除失败!";
+
+    public static final String RES_INSERT_SUCCESS = "添加成功!";
+
+    public static final String RES_INSERT_FAILED = "添加失败!";
+
+    public static final String RES_UPDATE_SUCCESS = "修改成功!";
+
+    public static final String RES_UPDATE_FAILED = "修改失败!";
 
 }

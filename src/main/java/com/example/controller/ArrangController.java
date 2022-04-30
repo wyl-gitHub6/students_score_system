@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.constant.MyConstant;
 import com.example.entity.Arrang;
 import com.example.entity.Classes;
 import com.example.service.ArrangService;
@@ -37,7 +38,7 @@ public class ArrangController {
                               @RequestParam(value = "classesName",defaultValue = "") String classesName) {
         List<Classes> list = this.arrangService.findClasses(currentPage,pageSize,classesName);
         PageInfo<Classes> pageInfo = new PageInfo<>(list);
-        return Result.success(pageInfo,"查询成功!");
+        return Result.success(pageInfo, MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -50,9 +51,9 @@ public class ArrangController {
     public Result<String> insert(@RequestBody Arrang arrang) {
         int i = arrangService.insert(arrang);
         if (i > 0){
-            return Result.success("添加成功!");
+            return Result.success(MyConstant.RES_INSERT_SUCCESS);
         }
-        return Result.error("添加失败!");
+        return Result.error(MyConstant.RES_INSERT_FAILED);
     }
 
 
@@ -79,7 +80,7 @@ public class ArrangController {
     @GetMapping("/findByClassesId")
     public Result<List<Classes>> findByClassesId(@RequestParam("classesId") int classesId){
         List<Classes> list = arrangService.findByClassesId(classesId);
-        return Result.success(list,"查询成功!");
+        return Result.success(list,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -94,9 +95,9 @@ public class ArrangController {
                          @RequestParam("classesId") int classesId){
         boolean b = arrangService.delete(courseId,classesId);
         if (b){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
     /**
@@ -108,7 +109,7 @@ public class ArrangController {
     @GetMapping("/findByCourseId")
     public Result<List<Classes>> findByCourseId(@RequestParam("courseId") int courseId){
         List<Classes> list = arrangService.findByCourseId(courseId);
-        return Result.success(list,"查询成功!");
+        return Result.success(list,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
 }

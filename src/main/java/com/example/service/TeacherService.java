@@ -55,47 +55,53 @@ public interface TeacherService {
 
     /**
      * 分页查询
-     * @param currentPage
-     * @param pageSize
-     * @param teacherNum
-     * @param teacherName
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param teacherNum  老师num
+     * @param teacherName 老师名字
+     * @return {@link List}<{@link Teacher}>
      */
     List<Teacher> findList(int currentPage, int pageSize, String teacherNum, String teacherName);
 
     /**
-     * 批量删除
-     * @param ids
-     * @return
+     * 删除批处理
+     *
+     * @param ids id
+     * @return boolean
      */
     boolean deleteBatch(int[] ids);
 
     /**
      * 登录
-     * @param teacherNum
-     * @param password
-     * @return
+     *
+     * @param teacherNum 老师num
+     * @param password   密码
+     * @return {@link Teacher}
      */
     Teacher login(String teacherNum, String password);
 
     /**
      * 查询教师数量
-     * @return
+     *
+     * @return int
      */
     int findCount();
 
     /**
      * 根据职工编号查询
-     * @param teacherNum
-     * @return
+     *
+     * @param teacherNum 老师num
+     * @return {@link Teacher}
      */
     Teacher findByNum(String teacherNum);
 
     /**
      * 导入
-     * @param file
-     * @return
-     * @throws IOException
+     *
+     * @param file 文件
+     * @return int
+     * @throws IOException ioexception
      */
     int uploadXls(MultipartFile file) throws IOException;
 }

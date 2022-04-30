@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.constant.MyConstant;
 import com.example.entity.Grade;
 import com.example.service.GradeService;
 import com.example.utils.Result;
@@ -39,7 +40,7 @@ public class GradeController {
                            @RequestParam(value = "gradeName",defaultValue = "") String gradeName){
         List<Grade> list = gradeService.findList(currentPage, pageSize, gradeNum, gradeName);
         PageInfo<Grade> pageInfo = new PageInfo<>(list);
-        return Result.success(pageInfo,"查询成功!");
+        return Result.success(pageInfo,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -49,9 +50,9 @@ public class GradeController {
      * @return {@link Result}
      */
     @GetMapping("/findByProfessionalId")
-    public Result findByProfessionalId(@RequestParam("professionalId") int professionalId){
+    public Result<List<Grade>> findByProfessionalId(@RequestParam("professionalId") int professionalId){
         List<Grade> list = gradeService.findByProfessionalId(professionalId);
-        return Result.success(list,"查询成功!");
+        return Result.success(list,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -61,18 +62,18 @@ public class GradeController {
      * @return 单条数据
      */
     @GetMapping("/findById")
-    public Result findById(@RequestParam("gradeId") int gradeId) {
-        return Result.success(this.gradeService.findById(gradeId),"查询成功!");
+    public Result<Grade> findById(@RequestParam("gradeId") int gradeId) {
+        return Result.success(this.gradeService.findById(gradeId),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
-     /**
+    /**
      * 查询所有数据
      *
      * @return 数据数组
      */
     @GetMapping("/findAll")
-    public Result findAll() {
-        return Result.success(this.gradeService.findAll(),"查询成功!");
+    public Result<List<Grade>> findAll() {
+        return Result.success(this.gradeService.findAll(),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -82,14 +83,14 @@ public class GradeController {
      * @return 新增结果
      */
     @PostMapping("/insert")
-    public Result insert(@RequestBody Grade grade) {
+    public Result<String> insert(@RequestBody Grade grade) {
         Grade gra = gradeService.findByProfessionalIdAndGradeName(grade.getProfessional().getProfessionalId(), grade.getGradeName());
         if (null == gra){
             int i = gradeService.insert(grade);
             if (i > 0){
-                return Result.success("添加成功!");
+                return Result.success(MyConstant.RES_INSERT_SUCCESS);
             }
-            return Result.error("添加失败!");
+            return Result.error(MyConstant.RES_INSERT_SUCCESS);
         }
         return Result.error("该专业下已有此年级!");
     }
@@ -101,16 +102,16 @@ public class GradeController {
      * @return 编辑结果
      */
     @PutMapping("/update")
-    public Result update(@RequestBody Grade grade) {
+    public Result<String>  update(@RequestBody Grade grade) {
         Grade gra = gradeService.findByIdAndProfessionalIdAndGradeName(grade.getGradeId(),
                 grade.getProfessional().getProfessionalId(),
                 grade.getGradeName());
         if (null == gra){
             int i = gradeService.update(grade);
             if (i > 0){
-                return Result.success("编辑成功!");
+                return Result.success(MyConstant.RES_UPDATE_SUCCESS);
             }
-            return Result.error("编辑失败!");
+            return Result.error(MyConstant.RES_UPDATE_FAILED);
         }
         return Result.error("该专业下已有此年级!");
     }
@@ -122,12 +123,12 @@ public class GradeController {
      * @return 删除是否成功
      */
     @DeleteMapping("/deleteById")
-    public Result deleteById(@RequestParam("gradeId") int gradeId) {
+    public Result<String>  deleteById(@RequestParam("gradeId") int gradeId) {
         boolean i = gradeService.deleteById(gradeId);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
     /**
@@ -137,12 +138,12 @@ public class GradeController {
      * @return {@link Result}
      */
     @DeleteMapping("deleteBatch")
-    public Result deleteBatch(@RequestParam("ids") int[] ids){
+    public Result<String>  deleteBatch(@RequestParam("ids") int[] ids){
         boolean i = gradeService.deleteBatch(ids);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
     /**
@@ -151,9 +152,8 @@ public class GradeController {
      * @return {@link Result}
      */
     @GetMapping("findCount")
-    public Result findCount(){
-        int count = gradeService.findCount();
-        return Result.success(count,"查询成功!");
+    public Result<Integer> findCount(){
+        return Result.success(gradeService.findCount(), MyConstant.RES_SUCCESS_MESSAGE);
     }
 }
 

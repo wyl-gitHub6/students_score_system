@@ -12,7 +12,6 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -34,12 +33,6 @@ public class ClassesServiceImpl implements ClassesService {
     @Resource
     private OverAll overAll;
 
-    /**
-     * 通过ID查询单条数据
-     *
-     * @param classesId 主键
-     * @return 实例对象
-     */
     @Override
     public Classes findById(Integer classesId) {
         Classes byId = this.classesDao.findById(classesId);
@@ -47,11 +40,6 @@ public class ClassesServiceImpl implements ClassesService {
         return byId;
     }
 
-    /**
-     * 查询所有数据
-     *
-     * @return 对象数组
-     */
     @Override
     public List<Classes> findAll() {
         List<Classes> list = this.classesDao.findAll();
@@ -61,49 +49,26 @@ public class ClassesServiceImpl implements ClassesService {
         return list;
     }
 
-    /**
-     * 新增数据
-     *
-     * @param classes 实例对象
-     * @return 实例对象
-     */
     @Override
     public int insert(Classes classes) {
         classes.setClassesNum(RandomUtil.randomString(MyConstant.NUM_BIT));
         /*默认状态为未满--0*/
         classes.setClassesState(MyConstant.ZERO);
         String maxCode = classesDao.findMaxCode();
-        classes.setClassesCode(null == maxCode || maxCode.equals(MyConstant.ONE_STR)?MyConstant.CLASSES_DEFAULT_CODE:maxCode);
+        classes.setClassesCode(null == maxCode || maxCode.equals(MyConstant.ONE_STR)?MyConstant.CLASSES_DEFAULT_CODE:maxCode.substring(0,maxCode.lastIndexOf(".")));
         return this.classesDao.insert(classes);
     }
 
-    /**
-     * 修改数据
-     *
-     * @param classes 实例对象
-     * @return 实例对象
-     */
     @Override
     public int update(Classes classes) {
         return this.classesDao.update(classes);
     }
 
-    /**
-     * 通过主键删除数据
-     *
-     * @param classesId 主键
-     * @return 是否成功
-     */
     @Override
     public boolean deleteById(Integer classesId) {
         return this.classesDao.deleteById(classesId) > 0;
     }
 
-    /**
-     * 批量删除
-     * @param ids
-     * @return
-     */
     @Override
     public boolean deleteBatch(int[] ids) {
         return classesDao.deleteBatch(ids);

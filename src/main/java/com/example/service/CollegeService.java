@@ -51,25 +51,28 @@ public interface CollegeService {
     boolean deleteById(Integer collegeId);
 
     /**
-     * 批量删除
-     * @param ids
-     * @return
+     * 删除批处理
+     *
+     * @param ids id
+     * @return boolean
      */
     boolean deleteBatch(int[] ids);
 
     /**
      * 分页查询
-     * @param currentPage
-     * @param pageSize
-     * @param collegeNum
-     * @param collegeName
-     * @return
+     *
+     * @param currentPage 当前页面
+     * @param pageSize    页面大小
+     * @param collegeNum  大学num
+     * @param collegeName 大学名字
+     * @return {@link List}<{@link College}>
      */
     List<College> findList(int currentPage, int pageSize, String collegeNum, String collegeName);
 
     /**
      * 查询院系数量
-     * @return
+     *
+     * @return int
      */
     int findCount();
 }

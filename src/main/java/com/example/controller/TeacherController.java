@@ -2,6 +2,7 @@ package com.example.controller;
 
 import cn.hutool.crypto.SecureUtil;
 import com.example.config.SendEmailConfig;
+import com.example.constant.MyConstant;
 import com.example.entity.Teacher;
 import com.example.service.TeacherService;
 import com.example.utils.Result;
@@ -32,22 +33,22 @@ public class TeacherController {
 
 
     /**
-     * 查询教师
+     * 查询教师列表
      *
      * @param currentPage 当前页面
      * @param pageSize    页面大小
      * @param teacherNum  老师num
      * @param teacherName 老师名字
-     * @return {@link Result}
+     * @return {@link Result}<{@link PageInfo}<{@link Teacher}>>
      */
     @GetMapping("/findList")
-    public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+    public Result<PageInfo<Teacher>> findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                            @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "teacherNum",defaultValue = "") String teacherNum,
                            @RequestParam(value = "teacherName",defaultValue = "") String teacherName){
         List<Teacher> list = teacherService.findList(currentPage, pageSize, teacherNum, teacherName);
         PageInfo<Teacher> pageInfo = new PageInfo<>(list);
-        return Result.success(pageInfo,"查询成功!");
+        return Result.success(pageInfo,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -57,8 +58,8 @@ public class TeacherController {
      * @return 单条数据
      */
     @GetMapping("/findById")
-    public Result findById(@RequestParam("teacherId") int teacherId) {
-        return Result.success(this.teacherService.findById(teacherId),"查询成功!");
+    public Result<Teacher> findById(@RequestParam("teacherId") int teacherId) {
+        return Result.success(this.teacherService.findById(teacherId),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -67,8 +68,8 @@ public class TeacherController {
      * @return 数据数组
      */
     @GetMapping("/findAll")
-    public Result findAll() {
-        return Result.success(this.teacherService.findAll(),"查询成功!");
+    public Result<List<Teacher>> findAll() {
+        return Result.success(this.teacherService.findAll(),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -78,12 +79,12 @@ public class TeacherController {
      * @return 新增结果
      */
     @PostMapping("/insert")
-    public Result insert(@RequestBody Teacher teacher) {
+    public Result<String> insert(@RequestBody Teacher teacher) {
         int i = teacherService.insert(teacher);
         if (i > 0){
-            return Result.success("添加成功!");
+            return Result.success(MyConstant.RES_INSERT_SUCCESS);
         }
-        return Result.error("添加失败!");
+        return Result.error(MyConstant.RES_INSERT_FAILED);
     }
 
     /**
@@ -93,12 +94,12 @@ public class TeacherController {
      * @return 编辑结果
      */
     @PutMapping("/update")
-    public Result update(@RequestBody Teacher teacher) {
+    public Result<String> update(@RequestBody Teacher teacher) {
         int i = teacherService.update(teacher);
         if (i > 0){
-            return Result.success("编辑成功!");
+            return Result.success(MyConstant.RES_UPDATE_SUCCESS);
         }
-        return Result.error("编辑失败!");
+        return Result.error(MyConstant.RES_UPDATE_FAILED);
     }
 
     /**
@@ -108,12 +109,12 @@ public class TeacherController {
      * @return 删除是否成功
      */
     @DeleteMapping("/deleteById")
-    public Result deleteById(@RequestParam("teacherId") int teacherId) {
+    public Result<String> deleteById(@RequestParam("teacherId") int teacherId) {
         boolean i = teacherService.deleteById(teacherId);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
     /**
@@ -123,12 +124,12 @@ public class TeacherController {
      * @return {@link Result}
      */
     @DeleteMapping("deleteBatch")
-    public Result deleteBatch(@RequestParam("ids") int[] ids){
+    public Result<String> deleteBatch(@RequestParam("ids") int[] ids){
         boolean i = teacherService.deleteBatch(ids);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
     /**
@@ -139,7 +140,7 @@ public class TeacherController {
      * @throws IOException ioexception
      */
     @PostMapping("/uploadXls")
-    public Result uploadXls(MultipartFile file) throws IOException {
+    public Result<String> uploadXls(MultipartFile file) throws IOException {
         int i = teacherService.uploadXls(file);
         return Result.success("共导入"+i+"条数据!");
     }
@@ -149,10 +150,10 @@ public class TeacherController {
      *
      * @param teacherNum 老师职工编号
      * @param password   密码
-     * @return {@link Result}
+     * @return {@link Result}<{@link Teacher}>
      */
     @GetMapping("/login")
-    public Result login(@RequestParam("teacherNum") String teacherNum,
+    public Result<Teacher> login(@RequestParam("teacherNum") String teacherNum,
                         @RequestParam("password") String password){
         Teacher teacher = teacherService.login(teacherNum, SecureUtil.md5(password));
         if(null != teacher){
@@ -164,12 +165,12 @@ public class TeacherController {
     /**
      * 查询教师数量
      *
-     * @return {@link Result}
+     * @return {@link Result}<{@link Integer}>
      */
     @GetMapping("findCount")
-    public Result findCount(){
+    public Result<Integer> findCount(){
         int count = teacherService.findCount();
-        return Result.success(count,"查询成功!");
+        return Result.success(count, MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -177,10 +178,10 @@ public class TeacherController {
      *
      * @param teacherId 老师id
      * @param password  密码
-     * @return {@link Result}
+     * @return {@link Result}<{@link String}>
      */
     @GetMapping("/updatePassword")
-    public Result updatePassword(@RequestParam("teacherId") int teacherId,
+    public Result<String> updatePassword(@RequestParam("teacherId") int teacherId,
                                  @RequestParam("password") String password){
         Teacher teacher = teacherService.findById(teacherId);
         if (teacher.getTeacherPassword().equals(SecureUtil.md5(password))){
@@ -194,10 +195,10 @@ public class TeacherController {
      *
      * @param teacherNum   老师num
      * @param emailAddress 电子邮件地址
-     * @return {@link Result}
+     * @return {@link Result}<{@link Teacher}>
      */
     @GetMapping("/sendEmail")
-    public Result sendEmail(@RequestParam("teacherNum") String teacherNum,
+    public Result<Teacher> sendEmail(@RequestParam("teacherNum") String teacherNum,
                             @RequestParam("emailAddress") String emailAddress){
         Teacher teacher = teacherService.findByNum(teacherNum);
         if (null == teacher){

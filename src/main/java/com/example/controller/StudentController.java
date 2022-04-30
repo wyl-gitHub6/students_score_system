@@ -2,6 +2,7 @@ package com.example.controller;
 
 import cn.hutool.crypto.SecureUtil;
 import com.example.config.SendEmailConfig;
+import com.example.constant.MyConstant;
 import com.example.entity.Student;
 import com.example.service.StudentService;
 import com.example.utils.Result;
@@ -32,22 +33,22 @@ public class StudentController {
 
 
     /**
-     * 查询学生
+     * 查询学生列表
      *
      * @param currentPage 当前页面
      * @param pageSize    页面大小
      * @param studentNum  学生编号
      * @param studentName 学生名字
-     * @return {@link Result}
+     * @return {@link Result}<{@link PageInfo}<{@link Student}>>
      */
     @GetMapping("/findList")
-    public Result findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
+    public Result<PageInfo<Student>> findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                            @RequestParam(value = "pageSize",defaultValue = "8") int pageSize,
                            @RequestParam(value = "studentNum",defaultValue = "") String studentNum,
                            @RequestParam(value = "studentName",defaultValue = "") String studentName){
         List<Student> list = studentService.findList(currentPage, pageSize, studentNum, studentName);
         PageInfo<Student> pageInfo = new PageInfo<>(list);
-        return Result.success(pageInfo,"查询成功!");
+        return Result.success(pageInfo,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -57,8 +58,8 @@ public class StudentController {
      * @return 单条数据
      */
     @GetMapping("/findById")
-    public Result findById(@RequestParam("studentId") int studentId) {
-        return Result.success(this.studentService.findById(studentId),"查询成功!");
+    public Result<Student> findById(@RequestParam("studentId") int studentId) {
+        return Result.success(this.studentService.findById(studentId),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -67,8 +68,8 @@ public class StudentController {
      * @return 数据数组
      */
     @GetMapping("/findAll")
-    public Result findAll() {
-        return Result.success(this.studentService.findAll(),"查询成功!");
+    public Result<List<Student>> findAll() {
+        return Result.success(this.studentService.findAll(),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -78,14 +79,14 @@ public class StudentController {
      * @return 新增结果
      */
     @PostMapping("/insert")
-    public Result insert(@RequestBody Student student) {
+    public Result<String> insert(@RequestBody Student student) {
         Student stu = studentService.findByStudentNum(student.getStudentNum());
         if (null == stu){
             int i = studentService.insert(student);
             if (i > 0){
-                return Result.success("添加成功!");
+                return Result.success(MyConstant.RES_INSERT_SUCCESS);
             }
-            return Result.error("添加失败!");
+            return Result.error(MyConstant.RES_INSERT_SUCCESS);
         }
         return Result.error("学号重复!");
     }
@@ -97,12 +98,12 @@ public class StudentController {
      * @return 编辑结果
      */
     @PutMapping("/update")
-    public Result update(@RequestBody Student student) {
+    public Result<String> update(@RequestBody Student student) {
         int i = studentService.update(student);
         if (i > 0){
-            return Result.success("编辑成功!");
+            return Result.success(MyConstant.RES_UPDATE_SUCCESS);
         }
-        return Result.error("编辑失败!");
+        return Result.error(MyConstant.RES_UPDATE_FAILED);
     }
 
     /**
@@ -112,12 +113,12 @@ public class StudentController {
      * @return 删除是否成功
      */
     @DeleteMapping("/deleteById")
-    public Result deleteById(@RequestParam("studentId") int studentId) {
+    public Result<String> deleteById(@RequestParam("studentId") int studentId) {
         boolean i = studentService.deleteById(studentId);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_SUCCESS);
     }
 
     /**
@@ -127,23 +128,23 @@ public class StudentController {
      * @return {@link Result}
      */
     @DeleteMapping("deleteBatch")
-    public Result deleteBatch(@RequestParam("ids") int[] ids){
+    public Result<String> deleteBatch(@RequestParam("ids") int[] ids){
         boolean i = studentService.deleteBatch(ids);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
     /**
      * 上传xls
      *
      * @param file 文件
-     * @return {@link Result}
-     * @throws IOException ioexception
+     * @return {@link Result}<{@link String}>
+     * @throws IOException 异常
      */
     @PostMapping("/uploadXls")
-    public Result uploadXls(MultipartFile file) throws IOException {
+    public Result<String> uploadXls(MultipartFile file) throws IOException {
         int i = studentService.uploadXls(file);
         return Result.success("共导入"+i+"条数据!");
     }
@@ -156,10 +157,10 @@ public class StudentController {
      * @param pageSize    页面大小
      * @param studentNum  学生学号
      * @param studentName 学生名字
-     * @return {@link Result}
+     * @return {@link Result}<{@link PageInfo}<{@link Student}>>
      */
     @GetMapping("/findByClassesId")
-    public Result findByClassesId(@RequestParam("classesId") int classesId,
+    public Result<PageInfo<Student>> findByClassesId(@RequestParam("classesId") int classesId,
                                   @RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
                                   @RequestParam(value = "pageSize",defaultValue = "5") int pageSize,
                                   @RequestParam(value = "studentNum",defaultValue = "") String  studentNum,
@@ -167,9 +168,9 @@ public class StudentController {
         List<Student> list = studentService.findByClassesId(currentPage,pageSize,classesId,studentNum,studentName);
         PageInfo<Student> pageInfo = new PageInfo<>(list);
         if (list.isEmpty()){
-            return Result.error("暂无数据！");
+            return Result.error(MyConstant.RES_DATA_NULL);
         }
-        return Result.success(pageInfo,"查询成功!");
+        return Result.success(pageInfo,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -177,10 +178,10 @@ public class StudentController {
      *
      * @param studentNum 学生学号
      * @param password   密码
-     * @return {@link Result}
+     * @return {@link Result}<{@link Student}>
      */
     @GetMapping("/login")
-    public Result login(@RequestParam("studentNum") String studentNum,
+    public Result<Student> login(@RequestParam("studentNum") String studentNum,
                         @RequestParam("password") String password){
         Student student = studentService.login(studentNum, SecureUtil.md5(password));
         if(null != student){
@@ -194,27 +195,26 @@ public class StudentController {
      *
      * @param classesId 班级id
      * @param courseId  课程id
-     * @return {@link Result}
+     * @return {@link Result}<{@link List}<{@link Student}>>
      */
     @GetMapping("/findByClasses")
-    public Result findByClasses(@RequestParam("classesId") int classesId,
+    public Result<List<Student>> findByClasses(@RequestParam("classesId") int classesId,
                                 @RequestParam("courseId") int courseId){
         List<Student> list = studentService.findByClasses(classesId,courseId);
         if (list.isEmpty()){
-            return Result.error("暂无数据！");
+            return Result.error(MyConstant.RES_DATA_NULL);
         }
-        return Result.success(list,"查询成功!");
+        return Result.success(list,MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
      * 查询学生数量
      *
-     * @return {@link Result}
+     * @return {@link Result}<{@link Integer}>
      */
     @GetMapping("findCount")
-    public Result findCount(){
-        int count = studentService.findCount();
-        return Result.success(count,"查询成功!");
+    public Result<Integer> findCount(){
+        return Result.success(studentService.findCount(), MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -222,10 +222,10 @@ public class StudentController {
      *
      * @param studentId 学生证
      * @param password  密码
-     * @return {@link Result}
+     * @return {@link Result}<{@link String}>
      */
     @GetMapping("/updatePassword")
-    public Result updatePassword(@RequestParam("studentId") int studentId,
+    public Result<String> updatePassword(@RequestParam("studentId") int studentId,
                                  @RequestParam("password") String password){
         Student student = studentService.findById(studentId);
         if (student.getStudentPassword().equals(SecureUtil.md5(password))){
@@ -239,10 +239,10 @@ public class StudentController {
      *
      * @param studentNum   学生学号
      * @param emailAddress 电子邮件地址
-     * @return {@link Result}
+     * @return {@link Result}<{@link Student}>
      */
     @GetMapping("/sendEmail")
-    public Result sendEmail(@RequestParam("studentNum") String studentNum,
+    public Result<Student> sendEmail(@RequestParam("studentNum") String studentNum,
                             @RequestParam("emailAddress") String emailAddress){
         Student student = studentService.findByStudentNum(studentNum);
         if (null == student){

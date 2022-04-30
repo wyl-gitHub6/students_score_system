@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.constant.MyConstant;
 import com.example.entity.College;
 import com.example.service.CollegeService;
 import com.example.utils.Result;
@@ -39,7 +40,7 @@ public class CollegeController {
                            @RequestParam(value = "collegeName",defaultValue = "") String collegeName){
         List<College> list = collegeService.findList(currentPage, pageSize, collegeNum, collegeName);
         PageInfo<College> pageInfo = new PageInfo<>(list);
-        return Result.success(pageInfo,"查询成功!");
+        return Result.success(pageInfo, MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -49,18 +50,19 @@ public class CollegeController {
      * @return 单条数据
      */
     @GetMapping("/findById")
-    public Result findById(@RequestParam("collegeId") int collegeId) {
-        return Result.success(this.collegeService.findById(collegeId),"查询成功!");
+    public Result<College> findById(@RequestParam("collegeId") int collegeId) {
+        return Result.success(this.collegeService.findById(collegeId),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
-     /**
+    /**
+     * 查询所有
      * 查询所有数据
      *
      * @return 数据数组
      */
     @GetMapping("/findAll")
-    public Result findAll() {
-        return Result.success(this.collegeService.findAll(),"查询成功!");
+    public Result<List<College>> findAll() {
+        return Result.success(this.collegeService.findAll(),MyConstant.RES_SUCCESS_MESSAGE);
     }
 
     /**
@@ -70,12 +72,12 @@ public class CollegeController {
      * @return 新增结果
      */
     @PostMapping("/insert")
-    public Result insert(@RequestBody College college) {
+    public Result<String> insert(@RequestBody College college) {
         int i = collegeService.insert(college);
         if (i > 0){
-            return Result.success("添加成功!");
+            return Result.success(MyConstant.RES_INSERT_SUCCESS);
         }
-        return Result.error("添加失败!");
+        return Result.error(MyConstant.RES_INSERT_SUCCESS);
     }
 
     /**
@@ -85,12 +87,12 @@ public class CollegeController {
      * @return 编辑结果
      */
     @PutMapping("/update")
-    public Result update(@RequestBody College college) {
+    public Result<String> update(@RequestBody College college) {
         int i = collegeService.update(college);
         if (i > 0){
-            return Result.success("编辑成功!");
+            return Result.success(MyConstant.RES_UPDATE_SUCCESS);
         }
-        return Result.error("编辑失败!");
+        return Result.error(MyConstant.RES_UPDATE_FAILED);
     }
 
     /**
@@ -100,12 +102,12 @@ public class CollegeController {
      * @return 删除是否成功
      */
     @DeleteMapping("/deleteById")
-    public Result deleteById(@RequestParam("collegeId") int collegeId) {
+    public Result<String> deleteById(@RequestParam("collegeId") int collegeId) {
         boolean i = collegeService.deleteById(collegeId);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
     /**
@@ -115,12 +117,12 @@ public class CollegeController {
      * @return {@link Result}
      */
     @DeleteMapping("deleteBatch")
-    public Result deleteBatch(@RequestParam("ids") int[] ids){
+    public Result<String> deleteBatch(@RequestParam("ids") int[] ids){
         boolean i = collegeService.deleteBatch(ids);
         if (i){
-            return Result.success("删除成功!");
+            return Result.success(MyConstant.RES_DELETE_SUCCESS);
         }
-        return Result.error("删除失败!");
+        return Result.error(MyConstant.RES_DELETE_FAILED);
     }
 
     /**
@@ -129,9 +131,9 @@ public class CollegeController {
      * @return {@link Result}
      */
     @GetMapping("findCount")
-    public Result findCount(){
+    public Result<Integer> findCount(){
         int count = collegeService.findCount();
-        return Result.success(count,"查询成功!");
+        return Result.success(count,MyConstant.RES_SUCCESS_MESSAGE);
     }
 }
 
