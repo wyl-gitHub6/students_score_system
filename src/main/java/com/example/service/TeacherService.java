@@ -101,7 +101,7 @@ public interface TeacherService {
      *
      * @param file 文件
      * @return int
-     * @throws IOException ioexception
+     * @throws IOException exception
      */
     int uploadXls(MultipartFile file) throws IOException;
 }

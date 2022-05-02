@@ -24,14 +24,15 @@ public class UploadController {
     private final String IMAGE_URL = "D:\\image_upload\\";
 
     /**
+     * 上传
      * 上传图片
      *
      * @param file 文件
-     * @return {@link Result}
-     * @throws IOException
+     * @return {@link Result}<{@link String}>
+     * @throws IOException exception
      */
     @PostMapping("/upload")
-    public Result upload(MultipartFile file) throws IOException {
+    public Result<String> upload(MultipartFile file) throws IOException {
         //获取图片名称
         String fileName = file.getOriginalFilename();
         //获取后缀
@@ -45,7 +46,6 @@ public class UploadController {
         FileUtil.writeBytes(file.getBytes(),new File(IMAGE_URL+fileName));
         //上传的服务器返回路径
         String returnUrl = "image_upload/";
-        System.out.println(returnUrl +fileName);
         return Result.success(returnUrl +fileName);
     }
 
@@ -53,10 +53,10 @@ public class UploadController {
      * 删除图片
      *
      * @param deleteUrl 删除网址
-     * @return {@link Result}
+     * @return {@link Result}<{@link String}>
      */
     @DeleteMapping("/deleteImage")
-    public Result deleteImage(@RequestParam("deleteUrl") String deleteUrl){
+    public Result<String> deleteImage(@RequestParam("deleteUrl") String deleteUrl){
         //获取文件名
         String url = deleteUrl.substring(deleteUrl.lastIndexOf("/"));
         //定义一个file对象

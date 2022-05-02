@@ -1,9 +1,10 @@
 package com.example.quartz;
 
 import com.example.service.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * @author wyl
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SchedulerJobInitListener implements CommandLineRunner {
 
-    @Autowired
+    @Resource
     private TaskService taskService;
 
     /**

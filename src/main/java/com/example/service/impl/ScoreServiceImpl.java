@@ -47,7 +47,7 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
-    public Result<String> insert(int studentId, int courseId) {
+    public synchronized Result<String> insert(int studentId, int courseId) {
         Course course = courseDao.findById(courseId);
         int number = scoreDao.findCountByCourseId(courseId);
         if (number >= course.getNumber()){
