@@ -1,7 +1,9 @@
 package com.example.controller;
 
 import com.example.constant.MyConstant;
+import com.example.entity.Grade;
 import com.example.entity.Professional;
+import com.example.service.GradeService;
 import com.example.service.ProfessionalService;
 import com.example.utils.Result;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +24,9 @@ public class ProfessionalController {
 
     @Resource
     private ProfessionalService professionalService;
+
+    @Resource
+    private GradeService gradeService;
 
 
     /**
@@ -124,6 +129,11 @@ public class ProfessionalController {
      */
     @DeleteMapping("/deleteById")
     public Result<String> deleteById(@RequestParam("professionalId") int professionalId) {
+        List<Grade> res = gradeService.findByProfessionalId(professionalId);
+        if (!res.isEmpty()){
+            return Result.error(MyConstant.RES_DATA_USE);
+        }
+
         boolean i = professionalService.deleteById(professionalId);
         if (i){
             return Result.success(MyConstant.RES_DELETE_SUCCESS);

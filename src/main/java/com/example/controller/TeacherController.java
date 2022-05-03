@@ -3,7 +3,9 @@ package com.example.controller;
 import cn.hutool.crypto.SecureUtil;
 import com.example.config.SendEmailConfig;
 import com.example.constant.MyConstant;
+import com.example.entity.Course;
 import com.example.entity.Teacher;
+import com.example.service.CourseService;
 import com.example.service.TeacherService;
 import com.example.utils.Result;
 import com.example.utils.VerCode;
@@ -30,6 +32,9 @@ public class TeacherController {
 
     @Resource
     private SendEmailConfig sendEmailConfig;
+
+    @Resource
+    private CourseService courseService;
 
 
     /**
@@ -110,6 +115,10 @@ public class TeacherController {
      */
     @DeleteMapping("/deleteById")
     public Result<String> deleteById(@RequestParam("teacherId") int teacherId) {
+        List<Course> res = courseService.findByTeacherId(teacherId);
+        if (!res.isEmpty()){
+            return Result.error(MyConstant.RES_DATA_USE);
+        }
         boolean i = teacherService.deleteById(teacherId);
         if (i){
             return Result.success(MyConstant.RES_DELETE_SUCCESS);

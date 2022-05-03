@@ -59,7 +59,7 @@
     </select>
 
     <!--根据班级ID查询-->
-    <select id="findByClassesId"  resultMap="StudentMap">
+    <select id="findByClassesList"  resultMap="StudentMap">
         SELECT *
         FROM student AS s LEFT OUTER JOIN classes AS c
         ON s.classes_id = c.classes_id
@@ -213,6 +213,9 @@
 
     <select id="findMaxCode" resultType="Long">
         SELECT MAX(student_num)+1 FROM student WHERE classes_id = #{classesId}
+    </select>
+    <select id="findByClassesId" resultType="com.example.entity.Student">
+        SELECT * FROM student WHERE classes_id = #{classesId}
     </select>
 </mapper>
 

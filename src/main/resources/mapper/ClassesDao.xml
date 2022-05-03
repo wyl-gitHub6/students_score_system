@@ -88,7 +88,7 @@
         order by classes_id desc
     </select>
 
-    <select id="findByGradeId" resultMap="ClassesMap">
+    <select id="findByGradeIdList" resultMap="ClassesMap">
         <include refid="find"/>
         where c.grade_id = #{gradeId}
         <if test="classesNum != ''">
@@ -98,6 +98,10 @@
             or classes_name like concat('%',#{classesName},'%')
         </if>
         order by classes_id desc
+    </select>
+
+    <select id="findByGradeId" resultMap="ClassesMap">
+        select * from classes where grade_id = #{gradeId}
     </select>
 
     <select id="findCount" resultType="java.lang.Integer">

@@ -88,7 +88,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> findByClassesId(int currentPage, int pageSize, int classesId,String studentNum, String studentName) {
         PageHelper.startPage(currentPage,pageSize);
-        return studentDao.findByClassesId(classesId,studentNum,studentName);
+        return studentDao.findByClassesList(classesId,studentNum,studentName);
     }
 
     @Override
@@ -150,5 +150,10 @@ public class StudentServiceImpl implements StudentService {
             studentDao.insert(s);
         }
         return i-1;
+    }
+
+    @Override
+    public List<Student> findByClassesId(int classesId) {
+        return studentDao.findByClassesId(classesId);
     }
 }

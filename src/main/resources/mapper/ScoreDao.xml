@@ -158,7 +158,7 @@
                                          ON p.college_id = co.college_id
     </sql>
 
-    <select id="findByCourseId" resultMap="findStudentMap">
+    <select id="findByCourseList" resultMap="findStudentMap">
         <include refid="findAll"/>
         where cou.course_id = #{courseId} and sc.state = 0
     </select>
@@ -181,7 +181,7 @@
 
     <select id="findCourse" resultMap="ScoreMap">
         <include refid="findLeftCourse"/>
-        where sc.student_id = #{studentId} and sc.state = 0 or sc.state = 1
+        where sc.student_id = #{studentId} and (sc.state = 0 or sc.state = 1)
     </select>
 
     <select id="findBxCourse" resultMap="ScoreMap">
@@ -252,6 +252,11 @@
         WHERE c.teacher_id = #{teacherId}
         GROUP BY sc.course_id
     </select>
+
+    <select id="findByCourseId" resultMap="ScoreMap">
+        select * from score where course_id = #{courseId}
+    </select>
+
 
     <!--新增-->
     <insert id="insert">

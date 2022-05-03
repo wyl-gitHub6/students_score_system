@@ -97,7 +97,7 @@ public class ClassesServiceImpl implements ClassesService {
     @Override
     public List<Classes> findByGradeId(int currentPage, int pageSize, int gradeId, String classesNum, String classesName) {
         PageHelper.startPage(currentPage,pageSize);
-        List<Classes> list = classesDao.findByGradeId(gradeId, classesNum, classesName);
+        List<Classes> list = classesDao.findByGradeIdList(gradeId, classesNum, classesName);
         for (Classes c:list) {
             c.setClassesNumber(studentDao.findCount(c.getClassesId()));
         }
@@ -139,5 +139,10 @@ public class ClassesServiceImpl implements ClassesService {
             c.setClassesNumber(studentDao.findCount(c.getClassesId()));
         }
         return list;
+    }
+
+    @Override
+    public List<Classes> findByGradeId(int gradeId) {
+        return classesDao.findByGradeId(gradeId);
     }
 }

@@ -126,4 +126,12 @@ public interface StudentService {
      * @throws IOException exception
      */
     int uploadXls(MultipartFile file) throws IOException;
+
+    /**
+     * 查询通过类id
+     *
+     * @param classesId 类id
+     * @return {@link List}<{@link Student}>
+     */
+    List<Student> findByClassesId(int classesId);
 }

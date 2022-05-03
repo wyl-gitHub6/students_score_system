@@ -143,7 +143,7 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public List<Course> findByCourseId(int currentPage, int pageSize, int courseId) {
         PageHelper.startPage(currentPage,pageSize);
-        return scoreDao.findByCourseId(courseId);
+        return scoreDao.findByCourseList(courseId);
     }
 
     @Override
@@ -274,5 +274,10 @@ public class ScoreServiceImpl implements ScoreService {
         map.put("jg",jg);
         map.put("bjg",bjg);
         return map;
+    }
+
+    @Override
+    public List<Course> findByCourseId(int courseId) {
+        return scoreDao.findByCourseId(courseId);
     }
 }

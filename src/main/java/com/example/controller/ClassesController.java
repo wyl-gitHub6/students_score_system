@@ -2,7 +2,9 @@ package com.example.controller;
 
 import com.example.constant.MyConstant;
 import com.example.entity.Classes;
+import com.example.entity.Student;
 import com.example.service.ClassesService;
+import com.example.service.StudentService;
 import com.example.utils.Result;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,9 @@ public class ClassesController {
 
     @Resource
     private ClassesService classesService;
+
+    @Resource
+    private StudentService studentService;
 
     @GetMapping("/findList")
     public Result<PageInfo<Classes>> findList(@RequestParam(value = "currentPage",defaultValue = "1") int currentPage,
@@ -101,6 +106,11 @@ public class ClassesController {
      */
     @DeleteMapping("/deleteById")
     public Result<String> deleteById(@RequestParam("classesId") int classesId) {
+        List<Student> res = studentService.findByClassesId(classesId);
+        if (!res.isEmpty()){
+            return Result.error(MyConstant.RES_DATA_USE);
+        }
+
         boolean i = classesService.deleteById(classesId);
         if (i){
             return Result.success(MyConstant.RES_DELETE_SUCCESS);

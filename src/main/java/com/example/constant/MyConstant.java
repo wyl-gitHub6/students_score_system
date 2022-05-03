@@ -80,4 +80,6 @@ public class MyConstant {
 
     public static final String RES_UPDATE_FAILED = "修改失败!";
 
+    public static final String RES_DATA_USE = "数据已被使用!";
+
 }

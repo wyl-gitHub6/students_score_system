@@ -113,7 +113,7 @@ public interface ScoreDao {
      * @param courseId 进程id
      * @return {@link List}<{@link Course}>
      */
-    List<Course> findByCourseId(int courseId);
+    List<Course> findByCourseList(int courseId);
 
     /**
      * 选修课统计
@@ -234,5 +234,13 @@ public interface ScoreDao {
      */
     @MapKey("courseId")
     HashMap<String,HashMap<String,String>> findCreditStatistical(String teacherId);
+
+    /**
+     * 查询通过课程id
+     *
+     * @param courseId 进程id
+     * @return {@link List}<{@link Course}>
+     */
+    List<Course> findByCourseId(int courseId);
 }
 

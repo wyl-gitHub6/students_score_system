@@ -123,4 +123,12 @@ public interface ClassesService {
      * @return {@link List}<{@link Classes}>
      */
     List<Classes> findByTeacherId(int teacherId);
+
+    /**
+     * 查询通过年级id
+     *
+     * @param gradeId 年级id
+     * @return {@link Classes}
+     */
+    List<Classes> findByGradeId(int gradeId);
 }

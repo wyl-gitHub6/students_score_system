@@ -84,45 +84,58 @@ public interface StudentDao {
     int findCount(Integer classesId);
 
     /**
-     * 根据班级ID查询
-     * @param classesId
-     * @param studentNum
-     * @param studentName
-     * @return
+     * 查询通过类列表
+     *
+     * @param classesId   类id
+     * @param studentNum  学生num
+     * @param studentName 学生名字
+     * @return {@link List}<{@link Student}>
      */
-    List<Student> findByClassesId(@Param("classesId") Integer classesId,
+    List<Student> findByClassesList(@Param("classesId") Integer classesId,
                                   @Param("studentNum") String studentNum,
                                   @Param("studentName") String studentName);
 
     /**
      * 登录
-     * @param studentNum
-     * @param password
-     * @return
+     *
+     * @param studentNum 学生num
+     * @param password   密码
+     * @return {@link Student}
      */
     Student findByStudentNumAndPassword(@Param("studentNum") String studentNum,
                                         @Param("password") String password);
 
     /**
      * 必修课录入成绩时查询该课程没成绩的学生
-     * @param classesId
-     * @param courseId
-     * @return
+     *
+     * @param classesId 类id
+     * @param courseId  进程id
+     * @return {@link List}<{@link Student}>
      */
     List<Student> findByClasses(@Param("classesId") int classesId,
                                 @Param("courseId") int courseId);
 
     /**
      * 查询学生数量
-     * @return
+     *
+     * @return int
      */
     int getCount();
 
     /**
      * 获取班级最大学号
-     * @param classesId
-     * @return
+     *
+     * @param classesId 类id
+     * @return {@link Long}
      */
     Long findMaxCode(int classesId);
+
+    /**
+     * 查询通过类id
+     *
+     * @param classesId 类id
+     * @return {@link List}<{@link Student}>
+     */
+    List<Student> findByClassesId(int classesId);
 }
 

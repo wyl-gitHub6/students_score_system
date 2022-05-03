@@ -184,4 +184,12 @@ public interface ScoreService {
      * @return {@link HashMap}<{@link String}, {@link Object}>
      */
     HashMap<String, Object> statistical(int teacherId);
+
+    /**
+     * 查询通过课程id
+     *
+     * @param courseId 进程id
+     * @return {@link List}<{@link Course}>
+     */
+    List<Course> findByCourseId(int courseId);
 }

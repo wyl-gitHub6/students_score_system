@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.constant.MyConstant;
 import com.example.entity.Course;
 import com.example.service.CourseService;
+import com.example.service.ScoreService;
 import com.example.utils.Result;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,9 @@ public class CourseController {
 
     @Resource
     private CourseService courseService;
+
+    @Resource
+    private ScoreService scoreService;
 
 
     /**
@@ -104,6 +108,12 @@ public class CourseController {
      */
     @DeleteMapping("/deleteById")
     public Result<String> deleteById(@RequestParam("courseId") int courseId) {
+
+        List<Course> course = scoreService.findByCourseId(courseId);
+        if (!course.isEmpty()){
+            return Result.error(MyConstant.RES_DATA_USE);
+        }
+
         boolean i = courseService.deleteById(courseId);
         if (i){
             return Result.success(MyConstant.RES_DELETE_SUCCESS);
