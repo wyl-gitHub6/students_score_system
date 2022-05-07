@@ -160,7 +160,7 @@ public class StudentController {
     }
 
     /**
-     * 根据班级查询
+     * 根据班级查询 分页
      *
      * @param classesId   班级id
      * @param currentPage 当前页面
@@ -182,6 +182,23 @@ public class StudentController {
         }
         return Result.success(pageInfo,MyConstant.RES_SUCCESS_MESSAGE);
     }
+
+    /**
+     * 根据班级查询
+     *
+     * @param classesId 类id
+     * @return {@link Result}<{@link List}<{@link Student}>>
+     */
+    @GetMapping("/findStudentByClassesId")
+    public Result<List<Student>> findStudentByClassesId(@RequestParam("classesId") int classesId){
+        List<Student> list = studentService.findByClassesId(classesId);
+        if (list.isEmpty()){
+            return Result.error(MyConstant.RES_DATA_NULL);
+        }
+        return Result.success(list,MyConstant.RES_SUCCESS_MESSAGE);
+    }
+
+
 
     /**
      * 登录
@@ -209,7 +226,7 @@ public class StudentController {
      */
     @GetMapping("/findByClasses")
     public Result<List<Student>> findByClasses(@RequestParam("classesId") int classesId,
-                                @RequestParam("courseId") int courseId){
+                                               @RequestParam("courseId") int courseId){
         List<Student> list = studentService.findByClasses(classesId,courseId);
         if (list.isEmpty()){
             return Result.error(MyConstant.RES_DATA_NULL);

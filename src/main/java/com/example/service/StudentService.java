@@ -81,7 +81,7 @@ public interface StudentService {
     Student findByStudentNum(String studentNum);
 
     /**
-     * 根据班级查询
+     * 根据班级查询 分页
      *
      * @param currentPage 当前页面
      * @param pageSize    页面大小
@@ -128,10 +128,11 @@ public interface StudentService {
     int uploadXls(MultipartFile file) throws IOException;
 
     /**
-     * 查询通过类id
+     * 查询通过班级id
      *
      * @param classesId 类id
      * @return {@link List}<{@link Student}>
      */
     List<Student> findByClassesId(int classesId);
+
 }

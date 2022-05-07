@@ -55,31 +55,35 @@ public interface StudentDao {
     int deleteById(Integer studentId);
 
     /**
-     * 批量删除
-     * @param ids
-     * @return
+     * 删除批处理
+     *
+     * @param ids id
+     * @return boolean
      */
     boolean deleteBatch(int[] ids);
 
     /**
-     * 模糊查询
-     * @param studentNum
-     * @param studentName
-     * @return
+     * 查询列表
+     *
+     * @param studentNum  学生num
+     * @param studentName 学生名字
+     * @return {@link List}<{@link Student}>
      */
     List<Student> findList(String studentNum, String studentName);
 
     /**
      * 根据学号查询
-     * @param studentNum
-     * @return
+     *
+     * @param studentNum 学生num
+     * @return {@link Student}
      */
     Student findByStudentNum(String studentNum);
 
     /**
      * 查询班级人数
-     * @param classesId
-     * @return
+     *
+     * @param classesId 类id
+     * @return int
      */
     int findCount(Integer classesId);
 
