@@ -31,8 +31,8 @@ spring:
       connection-timeout: 30000
   mail: #邮箱配置
     host: smtp.qq.com
-    username: 362387242@qq.com
-    password: dccrzwcufxygbjhh
+    username: 邮箱
+    password: 协议密码
     port: 587
     default-encoding: utf-8
     properties:
