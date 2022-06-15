@@ -9,3 +9,5 @@ SpringBoot MyBatis WebScoket Quartz
 在线演示地址 
 管理系统：www.superwang.site:10000
 用户界面：www.superwang.site:10005
+教师:wmo0zgjc4j0ttci 123
+学生:19101010105 123
